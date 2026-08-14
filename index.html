@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projeto Integrador de E-commerce — Central de Projetos</title>
+<style>
+:root{
+  --bg:#EEF0EC; --surface:#FFFFFF; --surface-alt:#E3E6DE; --border:#D2D6C9;
+  --ink:#1F2421; --ink-soft:#545C52;
+  --accent:#1F2421; --accent-ink:#1F2421; --accent-soft:#E3E6DE;
+  --serif: Georgia,'Iowan Old Style','Sitka Text','Source Serif Pro',serif;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono: ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+    --ink:#ECEEE7; --ink-soft:#ABB2A3; --accent:#ECEEE7; --accent-ink:#ECEEE7; --accent-soft:#232720;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+  --ink:#ECEEE7; --ink-soft:#ABB2A3; --accent:#ECEEE7; --accent-ink:#ECEEE7; --accent-soft:#232720;
+}
+*{box-sizing:border-box;}
+body{background:var(--bg); color:var(--ink); font-family:var(--sans); margin:0; line-height:1.55;}
+.wrap{max-width:1080px; margin:0 auto; padding:0 24px 96px;}
+h1,h2,h3{font-family:var(--serif); text-wrap:balance; margin:0; font-weight:600;}
+p{margin:0 0 12px; max-width:70ch;}
+.eyebrow{font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em; font-size:12px; color:var(--ink-soft); font-weight:600;}
+.hero{padding:64px 0 40px; border-bottom:1px solid var(--border);}
+.hero h1{font-size:clamp(30px,4.2vw,46px); margin-top:10px;}
+.hero p{font-size:17px; color:var(--ink-soft); margin-top:14px;}
+.legend{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+.chip{font-family:var(--mono); font-size:12px; padding:5px 11px; border-radius:999px; border:1px solid var(--border); background:var(--surface); color:var(--ink-soft);}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin:40px 0;}
+.card{
+  display:flex; flex-direction:column; gap:10px; background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:24px; text-decoration:none; color:var(--ink); position:relative; overflow:hidden;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.card:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,.08);}
+.card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--card-accent, var(--ink-soft));}
+.card .num{font-family:var(--mono); font-size:12px; color:var(--ink-soft);}
+.card h2{font-size:21px; margin-top:2px;}
+.card .segment{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--card-accent, var(--ink-soft)); font-weight:700;}
+.card p{font-size:14px; color:var(--ink-soft); margin:6px 0 0;}
+.card .meta{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
+.card .tag{font-family:var(--mono); font-size:11px; padding:3px 8px; border-radius:6px; background:var(--surface-alt); color:var(--ink-soft);}
+.card .go{margin-top:14px; font-family:var(--mono); font-size:12.5px; color:var(--card-accent, var(--ink)); font-weight:700;}
+
+.about{padding:40px 0; border-top:1px solid var(--border); margin-top:20px;}
+.about h3{font-size:18px; margin-bottom:10px;}
+.about ol{padding-left:20px; color:var(--ink-soft); font-size:14.5px;}
+.about li{margin-bottom:4px;}
+footer{padding:32px 0 0; color:var(--ink-soft); font-size:13px; text-align:center;}
+
+/* SITE NAV */
+.sitenav{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border);}
+.sitenav-inner{max-width:1080px; margin:0 auto; padding:0 24px; height:48px; display:flex; align-items:center; gap:20px; overflow-x:auto; white-space:nowrap;}
+.sitenav-brand{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); text-decoration:none; flex-shrink:0;}
+.sitenav-links{display:flex; gap:2px;}
+.sitenav-links a{font-family:var(--sans); font-size:13px; color:var(--ink-soft); text-decoration:none; padding:6px 10px; border-radius:6px; flex-shrink:0;}
+.sitenav-links a:hover{background:var(--surface-alt); color:var(--ink);}
+.sitenav-links a.is-active{color:var(--accent-ink); background:var(--accent-soft); font-weight:700;}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="sitenav-brand" href="index.html">Projeto Integrador · E-commerce</a>
+    <div class="sitenav-links">
+      <a href="index.html" class="is-active">Início</a>
+      <a href="pets.html">Pets</a>
+      <a href="quadros.html">Quadros</a>
+      <a href="natura-norte.html">Raízes do Norte</a>
+      <a href="estetica.html">Estética</a>
+      <a href="casa-decoracao.html">Casa &amp; Decor</a>
+      <a href="doces-gourmet.html">Doces</a>
+      <a href="pos-venda-pos-consumo.html">Pós-venda &amp; Pós-consumo</a>
+    </div>
+  </div>
+</nav>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Projeto Integrador de E-commerce · Fase 1 — Planejamento e Estruturação</span>
+    <h1>Central de Projetos — 6 modelos de loja virtual</h1>
+    <p>O mesmo roteiro de 13 etapas (baseado no tutorial de referência) aplicado a seis tipos de negócio distintos, cada um com catálogo, precificação, canais, marketing, estoque, logística reversa e demanda mensal por SKU dimensionada para o mercado de São Paulo (capital) e Guarulhos. Um sétimo projeto reúne, em profundidade, os canais de pós-venda, a destinação pós-consumo dos materiais e a estrutura de atendimento ao cliente.</p>
+    <div class="legend">
+      <span class="chip">13 etapas por loja</span>
+      <span class="chip">Cálculos e fórmulas desenvolvidos</span>
+      <span class="chip">Praça-piloto: São Paulo + Guarulhos</span>
+      <span class="chip">Fluxo de pedido, trocas e atendimento ao final</span>
+    </div>
+  </header>
+
+  <section class="grid">
+    <a class="card" style="--card-accent:#1D7A72" href="pets.html">
+      <span class="num">01</span>
+      <span class="segment">Pet Fashion</span>
+      <h2>Matilha Urbana</h2>
+      <p>Roupas e acessórios têxteis sob medida para cães e gatos, com linha padrão e kits bordados sob encomenda.</p>
+      <div class="meta"><span class="tag">Estoque + sob encomenda</span><span class="tag">Ticket R$ 59,90–89,90</span></div>
+      <span class="go">Abrir projeto →</span>
+    </a>
+    <a class="card" style="--card-accent:#5B4B8A" href="quadros.html">
+      <span class="num">02</span>
+      <span class="segment">Arte & Decoração</span>
+      <h2>Parede Viva Ateliê</h2>
+      <p>Quadros personalizados sob encomenda em múltiplas dimensões, com impressão fine art, canvas e molduras.</p>
+      <div class="meta"><span class="tag">100% sob encomenda</span><span class="tag">Precificado por m²</span></div>
+      <span class="go">Abrir projeto →</span>
+    </a>
+    <a class="card" style="--card-accent:#2E6B4F" href="natura-norte.html">
+      <span class="num">03</span>
+      <span class="segment">Bem-estar & Origem Norte</span>
+      <h2>Raízes do Norte</h2>
+      <p>Produtos in natura da Amazônia (castanha, açaí, óleos, guaraná) para bem-estar, com rastreabilidade de cooperativas extrativistas.</p>
+      <div class="meta"><span class="tag">Cadeia de frio</span><span class="tag">Compliance ANVISA</span></div>
+      <span class="go">Abrir projeto →</span>
+    </a>
+    <a class="card" style="--card-accent:#A6456B" href="estetica.html">
+      <span class="num">04</span>
+      <span class="segment">Serviços de Beleza</span>
+      <h2>Cultivar Estética</h2>
+      <p>Sessões e pacotes de estética agendados online, com planos de tratamento personalizados e kits home care.</p>
+      <div class="meta"><span class="tag">Capacidade de agenda</span><span class="tag">2 unidades: SP e Guarulhos</span></div>
+      <span class="go">Abrir projeto →</span>
+    </a>
+    <a class="card" style="--card-accent:#3E6E8E" href="casa-decoracao.html">
+      <span class="num">05</span>
+      <span class="segment">Casa & Decoração</span>
+      <h2>Lar Aberto</h2>
+      <p>Itens decorativos de linha (almofadas, tapetes, vasos) combinados com cortinas e prateleiras sob medida.</p>
+      <div class="meta"><span class="tag">Linha padrão + sob medida</span><span class="tag">Marcenaria parceira</span></div>
+      <span class="go">Abrir projeto →</span>
+    </a>
+    <a class="card" style="--card-accent:#7A3B2E" href="doces-gourmet.html">
+      <span class="num">06</span>
+      <span class="segment">Confeitaria Gourmet</span>
+      <h2>Confeito de Autor</h2>
+      <p>Doces gourmet avulsos e mesas de doces sob encomenda para eventos de pessoa física e jurídica.</p>
+      <div class="meta"><span class="tag">Perecível</span><span class="tag">Sinal 50% em eventos</span></div>
+      <span class="go">Abrir projeto →</span>
+    </a>
+    <a class="card" style="--card-accent:#6B6B35" href="pos-venda-pos-consumo.html">
+      <span class="num">07</span>
+      <span class="segment">Módulo transversal</span>
+      <h2>Pós-venda &amp; Pós-consumo</h2>
+      <p>Canais de suporte, logística reversa e destinação pós-consumo de materiais consolidados para as 6 lojas, com custos, recursos e fluxos de processo.</p>
+      <div class="meta"><span class="tag">Aplica-se às 6 lojas</span><span class="tag">Custos e KPIs de atendimento</span></div>
+      <span class="go">Abrir projeto →</span>
+    </a>
+  </section>
+
+  <section class="about">
+    <h3>O que cada projeto contém</h3>
+    <ol>
+      <li>Etapa 0 — Organização da equipe e papéis</li>
+      <li>Etapa 1 — Ideia, problema e proposta de valor</li>
+      <li>Etapa 2 — Público-alvo, persona e jornada</li>
+      <li>Etapa 3 — Catálogo, abastecimento e demanda mensal estimada por SKU (São Paulo + Guarulhos)</li>
+      <li>Etapa 4 — Canais de venda e simulação de receita líquida</li>
+      <li>Etapa 5 — Cadastro do produto (ficha de anúncio completa)</li>
+      <li>Etapa 6 — Auditoria pré-publicação</li>
+      <li>Etapa 7 — Precificação (fórmula de preço mínimo aplicada)</li>
+      <li>Etapa 8 — Marketing e funil (CTR, CPC, conversão, CAC, ROAS)</li>
+      <li>Etapa 9 — Estoque e reposição (cobertura e ponto de pedido)</li>
+      <li>Etapa 10 — Entrega, atendimento e logística reversa (OTIF e devolução)</li>
+      <li>Etapa 11 — Priorização com curva ABC/Pareto e plano 5W2H</li>
+      <li>Etapa 12 — Painel de indicadores e recomendação executiva</li>
+      <li>Complemento — Fluxo de atendimento do pedido, política de trocas/devoluções e canais de relacionamento com o cliente</li>
+    </ol>
+  </section>
+
+  <footer>Material didático — Projeto Integrador de E-commerce, Fase 1. Estrutura baseada no tutorial de referência, com simulações numéricas para fins de aprendizagem.</footer>
+</div>
+</body>
+</html>

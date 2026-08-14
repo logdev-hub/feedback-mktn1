@@ -1,0 +1,664 @@
+<title>Matilha Urbana — Projeto Integrador · Moda Pet</title>
+<style>
+:root{
+  --bg:#EEF0EC; --surface:#FFFFFF; --surface-alt:#E3E6DE; --border:#D2D6C9;
+  --ink:#1F2421; --ink-soft:#545C52;
+  --accent:#1D7A72; --accent-ink:#0E3F3A; --accent-soft:#DCEDE9;
+  --good:#2E7D4F; --warn:#B8790A; --critical:#B23A3A;
+  --radius:10px;
+  --serif: Georgia,'Iowan Old Style','Sitka Text','Source Serif Pro',serif;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono: ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+    --ink:#ECEEE7; --ink-soft:#ABB2A3;
+    --accent:#3FA79C; --accent-ink:#DFF4F0; --accent-soft:#1E3A36;
+    --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+  --ink:#ECEEE7; --ink-soft:#ABB2A3;
+  --accent:#3FA79C; --accent-ink:#DFF4F0; --accent-soft:#1E3A36;
+  --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--sans);
+  margin:0; line-height:1.55; font-size:16px;
+}
+.wrap{max-width:1040px; margin:0 auto; padding:0 24px 96px;}
+h1,h2,h3,h4{font-family:var(--serif); text-wrap:balance; margin:0; color:var(--ink);}
+p{margin:0 0 12px; max-width:74ch;}
+a{color:var(--accent-ink);}
+.eyebrow{
+  font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em;
+  font-size:12px; color:var(--accent-ink); font-weight:600;
+}
+/* HERO */
+.hero{
+  padding:56px 0 40px; border-bottom:1px solid var(--border);
+  display:flex; flex-direction:column; gap:18px;
+}
+.hero h1{font-size:clamp(32px,4.4vw,50px); font-weight:600;}
+.hero .subtitle{font-size:18px; color:var(--ink-soft); max-width:68ch;}
+.meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+.chip{
+  font-family:var(--mono); font-size:12.5px; padding:6px 12px; border-radius:999px;
+  border:1px solid var(--border); background:var(--surface); color:var(--ink-soft);
+}
+.chip.accent{background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600;}
+.progress{
+  display:flex; align-items:center; gap:12px; margin-top:8px;
+}
+.progress-track{flex:1; max-width:320px; height:8px; background:var(--surface-alt); border-radius:999px; overflow:hidden; border:1px solid var(--border);}
+.progress-fill{height:100%; width:100%; background:var(--accent);}
+.progress-label{font-family:var(--mono); font-size:13px; color:var(--ink-soft); white-space:nowrap;}
+
+/* NAV STRIP */
+.navstrip{
+  position:sticky; top:48px; z-index:5; background:var(--bg);
+  border-bottom:1px solid var(--border); padding:10px 0; margin-bottom:8px;
+  overflow-x:auto; white-space:nowrap;
+}
+.navstrip .wrap{padding-bottom:0; display:flex; gap:6px;}
+.navstrip a{
+  font-family:var(--mono); font-size:12px; color:var(--ink-soft); text-decoration:none;
+  padding:5px 10px; border-radius:6px; border:1px solid transparent;
+}
+.navstrip a:hover{border-color:var(--border); color:var(--ink);}
+
+/* MODULE */
+.module{padding:52px 0; border-bottom:1px solid var(--border); scroll-margin-top:56px;}
+.module-head{display:flex; gap:20px; align-items:flex-start; margin-bottom:22px;}
+.module-num{
+  font-family:var(--serif); font-size:40px; font-weight:600; color:var(--accent-ink);
+  min-width:64px;
+}
+.module-title-wrap{flex:1;}
+.module-kicker{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:4px;}
+.module h2{font-size:26px; font-weight:600;}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:18px 0;}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px 20px;
+}
+.card h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; font-family:var(--sans); font-weight:700; color:var(--accent-ink); margin-bottom:8px;}
+.card p:last-child{margin-bottom:0;}
+.card ul{margin:0; padding-left:18px;}
+.card li{margin-bottom:5px;}
+
+.callout{border-radius:var(--radius); padding:16px 20px; margin:16px 0; border:1px solid var(--border);}
+.callout.tip{background:var(--accent-soft); border-color:var(--accent);}
+.callout.warn{background:var(--surface); border-left:4px solid var(--warn);}
+.callout.example{background:var(--surface-alt); border-style:dashed;}
+.callout h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; font-family:var(--mono);}
+
+.table-panel{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); margin:18px 0; background:var(--surface);}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:14.5px;}
+th,td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top;}
+thead th{background:var(--surface-alt); font-family:var(--sans); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-weight:700;}
+tbody tr:last-child td{border-bottom:none;}
+td.num, th.num{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right;}
+tbody tr:hover{background:var(--surface-alt);}
+
+.formula{
+  background:var(--ink); color:var(--bg); border-radius:var(--radius); padding:20px 22px; margin:18px 0;
+  font-family:var(--mono); font-size:14px;
+}
+:root[data-theme="dark"] .formula, :root:not([data-theme="light"]) .formula{background:#0D0F0C;}
+.formula .label{color:var(--accent); font-size:11px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px;}
+.formula .eq{font-size:15.5px; margin-bottom:10px; font-variant-numeric:tabular-nums;}
+.formula .calc{opacity:.85; border-top:1px solid rgba(255,255,255,.15); padding-top:10px; margin-top:10px; font-variant-numeric:tabular-nums;}
+.formula .result{color:#fff; font-weight:700;}
+
+.checklist{list-style:none; margin:16px 0; padding:0; display:grid; gap:8px;}
+.checklist li{display:flex; gap:10px; align-items:flex-start; font-size:14.5px;}
+.checklist li::before{content:"✓"; color:var(--good); font-weight:700; font-family:var(--mono);}
+
+.deliverable{
+  display:flex; gap:14px; align-items:center; background:var(--surface); border:1px solid var(--accent);
+  border-radius:var(--radius); padding:14px 18px; margin-top:20px;
+}
+.deliverable .tag{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; background:var(--accent); color:#fff; padding:4px 10px; border-radius:6px; white-space:nowrap;}
+
+.flow{display:flex; flex-wrap:wrap; gap:0; align-items:stretch; margin:20px 0;}
+.flow-step{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:14px 16px; flex:1; min-width:150px; position:relative;
+}
+.flow-step .n{font-family:var(--serif); font-size:22px; color:var(--accent-ink); font-weight:600;}
+.flow-step h5{margin:4px 0 4px; font-size:14px; font-family:var(--sans); font-weight:700;}
+.flow-step p{font-size:13px; color:var(--ink-soft); margin:0;}
+.flow-arrow{display:flex; align-items:center; justify-content:center; padding:0 8px; color:var(--ink-soft); font-family:var(--mono);}
+
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:720px){.two-col{grid-template-columns:1fr;} .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg); padding:2px 0;}}
+
+.section-title{margin:64px 0 8px;}
+.section-title .eyebrow{display:block; margin-bottom:6px;}
+.footer{padding:48px 0 0; color:var(--ink-soft); font-size:13px; text-align:center;}
+kbd{font-family:var(--mono); background:var(--surface-alt); border:1px solid var(--border); border-radius:4px; padding:1px 6px; font-size:12px;}
+strong{color:var(--ink);}
+.small{font-size:13px; color:var(--ink-soft);}
+
+/* SITE NAV */
+.sitenav{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border);}
+.sitenav-inner{max-width:1040px; margin:0 auto; padding:0 24px; height:48px; display:flex; align-items:center; gap:20px; overflow-x:auto; white-space:nowrap;}
+.sitenav-brand{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); text-decoration:none; flex-shrink:0;}
+.sitenav-links{display:flex; gap:2px;}
+.sitenav-links a{font-family:var(--sans); font-size:13px; color:var(--ink-soft); text-decoration:none; padding:6px 10px; border-radius:6px; flex-shrink:0;}
+.sitenav-links a:hover{background:var(--surface-alt); color:var(--ink);}
+.sitenav-links a.is-active{color:var(--accent-ink); background:var(--accent-soft); font-weight:700;}
+</style>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="sitenav-brand" href="index.html">Projeto Integrador · E-commerce</a>
+    <div class="sitenav-links">
+      <a href="index.html">Início</a>
+      <a href="pets.html" class="is-active">Pets</a>
+      <a href="quadros.html">Quadros</a>
+      <a href="natura-norte.html">Raízes do Norte</a>
+      <a href="estetica.html">Estética</a>
+      <a href="casa-decoracao.html">Casa &amp; Decor</a>
+      <a href="doces-gourmet.html">Doces</a>
+      <a href="pos-venda-pos-consumo.html">Pós-venda &amp; Pós-consumo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="navstrip">
+  <div class="wrap">
+    <a href="#e0">0·Equipe</a><a href="#e1">1·Proposta</a><a href="#e2">2·Público</a><a href="#e3">3·Catálogo</a>
+    <a href="#e4">4·Canais</a><a href="#e5">5·Cadastro</a><a href="#e6">6·Auditoria</a><a href="#e7">7·Preço</a>
+    <a href="#e8">8·Marketing</a><a href="#e9">9·Estoque</a><a href="#e10">10·Entrega</a><a href="#e11">11·ABC</a>
+    <a href="#e12">12·Indicadores</a><a href="#pos">Pós-venda</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Projeto Integrador de E-commerce · Fase 1 — Planejamento e Estruturação</span>
+    <h1>Matilha Urbana — moda funcional para cães e gatos</h1>
+    <p class="subtitle">Loja virtual de roupas e acessórios têxteis para pets de pequeno, médio e grande porte, com foco em conforto térmico, proteção pós-tosa e personalização sob encomenda para a Região Metropolitana de São Paulo.</p>
+    <div class="meta-row">
+      <span class="chip accent">Segmento: Pet Fashion</span>
+      <span class="chip">Praça-piloto: São Paulo (capital) + Guarulhos</span>
+      <span class="chip">Modelo: estoque enxuto + sob encomenda (bordado/tamanho especial)</span>
+      <span class="chip">Ticket médio-alvo: R$ 89,90</span>
+    </div>
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <span class="progress-label">13 de 13 etapas com entregável essencial preenchido</span>
+    </div>
+  </header>
+
+  <!-- ETAPA 0 -->
+  <section class="module" id="e0">
+    <div class="module-head">
+      <div class="module-num">00</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Organização da equipe</div>
+        <h2>Time, papéis e ritmo de trabalho</h2>
+      </div>
+    </div>
+    <p>Um projeto de e-commerce nasce como projeto de equipe antes de nascer como loja. A divisão de papéis abaixo evita que a "moda pet" vire só uma ideia de estilo e esqueça finanças, operação e atendimento — os três pilares que decidem se o negócio sobrevive ao primeiro trimestre.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Papel</th><th>Responsável (exemplo)</th><th>Principais entregas</th><th>Dedicação semanal</th></tr></thead>
+        <tbody>
+          <tr><td>Coordenação geral</td><td>Camila R.</td><td>Cronograma, integração das etapas, apresentação final</td><td class="num">4h</td></tr>
+          <tr><td>Pesquisa de mercado</td><td>Diego A.</td><td>Concorrência, persona, benchmarks de preço em pet shops de SP/Guarulhos</td><td class="num">5h</td></tr>
+          <tr><td>Estilo & Produto</td><td>Larissa M.</td><td>Ficha técnica das peças, tabela de medidas por porte, fornecedores</td><td class="num">6h</td></tr>
+          <tr><td>Financeiro & Precificação</td><td>Bruno T.</td><td>Planilha de custos, precificação, indicadores de margem</td><td class="num">5h</td></tr>
+          <tr><td>Operações & Logística</td><td>Yasmin S.</td><td>Estoque, fornecimento, frete, prazos de produção sob encomenda</td><td class="num">5h</td></tr>
+          <tr><td>Atendimento & Marketing</td><td>Pedro H.</td><td>Canais de venda, campanhas, SAC, política de trocas</td><td class="num">5h</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Exemplo-guia da turma</h4>
+      <p>O grupo batizou o projeto de <strong>Matilha Urbana</strong> — nome que remete a comunidade e vínculo, evitando termos genéricos como "Pet Shop Online". O naming foi validado checando disponibilidade de domínio (.com.br) e @ no Instagram antes de seguir para a Etapa 1.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ata de papéis assinada pela equipe + nome do projeto validado (domínio e redes sociais).</span></div>
+  </section>
+
+  <!-- ETAPA 1 -->
+  <section class="module" id="e1">
+    <div class="module-head">
+      <div class="module-num">01</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Ideia, problema e proposta de valor</div>
+        <h2>Por que a Matilha Urbana precisa existir</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Objetivo</h4>
+        <p>Traduzir uma dor real do tutor de pet urbano em uma proposta de valor específica — não "vender roupa de cachorro", e sim resolver um problema de conforto, saúde e identidade.</p>
+      </div>
+      <div class="card">
+        <h4>O problema do cliente</h4>
+        <ul>
+          <li>Cães de pelagem curta (pinscher, chihuahua, galgo, vira-latas de pelo curto) sofrem com as mínimas de 8-12°C do inverno paulistano.</li>
+          <li>Gatos e cães pós-tosa higiênica ficam desprotegidos de frio e do próprio lambedor por até 10 dias.</li>
+          <li>Roupas genéricas de pet shop não seguem tabela de medidas por raça, gerando devoluções por caimento.</li>
+          <li>Tutores quer personalização (nome bordado, cor do pelo combinando) mas não encontram opção sob encomenda confiável.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Diferencial competitivo</h4>
+        <ul>
+          <li>Tabela de medidas por raça (não só P/M/G genérico), validada com parceiro pet groomer.</li>
+          <li>Tecido certificado hipoalergênico (OEKO-TEX) e costura reforçada testada por veterinário parceiro.</li>
+          <li>Linha "Pós-tosa 10 dias" — body leve com abertura para coleira e sonda, se necessário.</li>
+          <li>Bordado sob encomenda com prazo declarado e simulação de preview antes da produção.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout tip">
+      <h4>Gerador de proposta de valor (aplicado)</h4>
+      <p><strong>Para</strong> tutores de cães e gatos de pequeno/médio porte em São Paulo e Guarulhos <strong>que</strong> sofrem para proteger seus pets do frio e pós-tosa com roupas de caimento ruim, <strong>a Matilha Urbana é</strong> uma marca de moda pet funcional <strong>que</strong> oferece peças sob medida por raça com tecido certificado e bordado personalizado, <strong>diferente de</strong> pet shops generalistas que vendem tamanhos únicos importados sem ficha técnica.</p>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Confundir "proposta de valor" com slogan bonito. A frase acima precisa ser testável: dá para verificar se o caimento por raça reduz devolução, e isso vira métrica na Etapa 12.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Frase de proposta de valor validada + lista de 3 problemas priorizados por frequência de reclamação em pesquisas com tutores.</span></div>
+  </section>
+
+  <!-- ETAPA 2 -->
+  <section class="module" id="e2">
+    <div class="module-head">
+      <div class="module-num">02</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Público-alvo, persona e jornada</div>
+        <h2>Quem compra e como decide</h2>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h4>Perfil demográfico</h4>
+        <ul>
+          <li>Tutores de 24-45 anos, classes B e C, majoritariamente mulheres (68% das compras de moda pet no Brasil, Abinpet 2023).</li>
+          <li>Concentração em bairros pet-friendly: Vila Mariana, Pinheiros, Moema, Tatuapé (SP) e Jardim Presidente Dutra, Vila Galvão (Guarulhos).</li>
+          <li>Renda familiar R$ 4.000–R$ 9.000; pet tratado como membro da família ("pet parent").</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Persona — Camila Duarte, 32</h4>
+        <p>Designer gráfica, mora em apartamento pet-friendly na Vila Mariana (SP). Tem um vira-lata caramelo de porte médio (Théo, 14 kg) e uma gata SRD (Mia). Compra roupas de frio para o Théo todo mês de maio, pesquisa no Instagram antes de comprar, e valoriza fotos reais de outros tutores (prova social) mais do que anúncio pago.</p>
+        <p class="small">Objeção principal: "já comprei roupa que não serviu e joguei fora". Gatilho de compra: campanha de friagem + frete grátis acima de R$120.</p>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Etapa da jornada</th><th>O que a Camila faz</th><th>O que a Matilha Urbana precisa entregar</th></tr></thead>
+        <tbody>
+          <tr><td>1. Descoberta</td><td>Vê reels de pets com roupinha no Instagram/TikTok</td><td>Conteúdo com pets reais, não still de catálogo</td></tr>
+          <tr><td>2. Consideração</td><td>Mede o pet com fita métrica, compara com tabela</td><td>Guia de medidas por raça + vídeo curto de "como medir"</td></tr>
+          <tr><td>3. Compra</td><td>Escolhe cor, tamanho e opção de bordado</td><td>Checkout simples, preview de bordado, prazo claro</td></tr>
+          <tr><td>4. Entrega</td><td>Acompanha rastreio, quer receber antes da próxima onda de frio</td><td>SLA de produção + envio comunicado por WhatsApp</td></tr>
+          <tr><td>5. Uso</td><td>Veste o pet, fotografa, posta com a marca marcada</td><td>Incentivo de UGC (desconto na próxima compra por foto)</td></tr>
+          <tr><td>6. Pós-venda</td><td>Guarda peça até o próximo inverno ou troca por tamanho</td><td>Lembrete sazonal + política de troca por crescimento do pet</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Persona documentada + mapa de jornada de 6 etapas com ações da loja associadas a cada uma.</span></div>
+  </section>
+
+  <!-- ETAPA 3 -->
+  <section class="module" id="e3">
+    <div class="module-head">
+      <div class="module-num">03</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Catálogo e abastecimento</div>
+        <h2>O que vender, com quem produzir e quanto vender por mês</h2>
+      </div>
+    </div>
+    <p>O catálogo mistura <strong>estoque enxuto</strong> (peças de giro rápido em tamanhos-padrão) com <strong>produção sob encomenda</strong> (bordado, tamanhos fora da curva, kits para ninhada). A confecção é feita por duas facções parceiras no Brás/Bom Retiro (SP), com um fornecedor de tecido técnico importado para a linha corta-vento.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>SKU</th><th>Porte</th><th>Fornecimento</th><th>Custo unit.</th><th>Prazo</th><th>Demanda estimada/mês (SP+Guarulhos)</th></tr></thead>
+        <tbody>
+          <tr><td>Casaquinho corta-vento</td><td>P/M/G</td><td>Facção Brás (nacional)</td><td class="num">R$ 24,50</td><td class="num">7 dias</td><td class="num">40 un.</td></tr>
+          <tr><td>Moletom soft canguru</td><td>P/M/G</td><td>Facção Bom Retiro</td><td class="num">R$ 19,80</td><td class="num">7 dias</td><td class="num">30 un.</td></tr>
+          <tr><td>Capa de chuva impermeável</td><td>P/M</td><td>Importado (China, MOQ 100)</td><td class="num">R$ 21,00</td><td class="num">35 dias (marítimo)</td><td class="num">18 un.</td></tr>
+          <tr><td>Body pós-tosa/pós-cirúrgico</td><td>P/M/G</td><td>Facção Brás</td><td class="num">R$ 16,90</td><td class="num">5 dias</td><td class="num">15 un.</td></tr>
+          <tr><td>Blusa térmica para gatos</td><td>Único adaptável</td><td>Facção Bom Retiro</td><td class="num">R$ 18,40</td><td class="num">7 dias</td><td class="num">20 un.</td></tr>
+          <tr><td>Bandana/acessório combinando</td><td>Único</td><td>Facção Brás</td><td class="num">R$ 6,20</td><td class="num">5 dias</td><td class="num">12 un.</td></tr>
+          <tr><td>Kit bordado sob encomenda (nome do pet)</td><td>P/M/G</td><td>Produção interna + bordadeira parceira</td><td class="num">R$ 28,90</td><td class="num">10 dias úteis</td><td class="num">5 un.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">
+      <div class="label">Simulador didático — dimensionamento de demanda mensal (SOM)</div>
+      <div class="eq">SOM mensal = Domicílios com pet (praça) × % que compra roupa pet/ano × Sazonalidade mensal × Market share-alvo</div>
+      <div class="calc">
+        Domicílios com cão/gato em SP+Guarulhos ≈ <strong>2.500.000</strong> (54% dos ~4,6 mi domicílios têm pet — Abinpet/IBGE)<br>
+        × 12% compram roupa pet ao ano = 300.000 domicílios/ano<br>
+        × fração mensal equivalente (concentrada mar-ago) ≈ 1/12 = 25.000 domicílios ativos/mês<br>
+        × market share-alvo de uma loja nova e nichada (0,4%)<br>
+        = <span class="result">≈ 100 pedidos/mês</span> → ≈140 peças/mês (1,4 item/pedido em média)
+      </div>
+    </div>
+    <div class="callout tip"><h4>Sobre a demanda sob encomenda</h4><p>O kit bordado não entra no estoque: cada pedido dispara uma ordem de produção (nome do pet, cor de linha, tamanho). Insumos simulados: linha de bordado (R$ 0,90/peça), setup de máquina (R$ 3,50 rateado a cada 10 peças), peça-base do moletom (R$ 19,80) → custo total R$ 28,90 já contempla a mão de obra extra de bordado.</p></div>
+    <div class="callout warn"><h4>Simulador de importação — capa de chuva (didático)</h4>
+      <p>Valor FOB: US$ 3,10/un × 100 un = US$ 310 (câmbio R$ 5,40 → R$ 1.674). Frete+seguro internacional: R$ 320. Base de cálculo do II: R$ 1.994.<br>
+      II (60%): R$ 1.196,40 · IPI (5% sobre base+II): R$ 159,52 · PIS (2,1%) + COFINS (9,65%) ≈ R$ 246,90 · ICMS-SP (18% "por dentro" sobre o total nacionalizado) ≈ R$ 794,90.<br>
+      <strong>Custo desembaraçado total ≈ R$ 4.271,72 ÷ 100 un = R$ 21,00/un nacionalizada</strong> (valor já usado na tabela acima). Simulação didática — alíquotas variam por NCM real.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Tabela de catálogo com 7 SKUs, fornecedores, custos, prazos e demanda mensal estimada por SKU.</span></div>
+  </section>
+
+  <!-- ETAPA 4 -->
+  <section class="module" id="e4">
+    <div class="module-head">
+      <div class="module-num">04</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Canais de venda</div>
+        <h2>Onde a Matilha Urbana vai vender</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Comissão</th><th>Taxa de devolução</th><th>Receita líquida simulada (100 pedidos, tíquete R$89,90)</th></tr></thead>
+        <tbody>
+          <tr><td>Loja virtual própria</td><td class="num">~4,5% (gateway)</td><td class="num">6%</td><td class="num">R$ 8.058</td></tr>
+          <tr><td>Mercado Livre (Clássico)</td><td class="num">13%</td><td class="num">9%</td><td class="num">R$ 7.115</td></tr>
+          <tr><td>Shopee</td><td class="num">14% (com frete grátis subsidiado)</td><td class="num">11%</td><td class="num">R$ 6.870</td></tr>
+          <tr><td>Instagram Shopping / WhatsApp</td><td class="num">0% (só gateway 4,5%)</td><td class="num">4%</td><td class="num">R$ 8.240</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Cálculo: Receita bruta = 100 × R$89,90 = R$8.990. Receita líquida = R$8.990 × (1 − comissão) × (1 − taxa de devolução).</p>
+    <div class="callout tip"><h4>Dica do orientador</h4><p>Para produtos sob encomenda (bordado), evite marketplaces no lançamento: o SLA de produção de 10 dias úteis entra em conflito com as políticas de envio rápido do ML/Shopee, gerando penalização de reputação. Priorize loja própria + Instagram/WhatsApp para essa linha.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Matriz de canais com comissão, devolução e receita líquida simulada, e decisão de mix de canal por linha de produto (padrão × sob encomenda).</span></div>
+  </section>
+
+  <!-- ETAPA 5 -->
+  <section class="module" id="e5">
+    <div class="module-head">
+      <div class="module-num">05</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Cadastro do produto</div>
+        <h2>Ficha de anúncio do casaquinho corta-vento</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Título (58/60 car.)</h4><p>Casaquinho Corta-Vento para Cachorro P M G Impermeável</p></div>
+      <div class="card"><h4>Palavras-chave</h4><ul><li>roupa de frio para cachorro</li><li>casaco pet impermeável</li><li>roupinha cachorro pequeno porte</li><li>agasalho cão inverno SP</li></ul></div>
+      <div class="card"><h4>Ficha técnica</h4><ul><li>Tecido: nylon ripstop + forro fleece</li><li>Fechamento: velcro duplo + regulagem de barriga</li><li>Certificação: OEKO-TEX Standard 100</li><li>Tamanhos: P (20-30cm costas) a G (45-55cm)</li></ul></div>
+      <div class="card"><h4>FAQ do anúncio</h4><ul><li>"Serve para gato?" — sim, do P ao M com ajuste de velcro</li><li>"É impermeável ou só corta vento?" — repelente à água leve, não é capa de chuva</li><li>"Posso pedir bordado?" — sim, via variação "personalizado"</li></ul></div>
+    </div>
+    <div class="callout example"><h4>Roteiro de imagens (7 fotos obrigatórias)</h4><p>1) Capa em fundo neutro · 2) Pet real vestindo, ângulo frontal · 3) Ângulo lateral mostrando caimento · 4) Detalhe do fechamento velcro · 5) Foto com fita métrica sobre a peça (escala) · 6) Tabela de medidas por raça · 7) Itens inclusos (peça + etiqueta de cuidados).</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ficha de anúncio completa (título, descrição, ficha técnica, FAQ, 7 fotos) para o SKU-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 6 -->
+  <section class="module" id="e6">
+    <div class="module-head">
+      <div class="module-num">06</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Auditoria pré-publicação</div>
+        <h2>Checklist antes de publicar o anúncio</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Item</th><th>Risco se falhar</th><th>Responsável</th><th>Prazo</th></tr></thead>
+        <tbody>
+          <tr><td>Preço final confere com planilha (Etapa 7)</td><td>Alto</td><td>Financeiro</td><td class="num">D-2</td></tr>
+          <tr><td>Peso e dimensões da embalagem cadastrados</td><td>Alto (frete errado)</td><td>Operações</td><td class="num">D-2</td></tr>
+          <tr><td>Tabela de medidas por raça anexada</td><td>Alto (devolução)</td><td>Produto</td><td class="num">D-1</td></tr>
+          <tr><td>Fotos com escala e detalhe do velcro</td><td>Médio</td><td>Produto</td><td class="num">D-1</td></tr>
+          <tr><td>Variações de tamanho e cor corretas</td><td>Médio</td><td>Operações</td><td class="num">D-1</td></tr>
+          <tr><td>Estoque inicial correto por tamanho</td><td>Alto (ruptura)</td><td>Operações</td><td class="num">D-1</td></tr>
+          <tr><td>Prazo de produção do sob encomenda destacado</td><td>Alto (reclamação)</td><td>Atendimento</td><td class="num">D-1</td></tr>
+          <tr><td>Política de troca por crescimento do pet visível</td><td>Médio</td><td>Atendimento</td><td class="num">D0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Checklist de 8 itens assinado pelos responsáveis antes da publicação do anúncio-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 7 -->
+  <section class="module" id="e7">
+    <div class="module-head">
+      <div class="module-num">07</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Precificação</div>
+        <h2>Quanto cobrar pelo casaquinho corta-vento</h2>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Fórmula de preço mínimo</div>
+      <div class="eq">Preço Mínimo = Custos Fixos por unidade ÷ (1 − Comissão do canal − Margem de contribuição desejada)</div>
+      <div class="calc">
+        Custo do produto: R$ 24,50 · Embalagem: R$ 2,10 · Frete médio absorvido: R$ 3,40 → <strong>Custos por unidade = R$ 30,00</strong><br>
+        Comissão do canal (loja própria, gateway): 4,5% · Margem de contribuição desejada: 32%<br>
+        Preço Mínimo = 30,00 ÷ (1 − 0,045 − 0,32) = 30,00 ÷ 0,635 = <span class="result">R$ 47,24 (mínimo)</span><br>
+        Preço praticado (arredondado e ajustado a concorrência): <span class="result">R$ 59,90</span> → margem real de contribuição ≈ 45,8%
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Concorrente</th><th>Preço peça equivalente</th><th>Posicionamento</th></tr></thead>
+        <tbody>
+          <tr><td>Pet shop de bairro (Vila Mariana)</td><td class="num">R$ 69,90</td><td>Sem tabela de medidas por raça</td></tr>
+          <tr><td>Marketplace genérico (importado)</td><td class="num">R$ 34,90</td><td>Tamanho único, alta devolução</td></tr>
+          <tr><td><strong>Matilha Urbana</strong></td><td class="num"><strong>R$ 59,90</strong></td><td>Meio-termo com tabela por raça + certificação</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de precificação com preço mínimo, preço praticado e margem de contribuição real por SKU.</span></div>
+  </section>
+
+  <!-- ETAPA 8 -->
+  <section class="module" id="e8">
+    <div class="module-head">
+      <div class="module-num">08</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Marketing e funil</div>
+        <h2>Campanha "Chegou o Frio" (abril–agosto)</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Objetivo</h4><p>Gerar 100 pedidos/mês na praça SP+Guarulhos durante o outono/inverno.</p></div>
+      <div class="card"><h4>Público</h4><p>Mulheres 24-45, interesse em "pets", raio de 15km de zonas pet-friendly, lookalike de clientes atuais.</p></div>
+      <div class="card"><h4>Orçamento</h4><p>R$ 1.800/mês (Meta Ads) + R$ 600/mês (influenciadores pet nano/micro)</p></div>
+    </div>
+    <div class="formula">
+      <div class="label">Indicadores do funil</div>
+      <div class="eq">CTR = Cliques ÷ Impressões × 100 · CPC = Investimento ÷ Cliques · Conversão = Pedidos ÷ Cliques × 100 · CAC = Investimento ÷ Pedidos · ROAS = Receita ÷ Investimento</div>
+      <div class="calc">
+        Impressões: 180.000 · Cliques: 3.600 → <strong>CTR = 2,0%</strong><br>
+        Investimento R$ 1.800 ÷ 3.600 cliques → <strong>CPC = R$ 0,50</strong><br>
+        Pedidos gerados pela campanha: 72 ÷ 3.600 → <strong>Conversão = 2,0%</strong><br>
+        CAC = 1.800 ÷ 72 = <strong>R$ 25,00</strong> por pedido<br>
+        Receita gerada = 72 × R$59,90 = R$4.312,80 → ROAS = 4.312,80 ÷ 1.800 = <span class="result">2,4x</span>
+      </div>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Otimizar só para CTR alto: anúncios com pets "fofos demais" geram cliques de curiosos sem intenção de compra, inflando CPC efetivo por pedido. Segmentar por interesse + comportamento de compra pet reduz esse ruído.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Plano de campanha com objetivo, público, orçamento, período e simulação de CTR/CPC/conversão/CAC/ROAS.</span></div>
+  </section>
+
+  <!-- ETAPA 9 -->
+  <section class="module" id="e9">
+    <div class="module-head">
+      <div class="module-num">09</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Estoque e reposição</div>
+        <h2>Quando recomprar o casaquinho corta-vento</h2>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Cobertura e ponto de pedido</div>
+      <div class="eq">Cobertura (dias) = Estoque atual ÷ Demanda diária média · Ponto de Pedido = (Demanda diária × Prazo de reposição) + Estoque de segurança</div>
+      <div class="calc">
+        Demanda mensal: 40 un. → demanda diária média = 40 ÷ 30 = <strong>1,33 un./dia</strong><br>
+        Estoque atual: 55 un. → Cobertura = 55 ÷ 1,33 = <span class="result">≈ 41 dias</span><br>
+        Prazo de reposição da facção: 7 dias · Estoque de segurança (pico sazonal +40%): 8 un.<br>
+        Ponto de Pedido = (1,33 × 7) + 8 = 9,3 + 8 = <span class="result">≈ 17 un.</span> (repor quando o estoque chegar a 17 peças)
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Cenário</th><th>Demanda diária</th><th>Ponto de pedido</th><th>Estoque de segurança</th></tr></thead>
+        <tbody>
+          <tr><td>Atual (regime de cruzeiro)</td><td class="num">1,33 un./dia</td><td class="num">17 un.</td><td class="num">8 un.</td></tr>
+          <tr><td>Crescimento (pico junho-julho, +60%)</td><td class="num">2,13 un./dia</td><td class="num">27 un.</td><td class="num">13 un.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de cobertura e ponto de pedido para os 2 SKUs de maior giro, em cenário atual e de crescimento.</span></div>
+  </section>
+
+  <!-- ETAPA 10 -->
+  <section class="module" id="e10">
+    <div class="module-head">
+      <div class="module-num">10</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Entrega, atendimento e logística reversa</div>
+        <h2>Do clique à peça vestida no pet</h2>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">OTIF e taxa de devolução</div>
+      <div class="eq">OTIF = (Pedidos completos E no prazo) ÷ Total de pedidos × 100 · Taxa de devolução = Devoluções ÷ Pedidos entregues × 100</div>
+      <div class="calc">
+        Pedidos do mês: 100 · Entregues completos e no prazo: 91 → <strong>OTIF = 91%</strong><br>
+        Devoluções: 6 (5 por caimento, 1 por defeito de costura) → <span class="result">Taxa de devolução = 6%</span>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Motivo de devolução</th><th>Ocorrências/mês</th><th>% do total</th></tr></thead>
+        <tbody>
+          <tr><td>Caimento (tamanho errado)</td><td class="num">5</td><td class="num">83%</td></tr>
+          <tr><td>Defeito de costura</td><td class="num">1</td><td class="num">17%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Fluxograma completo do pedido (abaixo) + cálculo de OTIF e devolução do mês simulado.</span></div>
+  </section>
+
+  <!-- ETAPA 11 -->
+  <section class="module" id="e11">
+    <div class="module-head">
+      <div class="module-num">11</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Priorização com curva ABC/Pareto</div>
+        <h2>Onde atacar primeiro</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Problema</th><th>Ocorrências/mês</th><th>% acumulado</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td>Devolução por caimento (tamanho)</td><td class="num">5</td><td class="num">45%</td><td>A</td></tr>
+          <tr><td>Atraso na produção sob encomenda</td><td class="num">3</td><td class="num">73%</td><td>A</td></tr>
+          <tr><td>Dúvida de medida antes da compra (contato SAC)</td><td class="num">2</td><td class="num">91%</td><td>B</td></tr>
+          <tr><td>Defeito de costura</td><td class="num">1</td><td class="num">100%</td><td>C</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Ação 5W2H — Classe A (caimento)</h4>
+      <p><strong>What:</strong> revisar tabela de medidas por raça · <strong>Why:</strong> é a maior causa de devolução · <strong>Who:</strong> Estilo & Produto · <strong>When:</strong> em 15 dias · <strong>Where:</strong> anúncios e site · <strong>How:</strong> incluir vídeo "como medir seu pet" · <strong>How much:</strong> R$ 300 (produção do vídeo).</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Curva ABC dos 4 principais problemas + plano 5W2H para a Classe A.</span></div>
+  </section>
+
+  <!-- ETAPA 12 -->
+  <section class="module" id="e12">
+    <div class="module-head">
+      <div class="module-num">12</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Indicadores e recomendação executiva</div>
+        <h2>Painel de indicadores e relatório final</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Indicador</th><th>Valor do mês simulado</th><th>Meta</th></tr></thead>
+        <tbody>
+          <tr><td>Pedidos/mês</td><td class="num">100</td><td class="num">150 (T+2)</td></tr>
+          <tr><td>Ticket médio</td><td class="num">R$ 89,90</td><td class="num">R$ 95,00</td></tr>
+          <tr><td>Margem de contribuição média</td><td class="num">42%</td><td class="num">45%</td></tr>
+          <tr><td>CAC</td><td class="num">R$ 25,00</td><td class="num">R$ 22,00</td></tr>
+          <tr><td>ROAS</td><td class="num">2,4x</td><td class="num">3,0x</td></tr>
+          <tr><td>OTIF</td><td class="num">91%</td><td class="num">95%</td></tr>
+          <tr><td>Taxa de devolução</td><td class="num">6%</td><td class="num">≤4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Recomendação executiva (resumo)</h4>
+      <p><strong>Diagnóstico:</strong> a devolução por caimento (Classe A) é o maior risco à margem. <strong>Evidência:</strong> 5 das 6 devoluções do mês. <strong>Prioridade:</strong> tabela de medidas por raça + vídeo educativo. <strong>Ação de marketing:</strong> reforçar prova social real no anúncio. <strong>Ação financeira:</strong> manter margem-alvo de 45% mesmo sob pressão de concorrência importada. <strong>Ação logística:</strong> aumentar estoque de segurança para o pico jun-jul. <strong>Meta:</strong> reduzir devolução para ≤4% em 60 dias. <strong>Risco se nada mudar:</strong> erosão de margem líquida em ~2,1 p.p. por trimestre.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Painel com 7 indicadores + relatório executivo de 8 seções pronto para apresentação.</span></div>
+  </section>
+
+  <!-- PÓS-VENDA -->
+  <section class="module" id="pos" style="border-bottom:none;">
+    <div class="section-title">
+      <span class="eyebrow">Complemento ao projeto</span>
+      <h2 style="font-size:30px;">Pós-venda: pedido, trocas e relacionamento</h2>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Fluxo de atendimento do pedido</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Confirmação</h5><p>Pagamento aprovado → e-mail e WhatsApp automáticos com prazo estimado</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Produção/Separação</h5><p>Estoque: separa em até 24h · Sob encomenda: entra na fila de bordado (até 10 dias úteis)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Controle de qualidade</h5><p>Conferência de tamanho, cor e bordado contra o pedido original</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Embalagem</h5><p>Saquinho biodegradável + cartão de cuidados + brinde (bandana amostra)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Envio</h5><p>Código de rastreio enviado por WhatsApp; transportadora regional para SP/Guarulhos (entrega em 2-3 dias úteis)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">6</div><h5>Pós-entrega</h5><p>Mensagem em D+3 pedindo foto do pet + avaliação; ativa lembrete sazonal</p></div>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Política de trocas e devoluções</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Direito de arrependimento</h4>
+        <p>Conforme Art. 49 do CDC, o cliente tem <strong>7 dias corridos</strong> a partir do recebimento para desistir da compra sem justificativa, com reembolso integral incluindo frete.</p>
+      </div>
+      <div class="card">
+        <h4>Troca por caimento</h4>
+        <p>Até <strong>30 dias</strong> após o recebimento, troca gratuita de tamanho para peças de estoque não personalizadas, desde que sem uso e com etiqueta.</p>
+      </div>
+      <div class="card">
+        <h4>Defeito de fabricação</h4>
+        <p>Garantia legal de <strong>90 dias</strong> (produto não durável) para vícios de costura/tecido, com troca ou reembolso integral, frete de retorno por conta da loja.</p>
+      </div>
+      <div class="card">
+        <h4>Itens sob encomenda (bordado)</h4>
+        <p>Sem direito a arrependimento por preferência (produto personalizado), mas <strong>com garantia de defeito e de erro de bordado</strong> — nome digitado errado é responsabilidade da loja se a arte final foi aprovada corretamente pelo cliente antes da produção.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Canais de atendimento e relacionamento</h3>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Uso principal</th><th>Horário</th><th>SLA de resposta</th></tr></thead>
+        <tbody>
+          <tr><td>WhatsApp Business</td><td>Dúvidas de medida, status do pedido, trocas</td><td>Seg-sáb, 9h-19h</td><td class="num">até 30 min</td></tr>
+          <tr><td>Instagram Direct</td><td>Pré-venda, prova social, dúvidas rápidas</td><td>Seg-sáb, 9h-19h</td><td class="num">até 2h</td></tr>
+          <tr><td>E-mail (SAC)</td><td>Formalização de trocas, reclamações, notas fiscais</td><td>Todos os dias</td><td class="num">até 24h</td></tr>
+          <tr><td>Chat do site</td><td>Suporte durante o checkout</td><td>Seg-sáb, 9h-19h</td><td class="num">até 5 min</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Fluxo de escalonamento</h4><p>Nível 1 (atendente) resolve dúvidas e trocas simples em até 2h → Nível 2 (coordenação) entra em casos de defeito recorrente ou insatisfação pública (redes sociais) em até 4h → Nível 3 (fundadores) atua em reclamações formais (Reclame Aqui/Procon) em até 24h, sempre com resposta pública + resolução privada registrada.</p></div>
+  </section>
+
+  <footer class="footer">
+    Projeto Integrador de E-commerce — Fase 1 · Matilha Urbana · Material didático com simulações para fins de aprendizagem.
+  </footer>
+</div>

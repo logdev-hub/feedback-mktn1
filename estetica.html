@@ -1,0 +1,699 @@
+<title>Cultivar Estética — Projeto Integrador · Serviços de Beleza</title>
+<style>
+:root{
+  --bg:#EEF0EC; --surface:#FFFFFF; --surface-alt:#E3E6DE; --border:#D2D6C9;
+  --ink:#1F2421; --ink-soft:#545C52;
+  --accent:#A6456B; --accent-ink:#5C2239; --accent-soft:#F3E1E8;
+  --good:#2E7D4F; --warn:#B8790A; --critical:#B23A3A;
+  --radius:10px;
+  --serif: Georgia,'Iowan Old Style','Sitka Text','Source Serif Pro',serif;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono: ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+    --ink:#ECEEE7; --ink-soft:#ABB2A3;
+    --accent:#E37DA0; --accent-ink:#FBE9EF; --accent-soft:#3D2430;
+    --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+  --ink:#ECEEE7; --ink-soft:#ABB2A3;
+  --accent:#E37DA0; --accent-ink:#FBE9EF; --accent-soft:#3D2430;
+  --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--sans);
+  margin:0; line-height:1.55; font-size:16px;
+}
+.wrap{max-width:1040px; margin:0 auto; padding:0 24px 96px;}
+h1,h2,h3,h4{font-family:var(--serif); text-wrap:balance; margin:0; color:var(--ink);}
+p{margin:0 0 12px; max-width:74ch;}
+a{color:var(--accent-ink);}
+.eyebrow{
+  font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em;
+  font-size:12px; color:var(--accent-ink); font-weight:600;
+}
+/* HERO */
+.hero{
+  padding:56px 0 40px; border-bottom:1px solid var(--border);
+  display:flex; flex-direction:column; gap:18px;
+}
+.hero h1{font-size:clamp(32px,4.4vw,50px); font-weight:600;}
+.hero .subtitle{font-size:18px; color:var(--ink-soft); max-width:68ch;}
+.meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+.chip{
+  font-family:var(--mono); font-size:12.5px; padding:6px 12px; border-radius:999px;
+  border:1px solid var(--border); background:var(--surface); color:var(--ink-soft);
+}
+.chip.accent{background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600;}
+.progress{
+  display:flex; align-items:center; gap:12px; margin-top:8px;
+}
+.progress-track{flex:1; max-width:320px; height:8px; background:var(--surface-alt); border-radius:999px; overflow:hidden; border:1px solid var(--border);}
+.progress-fill{height:100%; width:100%; background:var(--accent);}
+.progress-label{font-family:var(--mono); font-size:13px; color:var(--ink-soft); white-space:nowrap;}
+
+/* NAV STRIP */
+.navstrip{
+  position:sticky; top:48px; z-index:5; background:var(--bg);
+  border-bottom:1px solid var(--border); padding:10px 0; margin-bottom:8px;
+  overflow-x:auto; white-space:nowrap;
+}
+.navstrip .wrap{padding-bottom:0; display:flex; gap:6px;}
+.navstrip a{
+  font-family:var(--mono); font-size:12px; color:var(--ink-soft); text-decoration:none;
+  padding:5px 10px; border-radius:6px; border:1px solid transparent;
+}
+.navstrip a:hover{border-color:var(--border); color:var(--ink);}
+
+/* MODULE */
+.module{padding:52px 0; border-bottom:1px solid var(--border); scroll-margin-top:56px;}
+.module-head{display:flex; gap:20px; align-items:flex-start; margin-bottom:22px;}
+.module-num{
+  font-family:var(--serif); font-size:40px; font-weight:600; color:var(--accent-ink);
+  min-width:64px;
+}
+.module-title-wrap{flex:1;}
+.module-kicker{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:4px;}
+.module h2{font-size:26px; font-weight:600;}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:18px 0;}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px 20px;
+}
+.card h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; font-family:var(--sans); font-weight:700; color:var(--accent-ink); margin-bottom:8px;}
+.card p:last-child{margin-bottom:0;}
+.card ul{margin:0; padding-left:18px;}
+.card li{margin-bottom:5px;}
+
+.callout{border-radius:var(--radius); padding:16px 20px; margin:16px 0; border:1px solid var(--border);}
+.callout.tip{background:var(--accent-soft); border-color:var(--accent);}
+.callout.warn{background:var(--surface); border-left:4px solid var(--warn);}
+.callout.example{background:var(--surface-alt); border-style:dashed;}
+.callout h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; font-family:var(--mono);}
+
+.table-panel{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); margin:18px 0; background:var(--surface);}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:14.5px;}
+th,td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top;}
+thead th{background:var(--surface-alt); font-family:var(--sans); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-weight:700;}
+tbody tr:last-child td{border-bottom:none;}
+td.num, th.num{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right;}
+tbody tr:hover{background:var(--surface-alt);}
+
+.formula{
+  background:var(--ink); color:var(--bg); border-radius:var(--radius); padding:20px 22px; margin:18px 0;
+  font-family:var(--mono); font-size:14px;
+}
+:root[data-theme="dark"] .formula, :root:not([data-theme="light"]) .formula{background:#0D0F0C;}
+.formula .label{color:var(--accent); font-size:11px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px;}
+.formula .eq{font-size:15.5px; margin-bottom:10px; font-variant-numeric:tabular-nums;}
+.formula .calc{opacity:.85; border-top:1px solid rgba(255,255,255,.15); padding-top:10px; margin-top:10px; font-variant-numeric:tabular-nums;}
+.formula .result{color:#fff; font-weight:700;}
+
+.checklist{list-style:none; margin:16px 0; padding:0; display:grid; gap:8px;}
+.checklist li{display:flex; gap:10px; align-items:flex-start; font-size:14.5px;}
+.checklist li::before{content:"✓"; color:var(--good); font-weight:700; font-family:var(--mono);}
+
+.deliverable{
+  display:flex; gap:14px; align-items:center; background:var(--surface); border:1px solid var(--accent);
+  border-radius:var(--radius); padding:14px 18px; margin-top:20px;
+}
+.deliverable .tag{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; background:var(--accent); color:#fff; padding:4px 10px; border-radius:6px; white-space:nowrap;}
+
+.flow{display:flex; flex-wrap:wrap; gap:0; align-items:stretch; margin:20px 0;}
+.flow-step{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:14px 16px; flex:1; min-width:150px; position:relative;
+}
+.flow-step .n{font-family:var(--serif); font-size:22px; color:var(--accent-ink); font-weight:600;}
+.flow-step h5{margin:4px 0 4px; font-size:14px; font-family:var(--sans); font-weight:700;}
+.flow-step p{font-size:13px; color:var(--ink-soft); margin:0;}
+.flow-arrow{display:flex; align-items:center; justify-content:center; padding:0 8px; color:var(--ink-soft); font-family:var(--mono);}
+
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:720px){.two-col{grid-template-columns:1fr;} .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg); padding:2px 0;}}
+
+.section-title{margin:64px 0 8px;}
+.section-title .eyebrow{display:block; margin-bottom:6px;}
+.footer{padding:48px 0 0; color:var(--ink-soft); font-size:13px; text-align:center;}
+kbd{font-family:var(--mono); background:var(--surface-alt); border:1px solid var(--border); border-radius:4px; padding:1px 6px; font-size:12px;}
+strong{color:var(--ink);}
+.small{font-size:13px; color:var(--ink-soft);}
+
+/* SITE NAV */
+.sitenav{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border);}
+.sitenav-inner{max-width:1040px; margin:0 auto; padding:0 24px; height:48px; display:flex; align-items:center; gap:20px; overflow-x:auto; white-space:nowrap;}
+.sitenav-brand{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); text-decoration:none; flex-shrink:0;}
+.sitenav-links{display:flex; gap:2px;}
+.sitenav-links a{font-family:var(--sans); font-size:13px; color:var(--ink-soft); text-decoration:none; padding:6px 10px; border-radius:6px; flex-shrink:0;}
+.sitenav-links a:hover{background:var(--surface-alt); color:var(--ink);}
+.sitenav-links a.is-active{color:var(--accent-ink); background:var(--accent-soft); font-weight:700;}
+</style>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="sitenav-brand" href="index.html">Projeto Integrador · E-commerce</a>
+    <div class="sitenav-links">
+      <a href="index.html">Início</a>
+      <a href="pets.html">Pets</a>
+      <a href="quadros.html">Quadros</a>
+      <a href="natura-norte.html">Raízes do Norte</a>
+      <a href="estetica.html" class="is-active">Estética</a>
+      <a href="casa-decoracao.html">Casa &amp; Decor</a>
+      <a href="doces-gourmet.html">Doces</a>
+      <a href="pos-venda-pos-consumo.html">Pós-venda &amp; Pós-consumo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="navstrip">
+  <div class="wrap">
+    <a href="#e0">0·Equipe</a><a href="#e1">1·Proposta</a><a href="#e2">2·Público</a><a href="#e3">3·Catálogo</a>
+    <a href="#e4">4·Canais</a><a href="#e5">5·Cadastro</a><a href="#e6">6·Auditoria</a><a href="#e7">7·Preço</a>
+    <a href="#e8">8·Marketing</a><a href="#e9">9·Estoque</a><a href="#e10">10·Entrega</a><a href="#e11">11·ABC</a>
+    <a href="#e12">12·Indicadores</a><a href="#pos">Pós-venda</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Projeto Integrador de E-commerce · Fase 1 — Planejamento e Estruturação</span>
+    <h1>Cultivar Estética — sessões de beleza sob agendamento</h1>
+    <p class="subtitle">Loja virtual de serviços de estética (limpeza de pele, massagem modeladora, drenagem, peeling, sobrancelhas e hidratação capilar), vendidos como sessões avulsas ou pacotes agendáveis online, com dois estúdios físicos na Região Metropolitana de São Paulo: Vila Mariana (capital) e Guarulhos (Centro).</p>
+    <div class="meta-row">
+      <span class="chip accent">Segmento: Estética e Bem-estar</span>
+      <span class="chip">Praça-piloto: São Paulo (capital) + Guarulhos</span>
+      <span class="chip">Modelo: sessões e pacotes agendáveis + kit home care sob medida</span>
+      <span class="chip">Ticket médio-alvo: R$ 138,00/sessão</span>
+    </div>
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <span class="progress-label">13 de 13 etapas com entregável essencial preenchido</span>
+    </div>
+  </header>
+
+  <!-- ETAPA 0 -->
+  <section class="module" id="e0">
+    <div class="module-head">
+      <div class="module-num">00</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Organização da equipe</div>
+        <h2>Time, papéis e ritmo de trabalho</h2>
+      </div>
+    </div>
+    <p>Um negócio de serviços agendáveis mistura três disciplinas que raramente convivem no mesmo projeto de e-commerce: saúde/estética (protocolos e contraindicações), operação de agenda (salas, turnos, ocupação) e varejo digital (checkout, marketing, atendimento). A divisão de papéis abaixo garante que nenhuma dessas frentes fique órfã.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Papel</th><th>Responsável (exemplo)</th><th>Principais entregas</th><th>Dedicação semanal</th></tr></thead>
+        <tbody>
+          <tr><td>Coordenação geral</td><td>Fernanda Lopes</td><td>Cronograma, integração das etapas, apresentação final</td><td class="num">4h</td></tr>
+          <tr><td>Pesquisa de mercado</td><td>Rafael Nunes</td><td>Concorrência, persona, benchmarks de preço em estúdios de SP/Guarulhos</td><td class="num">5h</td></tr>
+          <tr><td>Serviços & Protocolos</td><td>Juliana Prado (esteticista responsável técnica)</td><td>Ficha de cada serviço, protocolos, contraindicações, fornecedores de insumo</td><td class="num">6h</td></tr>
+          <tr><td>Financeiro & Precificação</td><td>Marcelo Duarte</td><td>Planilha de custos por sessão, precificação, indicadores de margem</td><td class="num">5h</td></tr>
+          <tr><td>Operações & Agenda</td><td>Aline Costa</td><td>Grade de salas e turnos, estoque de insumos, taxa de ocupação</td><td class="num">5h</td></tr>
+          <tr><td>Atendimento & Marketing</td><td>Thiago Ramos</td><td>Canais de agendamento, campanhas, SAC, política de cancelamento</td><td class="num">5h</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Exemplo-guia da turma</h4>
+      <p>O grupo batizou o projeto de <strong>Cultivar Estética</strong> — nome que remete a cuidado contínuo (cultivar um resultado ao longo de um protocolo, não uma sessão isolada). O naming foi validado checando disponibilidade de domínio (.com.br) e @ no Instagram, além de verificar se o termo não colide com marcas já registradas de estética no INPI antes de seguir para a Etapa 1.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ata de papéis assinada pela equipe + nome do projeto validado (domínio, redes sociais e busca prévia de marca).</span></div>
+  </section>
+
+  <!-- ETAPA 1 -->
+  <section class="module" id="e1">
+    <div class="module-head">
+      <div class="module-num">01</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Ideia, problema e proposta de valor</div>
+        <h2>Por que a Cultivar Estética precisa existir</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Objetivo</h4>
+        <p>Traduzir uma dor real de quem busca tratamento estético em uma proposta de valor específica — não "vender sessão de massagem", e sim resolver um problema de continuidade, segurança e conveniência de agenda.</p>
+      </div>
+      <div class="card">
+        <h4>O problema do cliente</h4>
+        <ul>
+          <li>Tratamentos de estética funcionam em <strong>protocolo</strong> (sequência de sessões ao longo de semanas), mas o cliente abandona no meio por falta de lembrete e acompanhamento.</li>
+          <li>Agenda fragmentada: liga, manda WhatsApp, ninguém responde rápido, perde o horário ideal do dia.</li>
+          <li>Salões informais nem sempre verificam contraindicações de saúde (gravidez, hipertensão, uso recente de ácidos) antes de aplicar um procedimento — risco real de queimadura, reação alérgica ou intercorrência.</li>
+          <li>Falta de orientação de cuidado entre sessões reduz o resultado percebido do tratamento.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Diferencial competitivo</h4>
+        <ul>
+          <li>Agendamento 100% online com confirmação automática e lembrete 24h antes (reduz no-show e fricção).</li>
+          <li>Diagnóstico de pele/corpo na primeira sessão + protocolo personalizado com sequência de procedimentos ao longo de 4 a 8 semanas.</li>
+          <li>Ficha de anamnese e termo de consentimento padronizados, com checagem de contraindicações antes de cada sessão.</li>
+          <li>Kit home care formulado sob medida conforme o tipo de pele, para prolongar o resultado entre sessões.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout tip">
+      <h4>Gerador de proposta de valor (aplicado)</h4>
+      <p><strong>Para</strong> mulheres e homens de 25 a 55 anos em São Paulo e Guarulhos <strong>que</strong> querem cuidar da pele e do corpo com segurança e continuidade, mas esbarram em agenda fragmentada e falta de acompanhamento profissional, <strong>a Cultivar Estética é</strong> uma rede de estúdios de estética com agendamento online <strong>que</strong> oferece diagnóstico personalizado, protocolos de tratamento acompanhados e kit home care sob medida, <strong>diferente de</strong> salões avulsos que atendem sem plano de continuidade nem verificação formal de contraindicações.</p>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Confundir "proposta de valor" com promessa estética exagerada (ex.: "resultado garantido em 1 sessão"). Estética séria não promete milagre — a frase acima precisa ser testável: dá para verificar se o protocolo acompanhado reduz abandono no meio do pacote, e isso vira métrica na Etapa 12.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Frase de proposta de valor validada + lista de 3 problemas priorizados por frequência de reclamação em pesquisas com clientes de estúdios da região.</span></div>
+  </section>
+
+  <!-- ETAPA 2 -->
+  <section class="module" id="e2">
+    <div class="module-head">
+      <div class="module-num">02</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Público-alvo, persona e jornada</div>
+        <h2>Quem agenda e como decide</h2>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h4>Perfil demográfico</h4>
+        <ul>
+          <li>Mulheres e homens de 25-55 anos, classes B e C, maioria mulheres (cerca de 74% dos agendamentos de estética facial/corporal, segundo pesquisas setoriais de beleza no Brasil).</li>
+          <li>Concentração em bairros de fácil acesso às duas unidades: Vila Mariana, Aclimação, Ipiranga (SP) e Centro, Jardim Presidente Dutra, Vila Galvão (Guarulhos).</li>
+          <li>Renda familiar R$ 4.500–R$ 12.000; tratamento estético tratado como rotina de autocuidado recorrente, não luxo esporádico.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Persona — Renata Farias, 34</h4>
+        <p>Analista de projetos, mora na Vila Mariana (SP), trabalha em home office híbrido. Faz limpeza de pele mensal e busca protocolo de drenagem linfática antes do verão. Pesquisa no Instagram e pergunta a amigas antes de marcar em um lugar novo, e valoriza fotos de antes/depois reais mais do que anúncio genérico de spa.</p>
+        <p class="small">Objeção principal: "já paguei sinal e cancelaram meu horário em cima da hora". Gatilho de compra: campanha de avaliação de pele gratuita + confirmação automática por WhatsApp.</p>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Etapa da jornada</th><th>O que a Renata faz</th><th>O que a Cultivar Estética precisa entregar</th></tr></thead>
+        <tbody>
+          <tr><td>1. Descoberta</td><td>Vê reels de antes/depois no Instagram/TikTok</td><td>Conteúdo com clientes reais (com autorização de imagem), não banco de imagens</td></tr>
+          <tr><td>2. Consideração</td><td>Compara preço, duração e o que está incluso em cada serviço</td><td>Fichas de serviço claras, com contraindicações e FAQ visíveis</td></tr>
+          <tr><td>3. Agendamento</td><td>Escolhe serviço, unidade, data e horário na agenda online</td><td>Sistema de agendamento com horários reais disponíveis por sala/turno</td></tr>
+          <tr><td>4. Confirmação</td><td>Recebe lembrete 24h antes, confirma presença</td><td>Lembrete automático por WhatsApp com opção de reagendar sem atrito</td></tr>
+          <tr><td>5. Atendimento</td><td>Preenche anamnese, faz a sessão, recebe orientação de cuidado</td><td>Check-in com verificação de contraindicações + orientação pós-sessão por escrito</td></tr>
+          <tr><td>6. Fidelização</td><td>Compra pacote de 10 sessões ou reagenda a próxima do protocolo</td><td>Lembrete automático da próxima sessão do pacote + oferta de kit home care</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Persona documentada + mapa de jornada de 6 etapas com ações do estúdio associadas a cada uma.</span></div>
+  </section>
+
+  <!-- ETAPA 3 -->
+  <section class="module" id="e3">
+    <div class="module-head">
+      <div class="module-num">03</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Catálogo e abastecimento</div>
+        <h2>O que vender, com que capacidade produtiva e quanto vender por mês</h2>
+      </div>
+    </div>
+    <p>Em um negócio de serviços, "abastecimento" não é reposição de mercadoria: é <strong>capacidade produtiva</strong> — número de esteticistas, horas de agenda disponíveis e insumos consumíveis por sessão. A Cultivar Estética opera 2 estúdios: <strong>Vila Mariana (SP)</strong> e <strong>Guarulhos (Centro)</strong>, cada um com 3 salas de atendimento e 2 esteticistas por turno, em 2 turnos/dia, ~20 dias úteis/mês. Para simplificar a grade de agendamento, todo serviço reserva um <strong>bloco padronizado de 90 minutos</strong> (procedimento + preparo de sala + higienização), independente da duração real do procedimento.</p>
+
+    <div class="formula">
+      <div class="label">Simulador didático — capacidade máxima de atendimentos (o verdadeiro teto operacional)</div>
+      <div class="eq">Capacidade máxima/mês = Unidades × Salas/unidade × Turnos/dia × Atendimentos/turno × Dias úteis/mês</div>
+      <div class="calc">
+        2 unidades × 3 salas × 2 turnos/dia × 4 atendimentos/turno (turno de 6h ÷ bloco de 90 min) × 20 dias úteis<br>
+        = 2 × 3 × 2 × 4 × 20 = <span class="result">960 atendimentos/mês (teto físico das 2 unidades)</span><br>
+        Em horas-sala: 2 × 3 salas × 2 turnos × 6h × 20 dias = <strong>1.440 horas-sala disponíveis/mês</strong>
+      </div>
+    </div>
+
+    <div class="formula">
+      <div class="label">Simulador didático — dimensionamento de demanda mensal (SOM) da praça</div>
+      <div class="eq">SOM mensal (sessões) = População na área de influência × % que consome estética regularmente × frequência média mensal × market share-alvo</div>
+      <div class="calc">
+        São Paulo (capital) ≈ <strong>11,45 milhões</strong> hab. + Guarulhos ≈ <strong>1,39 milhões</strong> hab. = praça de ≈ 12,84 milhões<br>
+        População na área de influência real (raio de ~5km de cada unidade, combinada) ≈ <strong>450.000</strong> pessoas de 20-55 anos<br>
+        × 18% consomem serviços de estética regularmente = 81.000 pessoas<br>
+        × frequência média de mercado (1,2 sessão/mês, considerando múltiplos prestadores) = 97.200 sessões/mês (mercado total da região)<br>
+        × market share-alvo de um estúdio novo com 2 unidades (1,0%) = <span class="result">≈ 972 sessões/mês potenciais</span>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <h4>O teto não é o mercado, é a sala</h4>
+      <p>Mesmo com uma participação de mercado conservadora de apenas 1%, a demanda potencial (≈972 sessões/mês) já <strong>supera</strong> a capacidade física das 2 unidades (960 sessões/mês). Isso significa que, diferente de uma loja de produtos, aqui o fator limitante não é gerar mais tráfego — é ampliar salas, turnos ou uma 3ª unidade. Para o planejamento operacional (Etapas 4 a 12), a equipe adota uma <strong>meta realista de ocupação de 85%</strong>, reservando margem para manutenção, faltas de equipe e feriados: <span class="result">816 atendimentos/mês</span> — número usado para dimensionar o catálogo abaixo e todo o restante do projeto.</p>
+    </div>
+
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Serviço</th><th>Duração do procedimento</th><th>Modalidade</th><th>Custo insumo/sessão</th><th>Particularidade</th><th>Capacidade alocada/mês (meta 85%)</th></tr></thead>
+        <tbody>
+          <tr><td>Limpeza de pele profunda</td><td class="num">60 min</td><td>Sessão avulsa</td><td class="num">R$ 14,50</td><td>Diagnóstico de pele feito na 1ª sessão</td><td class="num">180</td></tr>
+          <tr><td>Massagem modeladora (avulsa)</td><td class="num">50 min</td><td>Sessão avulsa</td><td class="num">R$ 8,20</td><td>Porta de entrada mais vendida</td><td class="num">147</td></tr>
+          <tr><td>Massagem modeladora (pacote 10 sessões)</td><td class="num">50 min/sessão</td><td>Pacote, validade 4 meses</td><td class="num">R$ 8,20/sessão</td><td>Protocolo de 4-8 semanas</td><td class="num">163 (sessões consumidas)</td></tr>
+          <tr><td>Design de sobrancelhas com henna</td><td class="num">30 min</td><td>Sessão avulsa</td><td class="num">R$ 6,40</td><td>Maior giro, menor ticket</td><td class="num">122</td></tr>
+          <tr><td>Drenagem linfática</td><td class="num">50 min</td><td>Sessão avulsa</td><td class="num">R$ 7,80</td><td>Contraindicada em gestantes no 1º trimestre sem liberação médica</td><td class="num">98</td></tr>
+          <tr><td>Peeling de diamante</td><td class="num">45 min</td><td>Sessão avulsa</td><td class="num">R$ 22,00</td><td>Protocolo sequencial recomendado (3-5 sessões)</td><td class="num">65</td></tr>
+          <tr><td>Hidratação capilar profunda</td><td class="num">45 min</td><td>Sessão avulsa</td><td class="num">R$ 18,90</td><td>—</td><td class="num">41</td></tr>
+          <tr><td>Kit home care sob medida</td><td class="num">—</td><td>Produto físico · envio motoboy/correio</td><td class="num">R$ 42,00/kit</td><td>Formulado conforme diagnóstico; produção interna em 3 dias úteis</td><td class="num">102 kits (não ocupa sala)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Sobre o "sob encomenda" na estética</h4><p>Aqui, sob encomenda não é um produto raro — é o <strong>plano de tratamento personalizado</strong>: diagnóstico de pele/corpo na 1ª sessão, protocolo com sequência de procedimentos ao longo de 4 a 8 semanas, e um kit home care formulado sob medida (sabonete, sérum e protetor dosados conforme o tipo de pele identificado no diagnóstico). Nada disso entra em "estoque de produto acabado": cada kit dispara uma ordem de produção interna.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Tabela de catálogo com 7 serviços + kit home care, capacidade alocada por item e evidência de que a capacidade física (960), não a demanda, é o teto do negócio.</span></div>
+  </section>
+
+  <!-- ETAPA 4 -->
+  <section class="module" id="e4">
+    <div class="module-head">
+      <div class="module-num">04</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Canais de venda</div>
+        <h2>Onde a Cultivar Estética vai vender agendamentos</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Comissão</th><th>Taxa de no-show/cancelamento</th><th>Receita líquida simulada (100 agendamentos, ticket R$138,00)</th></tr></thead>
+        <tbody>
+          <tr><td>Loja virtual própria (agenda online)</td><td class="num">~4,5% (gateway)</td><td class="num">5%</td><td class="num">R$ 12.520</td></tr>
+          <tr><td>Instagram / WhatsApp (agendamento assistido)</td><td class="num">0% (só gateway 4,5%)</td><td class="num">4%</td><td class="num">R$ 12.652</td></tr>
+          <tr><td>Plataforma de agendamento de beleza (marketplace, categoria genérica tipo Booksy/Fresha)</td><td class="num">20% por reserva</td><td class="num">8%</td><td class="num">R$ 10.157</td></tr>
+          <tr><td>Indicação/parceria com salões de beleza parceiros</td><td class="num">15% de comissão de indicação</td><td class="num">6%</td><td class="num">R$ 11.026</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Cálculo: Receita bruta = 100 × R$138,00 = R$13.800. Receita líquida = R$13.800 × (1 − comissão) × (1 − taxa de no-show/cancelamento).</p>
+    <div class="callout tip"><h4>Dica do orientador</h4><p>A plataforma de agendamento de beleza traz volume e descoberta de novos clientes, mas cobra a maior comissão e tem o maior no-show (cliente reserva em vários lugares "para garantir" e some). Use-a como vitrine de aquisição, mas empurre o cliente recorrente para a agenda própria (canal com melhor margem e melhor comparecimento).</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Matriz de canais com comissão, no-show e receita líquida simulada, e decisão de mix de canal por tipo de cliente (novo × recorrente).</span></div>
+  </section>
+
+  <!-- ETAPA 5 -->
+  <section class="module" id="e5">
+    <div class="module-head">
+      <div class="module-num">05</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Cadastro do serviço</div>
+        <h2>Ficha do serviço "Massagem Modeladora"</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Título (58/60 car.)</h4><p>Massagem Modeladora — Sessão Avulsa ou Pacote 10 Sessões</p></div>
+      <div class="card"><h4>Duração e o que inclui</h4><ul><li>50 minutos de procedimento (bloco de agenda de 90 min)</li><li>Avaliação rápida antes da sessão + orientação de cuidado ao final</li><li>Óleo modelador específico conforme objetivo (redução de medidas/relaxamento)</li></ul></div>
+      <div class="card"><h4>Contraindicações</h4><ul><li>Gravidez (dependendo da técnica e trimestre — exige liberação médica)</li><li>Hipertensão não controlada</li><li>Trombose ou varizes graves na região tratada</li><li>Câncer ativo ou em tratamento sem liberação médica</li><li>Infecções de pele ou feridas abertas na área</li><li>Pós-cirúrgico recente sem liberação médica</li></ul></div>
+      <div class="card"><h4>Prova social</h4><p>Fotos de antes/depois de clientes reais (com termo de autorização de uso de imagem assinado), sempre com a mesma iluminação e ângulo para comparação honesta — nunca com filtro ou edição de corpo.</p></div>
+    </div>
+    <div class="callout example"><h4>Roteiro de conteúdo do anúncio (7 itens obrigatórios)</h4><p>1) Foto do ambiente da sala · 2) Foto da esteticista responsável, com certificação visível · 3) Antes/depois autorizado · 4) Tabela de duração e o que está incluso · 5) Lista de contraindicações em destaque · 6) Explicação do pacote de 10 sessões e validade · 7) FAQ (posso fazer no período menstrual? preciso de quantas sessões para notar resultado?).</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ficha de serviço completa (título, duração, o que inclui, contraindicações, antes/depois, FAQ) para o serviço-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 6 -->
+  <section class="module" id="e6">
+    <div class="module-head">
+      <div class="module-num">06</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Auditoria pré-publicação</div>
+        <h2>Checklist antes de publicar o serviço e liberar a agenda</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Item</th><th>Risco se falhar</th><th>Responsável</th><th>Prazo</th></tr></thead>
+        <tbody>
+          <tr><td>Preço final confere com planilha (Etapa 7)</td><td>Alto</td><td>Financeiro</td><td class="num">D-2</td></tr>
+          <tr><td>Duração e bloco de agenda cadastrados corretamente</td><td>Alto (agenda estourada)</td><td>Operações</td><td class="num">D-2</td></tr>
+          <tr><td>Lista de contraindicações revisada pela responsável técnica</td><td>Alto (risco à saúde do cliente)</td><td>Serviços & Protocolos</td><td class="num">D-1</td></tr>
+          <tr><td>Termo de consentimento do serviço configurado para assinatura obrigatória antes da 1ª sessão</td><td>Alto (jurídico/segurança)</td><td>Serviços & Protocolos</td><td class="num">D-1</td></tr>
+          <tr><td>Fluxo de verificação de contraindicações no check-in ativado</td><td>Alto (intercorrência na sessão)</td><td>Operações</td><td class="num">D-1</td></tr>
+          <tr><td>Fotos com autorização de uso de imagem anexada</td><td>Médio</td><td>Marketing</td><td class="num">D-1</td></tr>
+          <tr><td>Estoque de insumos da sessão (máscara, ácido, descartáveis) conferido</td><td>Alto (sessão cancelada por falta de insumo)</td><td>Operações</td><td class="num">D-1</td></tr>
+          <tr><td>Política de cancelamento e reagendamento visível na ficha</td><td>Médio</td><td>Atendimento</td><td class="num">D0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Publicar o serviço e só pedir o termo de consentimento verbalmente no dia. Sem assinatura registrada e sem checagem ativa de contraindicações a cada nova sessão (o quadro de saúde do cliente pode mudar), o estúdio assume risco jurídico e de segurança desnecessário.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Checklist de 8 itens assinado pelos responsáveis, incluindo termo de consentimento e verificação de contraindicações, antes da publicação do serviço-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 7 -->
+  <section class="module" id="e7">
+    <div class="module-head">
+      <div class="module-num">07</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Precificação</div>
+        <h2>Quanto cobrar pela Massagem Modeladora avulsa</h2>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Fórmula de preço mínimo — aplicada a serviço</div>
+      <div class="eq">Preço Mínimo = (Custo de insumo/sessão + Custo de hora-profissional rateado + Aluguel rateado da sala) ÷ (1 − Comissão do canal − Margem de contribuição desejada)</div>
+      <div class="calc">
+        Custo de insumo/sessão (óleo, luvas, toalha descartável): R$ 8,20<br>
+        Custo de hora-profissional rateado (salário-base R$2.200 + encargos ≈40% = R$3.080/mês ÷ 120h/mês = R$25,67/h; bloco de 90 min = 1,5h): R$ 38,50<br>
+        Aluguel rateado da sala (Vila Mariana: R$7.200/mês ÷ 480 atendimentos/mês de capacidade da unidade = R$15,00; Guarulhos: R$4.800 ÷ 480 = R$10,00; média usada nesta simulação): R$ 12,50<br>
+        <strong>Custos por sessão = R$ 8,20 + R$ 38,50 + R$ 12,50 = R$ 59,20</strong><br>
+        Comissão do canal (loja própria, gateway): 4,5% · Margem de contribuição desejada: 40%<br>
+        Preço Mínimo = 59,20 ÷ (1 − 0,045 − 0,40) = 59,20 ÷ 0,555 = <span class="result">R$ 106,67 (mínimo)</span><br>
+        Preço praticado (arredondado e ajustado à concorrência): <span class="result">R$ 130,00</span> → margem real de contribuição ≈ 50,0%
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Concorrente</th><th>Preço sessão equivalente</th><th>Posicionamento</th></tr></thead>
+        <tbody>
+          <tr><td>Spa de bairro (Vila Mariana)</td><td class="num">R$ 110,00</td><td>Sem diagnóstico nem protocolo, agenda só por telefone</td></tr>
+          <tr><td>Estúdio premium (Jardins)</td><td class="num">R$ 220,00</td><td>Fora do raio de atuação-piloto, ticket alto</td></tr>
+          <tr><td><strong>Cultivar Estética</strong></td><td class="num"><strong>R$ 130,00</strong></td><td>Meio-termo com protocolo, diagnóstico e agenda online</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn"><h4>Erro comum — o bloco padronizado penaliza serviços rápidos</h4><p>Como todo serviço reserva o mesmo bloco de 90 minutos, o Design de sobrancelhas com henna (30 min de procedimento, R$70,00 de ticket) carrega o mesmo custo fixo de sala e profissional que a Massagem Modeladora — resultando em margem de contribuição de apenas ≈13,5%. Duas saídas possíveis: reduzir o bloco de agenda de serviços curtos para 45 min (permitindo 2 atendimentos no espaço de 1 bloco padrão) ou vendê-lo sempre como complemento de outro serviço no mesmo horário. Ver recomendação na Etapa 12.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de precificação com preço mínimo, preço praticado e margem de contribuição real por serviço do catálogo.</span></div>
+  </section>
+
+  <!-- ETAPA 8 -->
+  <section class="module" id="e8">
+    <div class="module-head">
+      <div class="module-num">08</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Marketing e funil</div>
+        <h2>Campanha "Avaliação de Pele Gratuita" (isca de topo de funil)</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Objetivo</h4><p>Gerar novos agendamentos de avaliação de pele gratuita e convertê-los em cliente pagante (sessão avulsa ou pacote) na praça SP+Guarulhos.</p></div>
+      <div class="card"><h4>Público</h4><p>Mulheres e homens 25-55, interesse em "estética" e "skincare", raio de 8km das duas unidades, lookalike de clientes atuais.</p></div>
+      <div class="card"><h4>Orçamento</h4><p>R$ 2.000/mês (Meta Ads) + R$ 400/mês (microinfluenciadoras de beleza da região)</p></div>
+    </div>
+    <div class="formula">
+      <div class="label">Indicadores do funil de agendamento</div>
+      <div class="eq">CTR = Cliques ÷ Impressões × 100 · CPC = Investimento ÷ Cliques · Taxa de agendamento = Agendamentos ÷ Cliques × 100 · CAC = Investimento ÷ Clientes agendados · ROAS = Receita ÷ Investimento</div>
+      <div class="calc">
+        Impressões: 150.000 · Cliques: 4.500 → <strong>CTR = 3,0%</strong><br>
+        Investimento R$ 2.400 ÷ 4.500 cliques → <strong>CPC = R$ 0,53</strong><br>
+        Avaliações de pele gratuitas agendadas: 180 ÷ 4.500 → <strong>Taxa de agendamento = 4,0%</strong><br>
+        CAC = 2.400 ÷ 180 = <strong>R$ 13,33</strong> por cliente agendado<br>
+        Conversão da avaliação gratuita em 1ª sessão paga: 45% → 81 clientes convertidos (entram no total de 816 atendimentos/mês do estúdio)<br>
+        Receita gerada nesses primeiros atendimentos = 81 × R$210,00 (ticket médio de 1ª compra) = R$17.010,00 → ROAS = 17.010 ÷ 2.400 = <span class="result">7,1x</span>
+      </div>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Otimizar só para taxa de agendamento alta: promover a avaliação gratuita para qualquer público (inclusive fora do raio de 8km) enche a agenda de avaliações que nunca virarão sessão paga, ocupando horário que poderia ser vendido a um cliente pronto para comprar. Restringir por raio geográfico e por intenção evita esse desperdício de capacidade — lembrando que a agenda, aqui, é o recurso escasso.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Plano de campanha com objetivo, público, orçamento, período e simulação de CTR/CPC/taxa de agendamento/CAC/ROAS.</span></div>
+  </section>
+
+  <!-- ETAPA 9 -->
+  <section class="module" id="e9">
+    <div class="module-head">
+      <div class="module-num">09</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Estoque e reposição</div>
+        <h2>Insumos de sessão e capacidade de agenda: os dois "estoques" da estética</h2>
+      </div>
+    </div>
+    <p>Um negócio de serviços tem dois recursos para gerenciar como estoque: os <strong>insumos consumíveis por sessão</strong> (máscaras, ácidos, descartáveis) e a <strong>capacidade de agenda</strong> em si (salas e horas-profissional). Os dois precisam de ponto de controle.</p>
+
+    <div class="formula">
+      <div class="label">Cobertura e ponto de pedido — máscara facial (insumo da Limpeza de Pele Profunda)</div>
+      <div class="eq">Cobertura (dias) = Estoque atual ÷ Demanda diária média · Ponto de Pedido = (Demanda diária × Prazo de reposição) + Estoque de segurança</div>
+      <div class="calc">
+        Demanda mensal: 180 sessões (20 dias úteis) → demanda diária média = 180 ÷ 20 = <strong>9,0 un./dia</strong><br>
+        Estoque atual: 190 un. → Cobertura = 190 ÷ 9,0 = <span class="result">≈ 21 dias</span><br>
+        Prazo de reposição do fornecedor de insumos estéticos: 5 dias úteis · Estoque de segurança (picos de fim de semana/feriado): 10 un.<br>
+        Ponto de Pedido = (9,0 × 5) + 10 = 45 + 10 = <span class="result">≈ 55 un.</span> (repor quando restarem 55 máscaras)
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Cenário</th><th>Demanda diária</th><th>Ponto de pedido</th><th>Estoque de segurança</th></tr></thead>
+        <tbody>
+          <tr><td>Atual (meta de 85% de ocupação)</td><td class="num">9,0 un./dia</td><td class="num">55 un.</td><td class="num">10 un.</td></tr>
+          <tr><td>Crescimento (meta de 92% de ocupação)</td><td class="num">9,7 un./dia</td><td class="num">59 un.</td><td class="num">10 un.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formula">
+      <div class="label">Capacidade de agenda — o equivalente a "estoque" de um negócio de serviço</div>
+      <div class="eq">Taxa de ocupação = Horas agendadas ÷ Horas disponíveis × 100</div>
+      <div class="calc">
+        Horas-sala disponíveis/mês (Etapa 3): 1.440h<br>
+        Atendimentos do mês simulado: 816 × bloco padrão de 1,5h = <strong>1.224 horas agendadas</strong><br>
+        Taxa de ocupação = 1.224 ÷ 1.440 × 100 = <span class="result">85,0%</span><br>
+        Meta de crescimento: 92% de ocupação = 1.325h ≈ 883 atendimentos/mês — já próximo do teto físico de 960, sinal de que uma 3ª unidade entra em pauta antes de esgotar a meta.
+      </div>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de cobertura e ponto de pedido do insumo de maior giro + cálculo de taxa de ocupação da agenda, em cenário atual e de crescimento.</span></div>
+  </section>
+
+  <!-- ETAPA 10 -->
+  <section class="module" id="e10">
+    <div class="module-head">
+      <div class="module-num">10</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Atendimento, agendamento e logística reversa</div>
+        <h2>Do clique ao cliente atendido — e ao reagendamento</h2>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Pontualidade de início e taxa de no-show</div>
+      <div class="eq">Pontualidade = (Atendimentos iniciados no horário agendado) ÷ Total de atendimentos realizados × 100 · Taxa de no-show = Não comparecimentos/cancelamentos tardios ÷ Agendamentos confirmados × 100</div>
+      <div class="calc">
+        Agendamentos confirmados no mês: 870 · Não comparecimento ou cancelamento com menos de 24h: 54 → <span class="result">Taxa de no-show = 6,2%</span><br>
+        Atendimentos realizados: 870 − 54 = <strong>816</strong><br>
+        Desses, iniciados no horário agendado (tolerância de 10 min): 760 → <span class="result">Pontualidade = 93,1%</span> (56 tiveram atraso, geralmente por sessão anterior que estourou o tempo ou sala ainda em higienização)
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Kit home care — logística reversa</th><th>Regra</th></tr></thead>
+        <tbody>
+          <tr><td>Produto com defeito de fórmula/embalagem</td><td>Troca sem custo em até 7 dias corridos do recebimento, mediante fotos do problema</td></tr>
+          <tr><td>Produto não abre a embalagem lacrada</td><td>Direito de arrependimento (Art. 49 CDC) em até 7 dias corridos, por ser compra à distância</td></tr>
+          <tr><td>Kit já aberto/usado, cliente não se adaptou</td><td>Sem troca (produto de uso pessoal aberto); orientação de uso revisada com a esteticista na próxima sessão</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Fluxograma completo do agendamento (abaixo) + cálculo de pontualidade e no-show do mês simulado.</span></div>
+  </section>
+
+  <!-- ETAPA 11 -->
+  <section class="module" id="e11">
+    <div class="module-head">
+      <div class="module-num">11</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Priorização com curva ABC/Pareto</div>
+        <h2>Onde atacar primeiro</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Problema</th><th>Ocorrências/mês</th><th>% acumulado</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td>Atraso no início do atendimento</td><td class="num">56</td><td class="num">43,1%</td><td>A</td></tr>
+          <tr><td>No-show/cancelamento tardio</td><td class="num">54</td><td class="num">84,6%</td><td>A</td></tr>
+          <tr><td>Contraindicação identificada só na hora da sessão</td><td class="num">12</td><td class="num">93,8%</td><td>B</td></tr>
+          <tr><td>Reclamação de resultado abaixo do esperado</td><td class="num">8</td><td class="num">100%</td><td>C</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Ação 5W2H — Classe A (atraso no início do atendimento)</h4>
+      <p><strong>What:</strong> criar buffer de 10 min entre sessões e checklist de preparação de sala · <strong>Why:</strong> é a maior causa de atraso e gera efeito cascata na agenda do dia · <strong>Who:</strong> Operações & Agenda · <strong>When:</strong> em 30 dias · <strong>Where:</strong> sistema de agendamento online (ajuste de configuração de bloco) · <strong>How:</strong> alerta automático 5 min antes do fim de cada sessão + treinamento da equipe em troca rápida de sala · <strong>How much:</strong> R$ 450 (treinamento da equipe), sem custo de sistema.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Curva ABC dos 4 principais problemas + plano 5W2H para a Classe A.</span></div>
+  </section>
+
+  <!-- ETAPA 12 -->
+  <section class="module" id="e12">
+    <div class="module-head">
+      <div class="module-num">12</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Indicadores e recomendação executiva</div>
+        <h2>Painel de indicadores e relatório final</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Indicador</th><th>Valor do mês simulado</th><th>Meta</th></tr></thead>
+        <tbody>
+          <tr><td>Atendimentos/mês</td><td class="num">816</td><td class="num">883 (T+2, ~92% ocupação)</td></tr>
+          <tr><td>Ticket médio por sessão</td><td class="num">R$ 138,00</td><td class="num">R$ 145,00</td></tr>
+          <tr><td>Taxa de ocupação</td><td class="num">85%</td><td class="num">92%</td></tr>
+          <tr><td>Margem de contribuição média</td><td class="num">51%</td><td class="num">55%</td></tr>
+          <tr><td>CAC por cliente agendado</td><td class="num">R$ 13,33</td><td class="num">R$ 11,00</td></tr>
+          <tr><td>ROAS</td><td class="num">7,1x</td><td class="num">8,0x</td></tr>
+          <tr><td>Taxa de no-show</td><td class="num">6,2%</td><td class="num">≤4%</td></tr>
+          <tr><td>Pontualidade de início do atendimento</td><td class="num">93,1%</td><td class="num">97%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Recomendação executiva (resumo)</h4>
+      <p><strong>Diagnóstico:</strong> a capacidade física (960 atendimentos/mês) é um teto rígido — diferente de um negócio de produto, aqui investir mais em mídia não gera mais "estoque". O maior risco não é falta de demanda, é ineficiência operacional. <strong>Evidência:</strong> atraso no início (56) e no-show (54) juntos respondem por 84,6% das ocorrências registradas, consumindo capacidade que poderia atender outro cliente. <strong>Prioridade:</strong> buffer de higienização entre sessões + reforço do lembrete de 24h com confirmação ativa. <strong>Ação de precificação:</strong> revisar o bloco de agenda do Design de sobrancelhas (margem de apenas 13,5%) para 45 min ou vendê-lo como complemento de outro serviço. <strong>Ação de marketing:</strong> manter a campanha de avaliação gratuita restrita ao raio de 8km, já que agenda cheia com cliente fora da praça não gera receita. <strong>Meta:</strong> elevar ocupação de 85% para 92% em 90 dias sem abrir nova unidade. <strong>Risco se nada mudar:</strong> ao atingir ~92% de ocupação (teto prático de crescimento nas 2 unidades atuais), qualquer novo investimento em aquisição só gera fila de espera — argumento objetivo para avaliar a 3ª unidade no próximo ciclo.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Painel com 8 indicadores + relatório executivo de 8 seções pronto para apresentação.</span></div>
+  </section>
+
+  <!-- PÓS-VENDA -->
+  <section class="module" id="pos" style="border-bottom:none;">
+    <div class="section-title">
+      <span class="eyebrow">Complemento ao projeto</span>
+      <h2 style="font-size:30px;">Pós-venda: agendamento, cancelamento e relacionamento</h2>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Fluxo de agendamento e atendimento</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Agendamento</h5><p>Cliente escolhe serviço, unidade, data e horário na agenda online; pagamento ou sinal processado</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Confirmação</h5><p>E-mail e WhatsApp automáticos com endereço da unidade, duração e instruções de preparo</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Lembrete 24h antes</h5><p>Mensagem automática pedindo confirmação ativa; se não confirmar, horário pode ser liberado</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Check-in e anamnese</h5><p>Verificação de contraindicações e termo de consentimento (1ª vez ou atualização) antes de iniciar</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Atendimento</h5><p>Sessão realizada dentro do bloco de 90 min (procedimento + preparo + higienização)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">6</div><h5>Pós-sessão e reagendamento</h5><p>Orientações de cuidado por escrito + oferta de kit home care + agendamento da próxima sessão do pacote</p></div>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Política de cancelamento e reagendamento</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Cancelamento gratuito</h4>
+        <p>Até <strong>24 horas antes</strong> do horário agendado, cancelamento ou reagendamento sem qualquer custo, para sessão avulsa ou sessão dentro de um pacote.</p>
+      </div>
+      <div class="card">
+        <h4>Cancelamento tardio ou no-show</h4>
+        <p>Com menos de 24h de antecedência ou não comparecimento, cobrança de <strong>50% do valor da sessão avulsa</strong> ou desconto de <strong>1 sessão do pacote</strong>, para cobrir o horário de sala e profissional reservado e não reaproveitado.</p>
+      </div>
+      <div class="card">
+        <h4>Reembolso de pacote não utilizado</h4>
+        <p>Sessões restantes são reembolsadas recalculando as sessões já usadas pelo <strong>preço de sessão avulsa</strong> (não pelo preço rateado do pacote), descontada taxa administrativa de 5%. Ex.: pacote de 10 massagens por R$1.100 (R$110/sessão), com 4 sessões usadas: 4 × R$130 (avulsa) = R$520 já consumido → reembolso bruto R$580 → líquido R$551 após taxa administrativa.</p>
+      </div>
+      <div class="card">
+        <h4>Validade das sessões do pacote</h4>
+        <p>Pacotes têm validade de <strong>4 meses</strong> a partir da compra. Sessões não utilizadas dentro do prazo podem ser reagendadas livremente; após o vencimento, perdem validade salvo justificativa médica documentada.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Canais de atendimento e relacionamento</h3>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Uso principal</th><th>Horário</th><th>SLA de resposta</th></tr></thead>
+        <tbody>
+          <tr><td>WhatsApp Business</td><td>Agendamento, confirmação, dúvidas de contraindicação, reagendamento</td><td>Seg-sáb, 9h-19h</td><td class="num">até 30 min</td></tr>
+          <tr><td>Instagram Direct</td><td>Pré-venda, prova social, dúvidas rápidas</td><td>Seg-sáb, 9h-19h</td><td class="num">até 2h</td></tr>
+          <tr><td>E-mail (SAC)</td><td>Reembolso de pacote, reclamações formais, notas fiscais</td><td>Todos os dias</td><td class="num">até 24h</td></tr>
+          <tr><td>Recepção física (unidade)</td><td>Check-in, dúvidas presenciais, venda de kit home care</td><td>Horário de funcionamento da unidade</td><td class="num">imediato</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Fluxo de escalonamento</h4><p>Nível 1 (recepção/atendente) resolve reagendamentos e dúvidas simples em até 2h → Nível 2 (responsável técnica) entra em casos de dúvida sobre contraindicação, reação na pele ou insatisfação com resultado em até 4h → Nível 3 (coordenação geral) atua em reclamações formais (Reclame Aqui/Procon) ou incidentes de segurança em até 24h, sempre com resposta pública + resolução privada registrada.</p></div>
+  </section>
+
+  <footer class="footer">
+    Projeto Integrador de E-commerce — Fase 1 · Cultivar Estética · Material didático com simulações para fins de aprendizagem.
+  </footer>
+</div>

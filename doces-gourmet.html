@@ -1,0 +1,804 @@
+<title>Confeito de Autor — Projeto Integrador · Doces Gourmet</title>
+<style>
+:root{
+  --bg:#EEF0EC; --surface:#FFFFFF; --surface-alt:#E3E6DE; --border:#D2D6C9;
+  --ink:#1F2421; --ink-soft:#545C52;
+  --accent:#7A3B2E; --accent-ink:#451F17; --accent-soft:#EEDFD9;
+  --good:#2E7D4F; --warn:#B8790A; --critical:#B23A3A;
+  --radius:10px;
+  --serif: Georgia,'Iowan Old Style','Sitka Text','Source Serif Pro',serif;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono: ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+    --ink:#ECEEE7; --ink-soft:#ABB2A3;
+    --accent:#D08769; --accent-ink:#FBEAE1; --accent-soft:#3A281F;
+    --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+  --ink:#ECEEE7; --ink-soft:#ABB2A3;
+  --accent:#D08769; --accent-ink:#FBEAE1; --accent-soft:#3A281F;
+  --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--sans);
+  margin:0; line-height:1.55; font-size:16px;
+}
+.wrap{max-width:1040px; margin:0 auto; padding:0 24px 96px;}
+h1,h2,h3,h4{font-family:var(--serif); text-wrap:balance; margin:0; color:var(--ink);}
+p{margin:0 0 12px; max-width:74ch;}
+a{color:var(--accent-ink);}
+.eyebrow{
+  font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em;
+  font-size:12px; color:var(--accent-ink); font-weight:600;
+}
+/* HERO */
+.hero{
+  padding:56px 0 40px; border-bottom:1px solid var(--border);
+  display:flex; flex-direction:column; gap:18px;
+}
+.hero h1{font-size:clamp(32px,4.4vw,50px); font-weight:600;}
+.hero .subtitle{font-size:18px; color:var(--ink-soft); max-width:68ch;}
+.meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+.chip{
+  font-family:var(--mono); font-size:12.5px; padding:6px 12px; border-radius:999px;
+  border:1px solid var(--border); background:var(--surface); color:var(--ink-soft);
+}
+.chip.accent{background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600;}
+.progress{
+  display:flex; align-items:center; gap:12px; margin-top:8px;
+}
+.progress-track{flex:1; max-width:320px; height:8px; background:var(--surface-alt); border-radius:999px; overflow:hidden; border:1px solid var(--border);}
+.progress-fill{height:100%; width:100%; background:var(--accent);}
+.progress-label{font-family:var(--mono); font-size:13px; color:var(--ink-soft); white-space:nowrap;}
+
+/* NAV STRIP */
+.navstrip{
+  position:sticky; top:48px; z-index:5; background:var(--bg);
+  border-bottom:1px solid var(--border); padding:10px 0; margin-bottom:8px;
+  overflow-x:auto; white-space:nowrap;
+}
+.navstrip .wrap{padding-bottom:0; display:flex; gap:6px;}
+.navstrip a{
+  font-family:var(--mono); font-size:12px; color:var(--ink-soft); text-decoration:none;
+  padding:5px 10px; border-radius:6px; border:1px solid transparent;
+}
+.navstrip a:hover{border-color:var(--border); color:var(--ink);}
+
+/* MODULE */
+.module{padding:52px 0; border-bottom:1px solid var(--border); scroll-margin-top:56px;}
+.module-head{display:flex; gap:20px; align-items:flex-start; margin-bottom:22px;}
+.module-num{
+  font-family:var(--serif); font-size:40px; font-weight:600; color:var(--accent-ink);
+  min-width:64px;
+}
+.module-title-wrap{flex:1;}
+.module-kicker{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:4px;}
+.module h2{font-size:26px; font-weight:600;}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:18px 0;}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px 20px;
+}
+.card h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; font-family:var(--sans); font-weight:700; color:var(--accent-ink); margin-bottom:8px;}
+.card p:last-child{margin-bottom:0;}
+.card ul{margin:0; padding-left:18px;}
+.card li{margin-bottom:5px;}
+
+.callout{border-radius:var(--radius); padding:16px 20px; margin:16px 0; border:1px solid var(--border);}
+.callout.tip{background:var(--accent-soft); border-color:var(--accent);}
+.callout.warn{background:var(--surface); border-left:4px solid var(--warn);}
+.callout.example{background:var(--surface-alt); border-style:dashed;}
+.callout h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; font-family:var(--mono);}
+
+.table-panel{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); margin:18px 0; background:var(--surface);}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:14.5px;}
+th,td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top;}
+thead th{background:var(--surface-alt); font-family:var(--sans); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-weight:700;}
+tbody tr:last-child td{border-bottom:none;}
+td.num, th.num{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right;}
+tbody tr:hover{background:var(--surface-alt);}
+
+.formula{
+  background:var(--ink); color:var(--bg); border-radius:var(--radius); padding:20px 22px; margin:18px 0;
+  font-family:var(--mono); font-size:14px;
+}
+:root[data-theme="dark"] .formula, :root:not([data-theme="light"]) .formula{background:#0D0F0C;}
+.formula .label{color:var(--accent); font-size:11px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px;}
+.formula .eq{font-size:15.5px; margin-bottom:10px; font-variant-numeric:tabular-nums;}
+.formula .calc{opacity:.85; border-top:1px solid rgba(255,255,255,.15); padding-top:10px; margin-top:10px; font-variant-numeric:tabular-nums;}
+.formula .result{color:#fff; font-weight:700;}
+
+.checklist{list-style:none; margin:16px 0; padding:0; display:grid; gap:8px;}
+.checklist li{display:flex; gap:10px; align-items:flex-start; font-size:14.5px;}
+.checklist li::before{content:"✓"; color:var(--good); font-weight:700; font-family:var(--mono);}
+
+.deliverable{
+  display:flex; gap:14px; align-items:center; background:var(--surface); border:1px solid var(--accent);
+  border-radius:var(--radius); padding:14px 18px; margin-top:20px;
+}
+.deliverable .tag{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; background:var(--accent); color:#fff; padding:4px 10px; border-radius:6px; white-space:nowrap;}
+
+.flow{display:flex; flex-wrap:wrap; gap:0; align-items:stretch; margin:20px 0;}
+.flow-step{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:14px 16px; flex:1; min-width:150px; position:relative;
+}
+.flow-step .n{font-family:var(--serif); font-size:22px; color:var(--accent-ink); font-weight:600;}
+.flow-step h5{margin:4px 0 4px; font-size:14px; font-family:var(--sans); font-weight:700;}
+.flow-step p{font-size:13px; color:var(--ink-soft); margin:0;}
+.flow-arrow{display:flex; align-items:center; justify-content:center; padding:0 8px; color:var(--ink-soft); font-family:var(--mono);}
+
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:720px){.two-col{grid-template-columns:1fr;} .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg); padding:2px 0;}}
+
+.section-title{margin:64px 0 8px;}
+.section-title .eyebrow{display:block; margin-bottom:6px;}
+.footer{padding:48px 0 0; color:var(--ink-soft); font-size:13px; text-align:center;}
+kbd{font-family:var(--mono); background:var(--surface-alt); border:1px solid var(--border); border-radius:4px; padding:1px 6px; font-size:12px;}
+strong{color:var(--ink);}
+.small{font-size:13px; color:var(--ink-soft);}
+.subhead{font-size:19px; margin:32px 0 6px;}
+
+/* SITE NAV */
+.sitenav{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border);}
+.sitenav-inner{max-width:1040px; margin:0 auto; padding:0 24px; height:48px; display:flex; align-items:center; gap:20px; overflow-x:auto; white-space:nowrap;}
+.sitenav-brand{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); text-decoration:none; flex-shrink:0;}
+.sitenav-links{display:flex; gap:2px;}
+.sitenav-links a{font-family:var(--sans); font-size:13px; color:var(--ink-soft); text-decoration:none; padding:6px 10px; border-radius:6px; flex-shrink:0;}
+.sitenav-links a:hover{background:var(--surface-alt); color:var(--ink);}
+.sitenav-links a.is-active{color:var(--accent-ink); background:var(--accent-soft); font-weight:700;}
+</style>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="sitenav-brand" href="index.html">Projeto Integrador · E-commerce</a>
+    <div class="sitenav-links">
+      <a href="index.html">Início</a>
+      <a href="pets.html">Pets</a>
+      <a href="quadros.html">Quadros</a>
+      <a href="natura-norte.html">Raízes do Norte</a>
+      <a href="estetica.html">Estética</a>
+      <a href="casa-decoracao.html">Casa &amp; Decor</a>
+      <a href="doces-gourmet.html" class="is-active">Doces</a>
+      <a href="pos-venda-pos-consumo.html">Pós-venda &amp; Pós-consumo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="navstrip">
+  <div class="wrap">
+    <a href="#e0">0·Equipe</a><a href="#e1">1·Proposta</a><a href="#e2">2·Público</a><a href="#e3">3·Catálogo</a>
+    <a href="#e4">4·Canais</a><a href="#e5">5·Cadastro</a><a href="#e6">6·Auditoria</a><a href="#e7">7·Preço</a>
+    <a href="#e8">8·Marketing</a><a href="#e9">9·Estoque</a><a href="#e10">10·Entrega</a><a href="#e11">11·ABC</a>
+    <a href="#e12">12·Indicadores</a><a href="#pos">Pós-venda</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Projeto Integrador de E-commerce · Fase 1 — Planejamento e Estruturação</span>
+    <h1>Confeito de Autor — doces gourmet avulsos e sob encomenda</h1>
+    <p class="subtitle">Loja virtual de confeitaria artesanal com duas linhas de negócio: doces gourmet vendidos em pequenas unidades avulsas para entrega rápida, e produção sob encomenda para eventos de pessoa física (aniversários, casamentos) e pessoa jurídica (coffee break corporativo, brindes), com praça-piloto São Paulo (capital) + Guarulhos.</p>
+    <div class="meta-row">
+      <span class="chip accent">Segmento: Confeitaria Gourmet D2C</span>
+      <span class="chip">Praça-piloto: São Paulo (capital) + Guarulhos</span>
+      <span class="chip">Modelo: produção sob demanda (linha avulsa) + sob encomenda (linha eventos)</span>
+      <span class="chip">Ticket médio-alvo: linha avulsa R$ 46,50 · eventos a partir de R$ 480</span>
+    </div>
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <span class="progress-label">13 de 13 etapas com entregável essencial preenchido</span>
+    </div>
+  </header>
+
+  <!-- ETAPA 0 -->
+  <section class="module" id="e0">
+    <div class="module-head">
+      <div class="module-num">00</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Organização da equipe</div>
+        <h2>Time, papéis e ritmo de trabalho</h2>
+      </div>
+    </div>
+    <p>Um e-commerce de alimentos é, antes de tudo, uma operação regulada: além de estilo e vendas, a equipe precisa endereçar cedo os requisitos sanitários e de validade que decidem se o negócio pode legalmente colocar um anúncio no ar. A divisão de papéis abaixo garante que ninguém trate isso como "detalhe para depois".</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Papel</th><th>Responsável (exemplo)</th><th>Principais entregas</th><th>Dedicação semanal</th></tr></thead>
+        <tbody>
+          <tr><td>Coordenação geral</td><td>Renata C.</td><td>Cronograma, integração das etapas, apresentação final</td><td class="num">4h</td></tr>
+          <tr><td>Pesquisa de mercado</td><td>Thiago M.</td><td>Concorrência, persona, benchmarks de preço em docerias/buffets de SP/Guarulhos</td><td class="num">5h</td></tr>
+          <tr><td>Confeitaria & Produto</td><td>Isabela F.</td><td>Fichas técnicas, fornecedores de insumos, cardápio avulso e de eventos</td><td class="num">6h</td></tr>
+          <tr><td>Financeiro & Precificação</td><td>Rafael N.</td><td>Planilha de custos, precificação, indicadores de margem</td><td class="num">5h</td></tr>
+          <tr><td>Operações, Sanitário & Logística</td><td>Juliana P.</td><td>Alvará sanitário, BPF, estoque, fornecimento, entrega/montagem de eventos</td><td class="num">6h</td></tr>
+          <tr><td>Atendimento & Marketing</td><td>Gustavo A.</td><td>Canais de venda, campanhas, briefing de eventos, SAC, política de trocas</td><td class="num">5h</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Exemplo-guia da turma</h4>
+      <p>O grupo batizou o projeto de <strong>Confeito de Autor</strong> — nome que remete a autoria e cuidado artesanal, evitando termos genéricos como "Doceria Online". Antes de validar domínio e @ no Instagram, a equipe já levantou o custo e o prazo médio de emissão do Alvará sanitário municipal, porque sem ele nenhum anúncio pode ir ao ar (ver Etapa 6).</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ata de papéis assinada pela equipe + nome do projeto validado (domínio, redes sociais e pré-requisito sanitário mapeado).</span></div>
+  </section>
+
+  <!-- ETAPA 1 -->
+  <section class="module" id="e1">
+    <div class="module-head">
+      <div class="module-num">01</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Ideia, problema e proposta de valor</div>
+        <h2>Por que a Confeito de Autor precisa existir</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Objetivo</h4>
+        <p>Traduzir uma dor real de dois públicos diferentes — quem quer se presentear ou presentear alguém com pouca quantidade, e quem organiza um evento — em uma proposta de valor específica para cada linha, sem misturar as duas em uma promessa genérica de "doces bons".</p>
+      </div>
+      <div class="card">
+        <h4>O problema do cliente</h4>
+        <ul>
+          <li>Quem quer comprar doce gourmet em pequena quantidade esbarra em mínimos altos de personal chefs ou em padarias sem apresentação/prova social.</li>
+          <li>Noivos e organizadores de festa encontram buffets com mesa de doces genérica, sem personalização de tema/cor.</li>
+          <li>Empresas que querem brindes comestíveis para coffee break não encontram fornecedor pequeno com regularidade sanitária comprovada e etiqueta personalizada.</li>
+          <li>Em todos os casos, falta clareza sobre validade e conservação — um problema sério em produto perecível.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Diferencial competitivo</h4>
+        <ul>
+          <li>Ficha técnica declarada por doce (ingredientes, validade, conservação) em todos os anúncios.</li>
+          <li>Produção 100% própria em cozinha registrada, com Alvará sanitário e Boas Práticas de Fabricação (BPF).</li>
+          <li>Linha avulsa com entrega expressa em SP/Guarulhos e linha sob encomenda com briefing dedicado por tema/cor.</li>
+          <li>Atendimento B2B direto para RH e facilities, sem depender só de marketplace de comida.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout tip">
+      <h4>Gerador de proposta de valor (aplicado)</h4>
+      <p><strong>Para</strong> consumidores finais e organizadores de eventos (pessoa física e jurídica) em São Paulo e Guarulhos <strong>que</strong> querem doces gourmet com apresentação cuidada, seja em pequena quantidade ou em mesas/kits personalizados, <strong>a Confeito de Autor é</strong> uma confeitaria artesanal online <strong>que</strong> entrega doces avulsos com validade declarada e conserva sob encomenda personalizada por tema, com prazo mínimo e sinal claros, <strong>diferente de</strong> docerias de bairro sem ficha técnica e de buffets tradicionais com mesa de doces genérica e mínimos inviáveis para pedidos pequenos.</p>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Tratar a linha avulsa e a linha de eventos como o mesmo funil de venda. O ciclo de decisão, o ticket e a operação por trás de uma caixa de brigadeiro comprada por impulso são completamente diferentes de uma mesa de casamento fechada com 60 dias de antecedência — cada linha precisa da sua proposta de valor testável (Etapa 12 mede as duas separadamente).</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Duas frases de proposta de valor (avulsa e eventos) validadas + lista de 3 problemas priorizados por linha.</span></div>
+  </section>
+
+  <!-- ETAPA 2 -->
+  <section class="module" id="e2">
+    <div class="module-head">
+      <div class="module-num">02</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Público-alvo, persona e jornada</div>
+        <h2>Quem compra e como decide</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Perfil demográfico</h4>
+        <ul>
+          <li>São Paulo (capital) ≈ 11,45 milhões de hab. + Guarulhos ≈ 1,39 milhão de hab. → praça ≈ 12,84 milhões de hab. (≈4,6 milhões de domicílios, IBGE).</li>
+          <li>Linha avulsa: concentração em bairros de classe B/C com hábito de presentear/consumo-experiência: Vila Mariana, Moema, Tatuapé, Santana (SP) e Centro/Jardim Presidente Dutra (Guarulhos).</li>
+          <li>Linha eventos: noivos e famílias planejando festas (picos mar-jun e set-dez) e empresas de médio porte com RH/facilities ativos o ano todo, com pico em dezembro (confraternizações).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Persona avulsa — Aline Ferreira, 29</h4>
+        <p>Nutricionista, mora em apartamento no Tatuapé (SP). Segue confeitarias no Instagram, decide a compra pela foto e pela prova social, e compra em média 1 caixa a cada 3-4 semanas para presentear ou se presentear.</p>
+        <p class="small">Objeção: "não sei se chega gelado e fresquinho". Gatilho: embalagem térmica visível no anúncio + selo de validade.</p>
+      </div>
+      <div class="card">
+        <h4>Persona evento PF — Marina Costa, 27 (noiva)</h4>
+        <p>Planeja o casamento com 6 meses de antecedência, pesquisa fornecedores no Pinterest/Instagram e quer mesa de doces combinando com a paleta de cores do evento. Decide após reunião de briefing e prova/degustação.</p>
+        <p class="small">Objeção: "e se o sabor da prova não for igual no dia do evento?". Gatilho: contrato com sinal claro e prazo mínimo declarado (21 dias).</p>
+      </div>
+      <div class="card">
+        <h4>Persona evento PJ — Fernanda Alves, 41 (Analista de RH)</h4>
+        <p>Organiza coffee breaks e brindes de fim de ano para ~120 colaboradores. Precisa de nota fiscal, prazo confiável e possibilidade de logo comestível/etiqueta personalizada na caixa.</p>
+        <p class="small">Objeção: "preciso de recorrência, não de um pedido único". Gatilho: atendimento B2B dedicado e contrato recorrente.</p>
+      </div>
+    </div>
+    <p class="subhead">Jornada — cliente avulso (Aline)</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Etapa</th><th>O que a Aline faz</th><th>O que a Confeito de Autor precisa entregar</th></tr></thead>
+        <tbody>
+          <tr><td>1. Descoberta</td><td>Vê reels de doces sendo cortados/montados no Instagram</td><td>Conteúdo com o doce real, corte mostrando recheio</td></tr>
+          <tr><td>2. Consideração</td><td>Confere validade e se entrega gelado até seu bairro</td><td>Selo de validade e área de entrega expressa visíveis</td></tr>
+          <tr><td>3. Compra</td><td>Escolhe sabores e horário de entrega no mesmo dia</td><td>Checkout simples com janela de entrega clara</td></tr>
+          <tr><td>4. Entrega</td><td>Acompanha status por WhatsApp</td><td>Embalagem térmica + aviso de saída para entrega</td></tr>
+          <tr><td>5. Uso</td><td>Fotografa e posta marcando a marca</td><td>Incentivo de UGC (desconto na próxima compra por foto)</td></tr>
+          <tr><td>6. Pós-venda</td><td>Recebe lembrete em data comemorativa</td><td>Lembrete sazonal + recompra facilitada</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="subhead">Jornada — cliente de evento (Marina/Fernanda)</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Etapa</th><th>O que a cliente faz</th><th>O que a Confeito de Autor precisa entregar</th></tr></thead>
+        <tbody>
+          <tr><td>1. Descoberta</td><td>Pesquisa fornecedores no Instagram/indicação</td><td>Portfólio de mesas/caixas anteriores por tema</td></tr>
+          <tr><td>2. Briefing</td><td>Agenda reunião para alinhar tema, cor e quantidade</td><td>Roteiro de briefing padronizado (Etapa 10)</td></tr>
+          <tr><td>3. Orçamento e prova</td><td>Recebe proposta e agenda degustação</td><td>Orçamento claro com prazo mínimo e política de sinal</td></tr>
+          <tr><td>4. Confirmação</td><td>Paga sinal de 50% e assina o pedido</td><td>Contrato simples com data-limite de alteração/cancelamento</td></tr>
+          <tr><td>5. Entrega/montagem</td><td>Recebe ou tem a mesa montada no local do evento</td><td>Equipe própria de montagem (opcional) + checklist de transporte</td></tr>
+          <tr><td>6. Pós-evento</td><td>Avalia e indica para outras noivas/empresas</td><td>Follow-up com pedido de depoimento e fotos para portfólio</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>3 personas documentadas (avulsa, evento PF, evento PJ) + 2 mapas de jornada com ações da loja associadas a cada etapa.</span></div>
+  </section>
+
+  <!-- ETAPA 3 -->
+  <section class="module" id="e3">
+    <div class="module-head">
+      <div class="module-num">03</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Catálogo e abastecimento</div>
+        <h2>O que vender, com quais insumos e quanto vender por mês</h2>
+      </div>
+    </div>
+    <p>O catálogo combina uma <strong>linha avulsa</strong> (produção contínua para entrega rápida, "gôndola online") com uma <strong>linha sob encomenda</strong> para eventos (produção disparada por briefing, com quantidade mínima). Os insumos são comprados de distribuidores de confeitaria da região da Rua Bresser e da Barra Funda (SP), com risco relevante de variação de preço do chocolate/cacau por câmbio e sazonalidade de safra.</p>
+
+    <h3 class="subhead" style="font-size:16px;">Insumos e fornecimento</h3>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Insumo</th><th>Fornecedor/Região</th><th>Custo</th><th>Observação</th></tr></thead>
+        <tbody>
+          <tr><td>Chocolate belga (fracionado)</td><td>Distribuidor Rua Bresser (Brás)</td><td class="num">R$ 89,90/kg</td><td>Risco: câmbio + sazonalidade do cacau</td></tr>
+          <tr><td>Chocolate ao leite nacional</td><td>Distribuidor Barra Funda</td><td class="num">R$ 32,50/kg</td><td>Usado em coberturas de itens de entrada</td></tr>
+          <tr><td>Leite condensado</td><td>Atacadista local</td><td class="num">R$ 6,20/lata (395g)</td><td>Validade longa fechado; curta após aberto</td></tr>
+          <tr><td>Creme de leite fresco</td><td>Atacadista local</td><td class="num">R$ 5,80/cx (200g)</td><td>Validade curta (7-10 dias refrigerado)</td></tr>
+          <tr><td>Manteiga sem sal</td><td>Distribuidor Barra Funda</td><td class="num">R$ 44,00/kg</td><td>Validade média (60 dias refrigerada)</td></tr>
+          <tr><td>Embalagem personalizada (caixa + etiqueta)</td><td>Gráfica parceira (Brás)</td><td class="num">a partir de R$ 4,40/caixa</td><td>Pedido mínimo mensal de 500 caixas</td></tr>
+          <tr><td>Forminhas de papel</td><td>Distribuidor Rua Bresser</td><td class="num">R$ 0,18/un</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formula">
+      <div class="label">Ficha técnica de custo — brigadeiro gourmet tradicional (batelada de 30 unidades)</div>
+      <div class="eq">Custo/unidade = (Ingredientes ÷ Rendimento) + Rateio de embalagem + Rateio de gás/energia + Mão de obra por unidade</div>
+      <div class="calc">
+        Leite condensado: 2 latas × R$6,20 = R$12,40 · Chocolate belga (ganache+cobertura): 450g × R$89,90/kg = R$40,46<br>
+        Manteiga: 60g × R$44,00/kg = R$2,64 · Forminhas: 30un × R$0,18 = R$5,40 → <strong>Total ingredientes = R$60,90</strong><br>
+        Custo de ingredientes/unidade = 60,90 ÷ 30 = R$2,03<br>
+        Rateio de embalagem (caixa 6un R$3,80 + etiqueta R$0,60 ÷ 6un): R$0,73/un · Rateio de gás/energia (estimado): R$0,15/un<br>
+        Mão de obra: confeiteira produz ≈120 un/hora, custo-hora R$25,00 → 25,00 ÷ 120 = R$0,21/un<br>
+        Custo total/unidade = 2,03 + 0,73 + 0,15 + 0,21 = <span class="result">R$ 3,12/un</span> (caixa de 6un = R$18,72 · caixa de 12un, com rateio de embalagem menor, = R$34,44)
+      </div>
+    </div>
+
+    <h3 class="subhead" style="font-size:16px;">SKUs de venda avulsa (pronta-entrega)</h3>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>SKU</th><th>Sabores/variações</th><th>Custo</th><th>Preço</th><th>Validade</th><th>Demanda est./mês</th></tr></thead>
+        <tbody>
+          <tr><td>Caixa brigadeiro gourmet 6un</td><td>Tradicional, pistache, ninho c/ nutella</td><td class="num">R$ 18,72</td><td class="num">R$ 34,90</td><td class="num">5-7 dias refrig.</td><td class="num">180 cx./mês</td></tr>
+          <tr><td>Caixa brigadeiro gourmet 12un</td><td>Sortida (4 de cada sabor)</td><td class="num">R$ 34,44</td><td class="num">R$ 64,90</td><td class="num">5-7 dias refrig.</td><td class="num">130 cx./mês</td></tr>
+          <tr><td>Cookie recheado (cx. 4un)</td><td>Chocolate belga, doce de leite</td><td class="num">R$ 15,20</td><td class="num">R$ 32,90</td><td class="num">15 dias</td><td class="num">90 cx./mês</td></tr>
+          <tr><td>Trufa artesanal (cx. 6un)</td><td>Meio amargo, avelã</td><td class="num">R$ 23,70</td><td class="num">R$ 42,90</td><td class="num">6 dias refrig.</td><td class="num">70 cx./mês</td></tr>
+          <tr><td>Bolo no pote (unidade)</td><td>Ninho c/ morango, chocolate</td><td class="num">R$ 7,90</td><td class="num">R$ 16,90</td><td class="num">4 dias refrig.</td><td class="num">90 un./mês</td></tr>
+          <tr><td>Palha italiana (cx. 8un)</td><td>Tradicional</td><td class="num">R$ 16,80</td><td class="num">R$ 36,90</td><td class="num">7 dias refrig.</td><td class="num">54 cx./mês</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead" style="font-size:16px;">Linha sob encomenda (eventos PF/PJ)</h3>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Linha sob encomenda</th><th>Público</th><th>MOQ</th><th>Prazo mínimo</th><th>Ticket médio</th><th>Demanda est./mês</th></tr></thead>
+        <tbody>
+          <tr><td>Mesa de doces personalizada (por tema/cor)</td><td>PF — aniversário</td><td class="num">50 doces</td><td class="num">7 dias</td><td class="num">R$ 1.150</td><td class="num">≈4,8 pedidos</td></tr>
+          <tr><td>Kit mini doces para casamento</td><td>PF — casamento</td><td class="num">100 mini doces</td><td class="num">21 dias</td><td class="num">R$ 2.980</td><td class="num">≈0,9 pedido</td></tr>
+          <tr><td>Caixa corporativa personalizada (logo comestível/etiqueta)</td><td>PJ — coffee break/brindes</td><td class="num">50 unidades</td><td class="num">7 dias</td><td class="num">R$ 980</td><td class="num">≈0,3 pedido</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Todo pedido sob encomenda passa por: reunião de briefing → orçamento com prova/degustação (cobrada se o pedido ficar abaixo de R$800; gratuita acima disso) → sinal de 50% na confirmação → produção. Casamentos e grandes volumes exigem 21 dias de antecedência mínima; demais eventos, 7 dias.</p>
+
+    <div class="formula">
+      <div class="label">Simulador didático — dimensionamento da demanda mensal (SOM) · linha avulsa</div>
+      <div class="eq">SOM avulsa = População da praça × % que compra doces gourmet online/mês × Frequência de compra × Market share-alvo</div>
+      <div class="calc">
+        População SP (capital) + Guarulhos ≈ <strong>12.840.000 hab.</strong> (11,45 mi + 1,39 mi — IBGE)<br>
+        × 4% compram doces gourmet online mensalmente = 513.600 clientes ativos/mês<br>
+        × 1,3 compras/mês por cliente ativo = 667.680 pedidos/mês (mercado total da praça)<br>
+        × market share-alvo de uma marca nova e nichada (0,08%)<br>
+        = <span class="result">≈534 pedidos avulsos/mês</span> → ≈614 caixas/unidades vendidas (1,15 item/pedido em média)
+      </div>
+    </div>
+
+    <div class="formula">
+      <div class="label">Simulador didático — dimensionamento da demanda mensal (SOM) · linha sob encomenda</div>
+      <div class="eq">SOM eventos = Eventos/mês na praça (aniversários + casamentos + corporativos) × % que contrata doces personalizados × Market share-alvo</div>
+      <div class="calc">
+        Aniversários residenciais com festa contratada: 4.600.000 domicílios × 8%/ano ÷ 12 ≈ 30.667 festas/mês<br>
+        Casamentos: 12.840.000 hab. × taxa de nupcialidade ≈5,5/1.000 hab./ano ÷ 12 ≈ 5.885 casamentos/mês<br>
+        Eventos corporativos: ≈1.200.000 empresas ativas na praça × 0,15%/mês ≈ 1.800 eventos/mês<br>
+        Total ≈ 38.352 eventos/mês na praça × 3% contrata doces personalizados = 1.151 eventos/mês (mercado)<br>
+        × market share-alvo (0,5%) = <span class="result">≈6 pedidos de evento/mês</span> (≈4,8 aniversário + ≈0,9 casamento + ≈0,3 corporativo)
+      </div>
+    </div>
+
+    <div class="formula">
+      <div class="label">Receita total combinada simulada (mês-piloto)</div>
+      <div class="eq">Receita total = (Pedidos avulsos × Ticket médio avulso) + (Pedidos de evento × Ticket médio evento)</div>
+      <div class="calc">
+        Avulsa: 534 pedidos × R$46,50 = R$24.831,00<br>
+        Eventos: 6 pedidos × R$1.420 (ticket médio ponderado) = R$8.520,00<br>
+        Total = <span class="result">R$ 33.351,00/mês</span> (GMV simulado combinado)
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <h4>Risco de fornecimento — variação do preço do cacau/chocolate</h4>
+      <p>Se o chocolate belga subir de R$89,90/kg para R$103,90/kg (+15,6%, cenário de entressafra/alta do câmbio), o custo de ingredientes por unidade sobe de R$2,03 para R$2,24, elevando o custo total da caixa de 12un de R$34,44 para R$36,96. Ao preço praticado de R$64,90, a margem de contribuição real cairia de 42,4% para 38,6% (-3,8 p.p.). Mitigação: compra programada em lotes maiores durante baixa do câmbio e cláusula de reajuste em contratos B2B recorrentes.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ficha técnica de custo do brigadeiro + tabela de catálogo (6 SKUs avulsos + 3 linhas sob encomenda) com custos, MOQ, prazos e demanda mensal estimada.</span></div>
+  </section>
+
+  <!-- ETAPA 4 -->
+  <section class="module" id="e4">
+    <div class="module-head">
+      <div class="module-num">04</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Canais de venda</div>
+        <h2>Onde a Confeito de Autor vai vender</h2>
+      </div>
+    </div>
+    <p class="subhead" style="font-size:16px; margin-top:0;">Canais — linha avulsa</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Comissão</th><th>Taxa de reposição por não conformidade</th><th>Receita líquida simulada (534 pedidos, ticket R$46,50)</th></tr></thead>
+        <tbody>
+          <tr><td>Loja virtual própria</td><td class="num">~4,5% (gateway)</td><td class="num">2%</td><td class="num">R$ 23.239,33</td></tr>
+          <tr><td>Instagram Shopping / WhatsApp</td><td class="num">0% (PIX/dinheiro na entrega)</td><td class="num">1,5%</td><td class="num">R$ 24.458,54</td></tr>
+          <tr><td>iFood / Rappi</td><td class="num">27%</td><td class="num">4%</td><td class="num">R$ 17.401,56</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Cálculo: Receita bruta = 534 × R$46,50 = R$24.831,00. Receita líquida = Receita bruta × (1 − comissão) × (1 − taxa de reposição por não conformidade).</p>
+    <p class="subhead" style="font-size:16px;">Canais — linha sob encomenda (eventos)</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Comissão</th><th>Ciclo médio de venda</th><th>Observação</th></tr></thead>
+        <tbody>
+          <tr><td>Instagram/WhatsApp (orçamento direto)</td><td class="num">0%</td><td class="num">3-7 dias</td><td>Essencial para prova social visual (fotos de mesas montadas)</td></tr>
+          <tr><td>Prospecção B2B direta (RH/facilities)</td><td class="num">0%</td><td class="num">30-45 dias</td><td>Sem comissão, mas ciclo mais longo; depende de relacionamento e amostras</td></tr>
+          <tr><td>Cerimonialistas/buffets parceiros</td><td class="num">10-15% (indicação)</td><td class="num">15-30 dias</td><td>Canal de parceria útil para escalar casamentos</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Dica do orientador</h4><p>Não coloque a linha sob encomenda no iFood/Rappi: esses canais são pensados para entrega imediata, e o prazo mínimo de 7-21 dias de uma mesa de doces personalizada não cabe nesse modelo. Reserve marketplaces de comida só para a linha avulsa, e trate eventos como venda consultiva via Instagram, WhatsApp e prospecção B2B.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Matriz de canais por linha de produto (avulsa × eventos), com comissão, ciclo/reposição e receita líquida simulada.</span></div>
+  </section>
+
+  <!-- ETAPA 5 -->
+  <section class="module" id="e5">
+    <div class="module-head">
+      <div class="module-num">05</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Cadastro do produto</div>
+        <h2>Ficha de anúncio da caixa de brigadeiro gourmet 12un</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Título (56/60 car.)</h4><p>Caixa Brigadeiro Gourmet 12un Sabores Sortidos Presente</p></div>
+      <div class="card"><h4>Palavras-chave</h4><ul><li>doces gourmet para presente</li><li>brigadeiro gourmet SP</li><li>caixa de doces personalizada</li><li>doce sob encomenda para evento</li></ul></div>
+      <div class="card"><h4>Ficha técnica</h4><ul><li>Sabores: tradicional, pistache, ninho c/ nutella (4un cada)</li><li>Peso líquido: 360g (30g/un)</li><li>Validade: 5-7 dias refrigerado (2-8°C) / até 2h fora da geladeira</li><li>Contém leite; pode conter traços de nozes</li></ul></div>
+      <div class="card"><h4>FAQ do anúncio</h4><ul><li>"Posso deixar fora da geladeira?" — até 2h em dia ameno</li><li>"Chega no mesmo dia?" — sim, para SP capital e Guarulhos, pedidos até 14h</li><li>"Tem versão sem lactose?" — em desenvolvimento, ainda não disponível</li></ul></div>
+    </div>
+    <div class="callout example"><h4>Roteiro de imagens (7 fotos obrigatórias)</h4><p>1) Caixa fechada em fundo neutro · 2) Caixa aberta mostrando os 12 brigadeiros · 3) Corte transversal mostrando o recheio cremoso · 4) Doce individual em pinça/talher · 5) Foto com escala (régua ou moeda) · 6) Tabela de ingredientes e validade · 7) Embalagem com etiqueta e selo de validade visíveis.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ficha de anúncio completa (título, palavras-chave, ficha técnica, FAQ, 7 fotos) para o SKU-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 6 -->
+  <section class="module" id="e6">
+    <div class="module-head">
+      <div class="module-num">06</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Auditoria pré-publicação</div>
+        <h2>Checklist antes de publicar qualquer anúncio</h2>
+      </div>
+    </div>
+    <div class="callout warn">
+      <h4>Exigência legal — bloqueante</h4>
+      <p>Vender doces "informalmente" pelo Instagram, sem CNPJ e sem Alvará sanitário, é ilegal e arriscado. A produção precisa ocorrer em <strong>cozinha registrada</strong> (CNPJ MEI ou ME compatível com fabricação de alimentos + Alvará sanitário da Vigilância Sanitária municipal), seguindo as <strong>Boas Práticas de Fabricação (BPF)</strong>. Cada tipo de doce precisa de ficha de validade e armazenamento declarada — o brigadeiro gourmet, por levar creme de leite/leite condensado sem conservantes industriais, tem validade curta refrigerado (~5-7 dias) e não pode ser vendido sem essa informação visível ao cliente. Nenhum anúncio deve ir ao ar antes desse bloco jurídico-sanitário estar 100% resolvido.</p>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Item</th><th>Risco se falhar</th><th>Responsável</th><th>Prazo</th></tr></thead>
+        <tbody>
+          <tr><td>CNPJ MEI/ME ativo e compatível com fabricação de alimentos</td><td>Crítico</td><td>Financeiro</td><td class="num">D-30</td></tr>
+          <tr><td>Alvará sanitário da Vigilância Sanitária municipal emitido</td><td>Crítico (interdição/multa)</td><td>Operações</td><td class="num">D-30</td></tr>
+          <tr><td>Cozinha em conformidade com Boas Práticas de Fabricação (BPF)</td><td>Crítico</td><td>Operações</td><td class="num">D-20</td></tr>
+          <tr><td>Ficha de validade e armazenamento cadastrada por doce</td><td>Alto (intoxicação/reclamação)</td><td>Produto</td><td class="num">D-10</td></tr>
+          <tr><td>Preço final confere com ficha técnica de custo (Etapa 7)</td><td>Alto</td><td>Financeiro</td><td class="num">D-2</td></tr>
+          <tr><td>Peso, dimensões e necessidade de resfriamento no frete cadastrados</td><td>Alto (perda de qualidade)</td><td>Operações</td><td class="num">D-2</td></tr>
+          <tr><td>Fotos com validade e ingredientes visíveis</td><td>Médio</td><td>Produto</td><td class="num">D-1</td></tr>
+          <tr><td>MOQ e prazo mínimo (7/21 dias) destacados nos anúncios sob encomenda</td><td>Alto (reclamação)</td><td>Atendimento</td><td class="num">D-1</td></tr>
+          <tr><td>Política de sinal de 50% e cancelamento visível no orçamento</td><td>Médio</td><td>Atendimento</td><td class="num">D0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Checklist de 9 itens assinado pelos responsáveis, com o bloco sanitário resolvido, antes da publicação do anúncio-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 7 -->
+  <section class="module" id="e7">
+    <div class="module-head">
+      <div class="module-num">07</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Precificação</div>
+        <h2>Quanto cobrar pela caixa de brigadeiro gourmet 12un</h2>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Fórmula de preço mínimo</div>
+      <div class="eq">Preço Mínimo = Custos por unidade ÷ (1 − Comissão do canal − Margem de contribuição desejada)</div>
+      <div class="calc">
+        Custo total da caixa de 12un (ficha técnica, Etapa 3): <strong>R$ 34,44</strong><br>
+        Comissão do canal (loja própria, gateway): 4,5% · Margem de contribuição desejada: 32%<br>
+        Preço Mínimo = 34,44 ÷ (1 − 0,045 − 0,38) = 34,44 ÷ 0,575 = <span class="result">R$ 59,90 (mínimo)</span><br>
+        Preço praticado (arredondado e ajustado à concorrência): <span class="result">R$ 64,90</span> → margem real de contribuição ≈ 42,4%
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Concorrente</th><th>Preço caixa equivalente (12un)</th><th>Posicionamento</th></tr></thead>
+        <tbody>
+          <tr><td>Doceria de bairro</td><td class="num">R$ 42,00</td><td>Sem ficha técnica, sabor único, sem validade declarada</td></tr>
+          <tr><td>Confeitaria artesanal similar (Instagram)</td><td class="num">R$ 74,90</td><td>Personalização alta, mas sem padronização de validade</td></tr>
+          <tr><td><strong>Confeito de Autor</strong></td><td class="num"><strong>R$ 64,90</strong></td><td>Meio-termo com ficha técnica declarada + embalagem térmica</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de precificação com preço mínimo, preço praticado e margem de contribuição real por SKU avulso.</span></div>
+  </section>
+
+  <!-- ETAPA 8 -->
+  <section class="module" id="e8">
+    <div class="module-head">
+      <div class="module-num">08</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Marketing e funil</div>
+        <h2>Campanha "Doce Momento" (linha avulsa) + prospecção B2B (linha eventos)</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Objetivo</h4><p>Sustentar ~534 pedidos avulsos/mês e crescer de 6 para 10 pedidos de evento/mês na praça SP+Guarulhos.</p></div>
+      <div class="card"><h4>Público (linha avulsa)</h4><p>25-45 anos, interesse em "confeitaria"/"presentes", raio de 15km de zonas com hábito de presentear, lookalike de clientes atuais.</p></div>
+      <div class="card"><h4>Orçamento</h4><p>R$ 2.400/mês (Meta Ads) + R$ 600/mês (micro-influenciadores de gastronomia)</p></div>
+    </div>
+    <div class="formula">
+      <div class="label">Indicadores do funil — linha avulsa</div>
+      <div class="eq">CTR = Cliques ÷ Impressões × 100 · CPC = Investimento ÷ Cliques · Conversão = Pedidos ÷ Cliques × 100 · CAC = Investimento ÷ Pedidos · ROAS = Receita ÷ Investimento</div>
+      <div class="calc">
+        Impressões: 300.000 · Cliques: 6.000 → <strong>CTR = 2,0%</strong><br>
+        Investimento R$2.400 ÷ 6.000 cliques → <strong>CPC = R$ 0,40</strong><br>
+        Pedidos gerados pela campanha: 120 ÷ 6.000 → <strong>Conversão = 2,0%</strong><br>
+        CAC = 2.400 ÷ 120 = <strong>R$ 20,00</strong> por pedido<br>
+        Receita gerada = 120 × R$46,50 = R$5.580,00 → ROAS = 5.580,00 ÷ 2.400 = <span class="result">2,3x</span>
+      </div>
+    </div>
+    <div class="callout tip"><h4>Prospecção B2B — linha eventos</h4><p>Sem funil pago: lista de RH/facilities de empresas de médio porte na região, abordagem via LinkedIn/e-mail com envio de amostra de degustação, ciclo médio de 30-45 dias até o primeiro pedido. Meta: 2 novos contratos corporativos recorrentes por trimestre.</p></div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Otimizar só para CTR alto na linha avulsa: fotos "apetitosas demais" sem preço/validade visíveis geram cliques de curiosos sem intenção de compra, inflando o CAC efetivo. Segmentar por interesse + comportamento de compra reduz esse ruído.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Plano de campanha da linha avulsa (CTR/CPC/conversão/CAC/ROAS) + roteiro de prospecção B2B para a linha eventos.</span></div>
+  </section>
+
+  <!-- ETAPA 9 -->
+  <section class="module" id="e9">
+    <div class="module-head">
+      <div class="module-num">09</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Estoque e reposição</div>
+        <h2>Equilibrar ponto de pedido e risco de perda por validade</h2>
+      </div>
+    </div>
+    <p>O chocolate belga tem validade longa (~12 meses, seco, ambiente) e permite estoque de segurança generoso. Já os laticínios frescos (creme de leite, leite condensado aberto) têm validade curta e exigem lotes pequenos e frequentes — comprar demais gera perda por vencimento antes mesmo de faltar espaço no estoque.</p>
+    <div class="formula">
+      <div class="label">Ponto de pedido diferenciado por validade do insumo</div>
+      <div class="eq">Ponto de Pedido = (Consumo diário médio × Prazo de reposição) + Estoque de segurança (ajustado ao risco de perda)</div>
+      <div class="calc">
+        <strong>Chocolate belga</strong> (validade ~12 meses, baixo risco de perda): consumo diário 3,2kg · prazo de reposição (Rua Bresser) 3 dias · estoque de segurança generoso 15kg<br>
+        Ponto de Pedido = (3,2 × 3) + 15 = 9,6 + 15 = <span class="result">≈25kg</span> (repor em lotes maiores, diluindo frete/negociando desconto)<br>
+        <strong>Creme de leite fresco</strong> (validade 7-10 dias refrigerado, alto risco de perda): consumo diário 4,5 cx · prazo de reposição (atacadista local) 1 dia · estoque de segurança mínimo 3 cx<br>
+        Ponto de Pedido = (4,5 × 1) + 3 = 4,5 + 3 = <span class="result">≈8 caixas</span> (repor em pequenos lotes, 2-3x por semana)
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Insumo</th><th>Validade</th><th>Consumo diário</th><th>Prazo de reposição</th><th>Estoque de segurança</th><th>Ponto de pedido</th><th>Frequência recomendada</th></tr></thead>
+        <tbody>
+          <tr><td>Chocolate belga</td><td>~12 meses</td><td class="num">3,2kg</td><td class="num">3 dias</td><td class="num">15kg</td><td class="num">25kg</td><td>Quinzenal (lotes maiores)</td></tr>
+          <tr><td>Creme de leite fresco</td><td>7-10 dias refrig.</td><td class="num">4,5 cx</td><td class="num">1 dia</td><td class="num">3 cx</td><td class="num">8 cx</td><td>2-3x por semana</td></tr>
+          <tr><td>Leite condensado</td><td>12 meses / 5 dias aberto</td><td class="num">3,0 latas</td><td class="num">2 dias</td><td class="num">6 latas</td><td class="num">12 latas</td><td>Semanal</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Tabela de cobertura e ponto de pedido para os 3 principais insumos, evidenciando o trade-off entre ruptura e perda por vencimento.</span></div>
+  </section>
+
+  <!-- ETAPA 10 -->
+  <section class="module" id="e10">
+    <div class="module-head">
+      <div class="module-num">10</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Entrega, atendimento e logística reversa</div>
+        <h2>Do clique/briefing à mesa montada</h2>
+      </div>
+    </div>
+    <p>As duas linhas seguem caminhos operacionais distintos: a venda avulsa é produção sob demanda de curto prazo com entrega rápida local; o pedido de evento passa por briefing, orçamento, sinal e produção escalonada, podendo incluir montagem no local.</p>
+    <p class="subhead" style="font-size:16px;">Caminho A — Venda avulsa (curto prazo)</p>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Confirmação</h5><p>Pagamento aprovado (site/WhatsApp/iFood) → previsão de entrega no mesmo dia ou D+1</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Produção sob demanda</h5><p>Doce finalizado no turno, respeitando a fila de pedidos do dia</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Controle de qualidade</h5><p>Checagem visual + resfriamento adequado antes da embalagem</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Embalagem térmica</h5><p>Caixa + gelo reciclável para SKUs sensíveis ao calor</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Entrega</h5><p>Motoboy próprio/parceiro em SP capital e Guarulhos ou retirada</p></div>
+    </div>
+    <p class="subhead" style="font-size:16px;">Caminho B — Pedido de evento (sob encomenda)</p>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Briefing</h5><p>Reunião sobre tema, cores, quantidade, orçamento e data</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Orçamento e prova</h5><p>Degustação agendada (cobrada se pedido &lt;R$800)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Sinal de 50%</h5><p>Confirmação respeitando prazo mínimo (7 ou 21 dias)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Produção</h5><p>Escalonada para não competir com a linha avulsa do dia a dia</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Entrega/montagem</h5><p>Transporte especial + equipe própria para montar a mesa no local</p></div>
+    </div>
+    <div class="formula">
+      <div class="label">OTIF por linha de venda</div>
+      <div class="eq">OTIF = (Pedidos completos e no prazo ÷ Total de pedidos) × 100</div>
+      <div class="calc">
+        Linha avulsa: 534 pedidos/mês · 505 completos e no prazo → <span class="result">OTIF avulsa = 94,6%</span><br>
+        Linha eventos: 6 pedidos/mês · 5 completos e no prazo (1 com atraso de montagem) → <span class="result">OTIF eventos = 83,3%</span>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Motivo de reposição/reclamação (linha avulsa)</th><th>Ocorrências/mês</th><th>% do total</th></tr></thead>
+        <tbody>
+          <tr><td>Transporte fora da temperatura ideal (derretimento)</td><td class="num">9</td><td class="num">56%</td></tr>
+          <tr><td>Embalagem danificada no transporte</td><td class="num">5</td><td class="num">31%</td></tr>
+          <tr><td>Sabor/item divergente do pedido</td><td class="num">2</td><td class="num">13%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Total de 16 reposições/reembolsos em 534 pedidos ≈ 3,0% (taxa de reposição por não conformidade da linha avulsa).</p>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Dois fluxogramas do pedido (avulsa e evento) + cálculo de OTIF e taxa de reposição por não conformidade do mês simulado.</span></div>
+  </section>
+
+  <!-- ETAPA 11 -->
+  <section class="module" id="e11">
+    <div class="module-head">
+      <div class="module-num">11</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Priorização com curva ABC/Pareto</div>
+        <h2>Onde atacar primeiro</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Problema</th><th>Ocorrências/mês</th><th>% acumulado</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td>Transporte fora da temperatura (derretimento)</td><td class="num">9</td><td class="num">50%</td><td>A</td></tr>
+          <tr><td>Embalagem danificada no transporte</td><td class="num">5</td><td class="num">77,8%</td><td>A</td></tr>
+          <tr><td>Atraso na produção/montagem de evento</td><td class="num">2</td><td class="num">88,9%</td><td>B</td></tr>
+          <tr><td>Sabor/item divergente do pedido</td><td class="num">2</td><td class="num">100%</td><td>C</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Ação 5W2H — Classe A (transporte fora da temperatura)</h4>
+      <p><strong>What:</strong> adotar embalagem térmica com gel reciclável e caixa isotérmica para brigadeiro, trufa e bolo no pote · <strong>Why:</strong> maior causa de reposição (56% dos casos) · <strong>Who:</strong> Operações · <strong>When:</strong> em 15 dias · <strong>Where:</strong> entregas via motoboy próprio/parceiro · <strong>How:</strong> parceria com fornecedor de embalagem térmica + treinamento dos motoboys · <strong>How much:</strong> R$ 450 (kit inicial de caixas térmicas + gelo reciclável).</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Curva ABC dos 4 principais problemas + plano 5W2H para a Classe A.</span></div>
+  </section>
+
+  <!-- ETAPA 12 -->
+  <section class="module" id="e12">
+    <div class="module-head">
+      <div class="module-num">12</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Indicadores e recomendação executiva</div>
+        <h2>Painel de indicadores e relatório final</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Indicador</th><th>Valor do mês simulado</th><th>Meta</th></tr></thead>
+        <tbody>
+          <tr><td>Pedidos avulsos/mês</td><td class="num">534</td><td class="num">650 (T+2)</td></tr>
+          <tr><td>Pedidos de evento/mês</td><td class="num">6</td><td class="num">10 (T+2)</td></tr>
+          <tr><td>Ticket médio avulso</td><td class="num">R$ 46,50</td><td class="num">R$ 50,00</td></tr>
+          <tr><td>Ticket médio evento</td><td class="num">R$ 1.420</td><td class="num">R$ 1.600</td></tr>
+          <tr><td>Receita total combinada/mês</td><td class="num">R$ 33.351</td><td class="num">R$ 48.500</td></tr>
+          <tr><td>Margem de contribuição média (avulsa)</td><td class="num">42,4%</td><td class="num">45%</td></tr>
+          <tr><td>CAC (linha avulsa)</td><td class="num">R$ 20,00</td><td class="num">R$ 16,00</td></tr>
+          <tr><td>ROAS</td><td class="num">2,3x</td><td class="num">3,0x</td></tr>
+          <tr><td>OTIF avulsa / evento</td><td class="num">94,6% / 83,3%</td><td class="num">97% / 95%</td></tr>
+          <tr><td>Taxa de reposição por não conformidade</td><td class="num">3,0%</td><td class="num">≤2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Recomendação executiva (resumo)</h4>
+      <p><strong>Diagnóstico:</strong> o transporte fora da temperatura ideal (Classe A) é o maior risco à margem e à reputação. <strong>Evidência:</strong> 9 das 16 reposições do mês (56%). <strong>Prioridade:</strong> embalagem térmica com gel reciclável + revisão de rota dos entregadores. <strong>Ação de marketing:</strong> usar a embalagem térmica como diferencial de comunicação e reforçar prova social das mesas de evento. <strong>Ação financeira:</strong> manter margem-alvo de 45% mesmo sob variação do preço do chocolate, via compra programada em lotes maiores. <strong>Ação logística:</strong> equilibrar ponto de pedido de insumos perecíveis com o risco de perda. <strong>Ação comercial:</strong> intensificar a prospecção B2B para levar a linha eventos de 6 para 10 pedidos/mês. <strong>Meta:</strong> reduzir a taxa de reposição para ≤2% em 60 dias. <strong>Risco se nada mudar:</strong> perda de reputação nas redes (principal canal de aquisição) e erosão de margem por reposições recorrentes.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Painel com 10 indicadores + relatório executivo de 8 seções pronto para apresentação.</span></div>
+  </section>
+
+  <!-- PÓS-VENDA -->
+  <section class="module" id="pos" style="border-bottom:none;">
+    <div class="section-title">
+      <span class="eyebrow">Complemento ao projeto</span>
+      <h2 style="font-size:30px;">Pós-venda: relacionamento, trocas e cancelamento</h2>
+    </div>
+
+    <h3 class="subhead">Fluxo de atendimento e relacionamento</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Confirmação</h5><p>Resumo do pedido por WhatsApp (itens, data, endereço/local)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Lembrete e alinhamento</h5><p>D-2 (avulsa) ou D-7/D-3 (evento) confirmando detalhes finais</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Acompanhamento</h5><p>Atualização de status de produção para pedidos de evento</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Entrega/montagem</h5><p>Conforme fluxo operacional da Etapa 10</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Pós-entrega</h5><p>Mensagem D0/D+1 pedindo avaliação e foto</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">6</div><h5>Reativação</h5><p>Lembrete sazonal (avulsa) ou pedido de indicação (evento)</p></div>
+    </div>
+
+    <h3 class="subhead">Política de trocas, garantia de qualidade e cancelamento</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Sem devolução física (produto perecível)</h4>
+        <p>Por se tratar de produto alimentício perecível, produzido sob demanda e, em parte, personalizado, <strong>não há devolução física</strong> do doce por questões sanitárias. A política foca em garantia de qualidade, não em arrependimento simples.</p>
+      </div>
+      <div class="card">
+        <h4>Garantia de qualidade</h4>
+        <p>Reposição ou reembolso integral caso o produto chegue <strong>danificado</strong>, <strong>fora da temperatura correta</strong> (derretido) ou <strong>diferente do combinado</strong> (sabor/tema errado), mediante foto/vídeo enviado em até 2h do recebimento.</p>
+      </div>
+      <div class="card">
+        <h4>Sinal e cancelamento — eventos</h4>
+        <p>Cancelamento com <strong>mais de 10 dias</strong> de antecedência: sinal devolvido com desconto de taxa administrativa de 15%. Cancelamento com <strong>menos de 10 dias</strong>: sinal não é reembolsável, pois os insumos já foram comprados e a produção pode já ter iniciado.</p>
+      </div>
+      <div class="card">
+        <h4>Alterações de pedido</h4>
+        <p>Mudanças de quantidade ou tema até 10 dias antes do evento, sujeitas à disponibilidade de insumos e a possível ajuste de valor.</p>
+      </div>
+    </div>
+
+    <h3 class="subhead">Canais de atendimento e relacionamento</h3>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Uso principal</th><th>Horário</th><th>SLA de resposta</th></tr></thead>
+        <tbody>
+          <tr><td>WhatsApp Business</td><td>Pedidos avulsos, status, briefing e orçamento de eventos</td><td>Seg-sáb, 9h-19h</td><td class="num">até 30 min</td></tr>
+          <tr><td>Instagram Direct</td><td>Pré-venda, prova social, dúvidas rápidas</td><td>Seg-sáb, 9h-19h</td><td class="num">até 2h</td></tr>
+          <tr><td>E-mail (SAC)</td><td>Formalização de contratos de evento, notas fiscais, reclamações</td><td>Todos os dias</td><td class="num">até 24h</td></tr>
+          <tr><td>Chat do site</td><td>Suporte durante o checkout da linha avulsa</td><td>Seg-sáb, 9h-19h</td><td class="num">até 5 min</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Fluxo de escalonamento</h4><p>Nível 1 (atendente) resolve dúvidas e reposições simples em até 2h → Nível 2 (coordenação) entra em casos de defeito recorrente, atraso de evento ou insatisfação pública em até 4h → Nível 3 (fundadores) atua em reclamações formais (Reclame Aqui/Procon) em até 24h, sempre com resposta pública + resolução privada registrada.</p></div>
+  </section>
+
+  <footer class="footer">
+    Projeto Integrador de E-commerce — Fase 1 · Confeito de Autor · Material didático com simulações para fins de aprendizagem.
+  </footer>
+</div>

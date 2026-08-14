@@ -1,0 +1,720 @@
+<title>Lar Aberto — Projeto Integrador · Casa e Decoração</title>
+<style>
+:root{
+  --bg:#EEF0EC; --surface:#FFFFFF; --surface-alt:#E3E6DE; --border:#D2D6C9;
+  --ink:#1F2421; --ink-soft:#545C52;
+  --accent:#3E6E8E; --accent-ink:#1E374A; --accent-soft:#DDE9F0;
+  --good:#2E7D4F; --warn:#B8790A; --critical:#B23A3A;
+  --radius:10px;
+  --serif: Georgia,'Iowan Old Style','Sitka Text','Source Serif Pro',serif;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono: ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+    --ink:#ECEEE7; --ink-soft:#ABB2A3;
+    --accent:#6FB0DA; --accent-ink:#E7F3FA; --accent-soft:#223441;
+    --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+  --ink:#ECEEE7; --ink-soft:#ABB2A3;
+  --accent:#6FB0DA; --accent-ink:#E7F3FA; --accent-soft:#223441;
+  --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--sans);
+  margin:0; line-height:1.55; font-size:16px;
+}
+.wrap{max-width:1040px; margin:0 auto; padding:0 24px 96px;}
+h1,h2,h3,h4{font-family:var(--serif); text-wrap:balance; margin:0; color:var(--ink);}
+p{margin:0 0 12px; max-width:74ch;}
+a{color:var(--accent-ink);}
+.eyebrow{
+  font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em;
+  font-size:12px; color:var(--accent-ink); font-weight:600;
+}
+/* HERO */
+.hero{
+  padding:56px 0 40px; border-bottom:1px solid var(--border);
+  display:flex; flex-direction:column; gap:18px;
+}
+.hero h1{font-size:clamp(32px,4.4vw,50px); font-weight:600;}
+.hero .subtitle{font-size:18px; color:var(--ink-soft); max-width:68ch;}
+.meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+.chip{
+  font-family:var(--mono); font-size:12.5px; padding:6px 12px; border-radius:999px;
+  border:1px solid var(--border); background:var(--surface); color:var(--ink-soft);
+}
+.chip.accent{background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600;}
+.progress{
+  display:flex; align-items:center; gap:12px; margin-top:8px;
+}
+.progress-track{flex:1; max-width:320px; height:8px; background:var(--surface-alt); border-radius:999px; overflow:hidden; border:1px solid var(--border);}
+.progress-fill{height:100%; width:100%; background:var(--accent);}
+.progress-label{font-family:var(--mono); font-size:13px; color:var(--ink-soft); white-space:nowrap;}
+
+/* NAV STRIP */
+.navstrip{
+  position:sticky; top:48px; z-index:5; background:var(--bg);
+  border-bottom:1px solid var(--border); padding:10px 0; margin-bottom:8px;
+  overflow-x:auto; white-space:nowrap;
+}
+.navstrip .wrap{padding-bottom:0; display:flex; gap:6px;}
+.navstrip a{
+  font-family:var(--mono); font-size:12px; color:var(--ink-soft); text-decoration:none;
+  padding:5px 10px; border-radius:6px; border:1px solid transparent;
+}
+.navstrip a:hover{border-color:var(--border); color:var(--ink);}
+
+/* MODULE */
+.module{padding:52px 0; border-bottom:1px solid var(--border); scroll-margin-top:56px;}
+.module-head{display:flex; gap:20px; align-items:flex-start; margin-bottom:22px;}
+.module-num{
+  font-family:var(--serif); font-size:40px; font-weight:600; color:var(--accent-ink);
+  min-width:64px;
+}
+.module-title-wrap{flex:1;}
+.module-kicker{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:4px;}
+.module h2{font-size:26px; font-weight:600;}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:18px 0;}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px 20px;
+}
+.card h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; font-family:var(--sans); font-weight:700; color:var(--accent-ink); margin-bottom:8px;}
+.card p:last-child{margin-bottom:0;}
+.card ul{margin:0; padding-left:18px;}
+.card li{margin-bottom:5px;}
+
+.callout{border-radius:var(--radius); padding:16px 20px; margin:16px 0; border:1px solid var(--border);}
+.callout.tip{background:var(--accent-soft); border-color:var(--accent);}
+.callout.warn{background:var(--surface); border-left:4px solid var(--warn);}
+.callout.example{background:var(--surface-alt); border-style:dashed;}
+.callout h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; font-family:var(--mono);}
+
+.table-panel{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); margin:18px 0; background:var(--surface);}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:14.5px;}
+th,td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top;}
+thead th{background:var(--surface-alt); font-family:var(--sans); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-weight:700;}
+tbody tr:last-child td{border-bottom:none;}
+td.num, th.num{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right;}
+tbody tr:hover{background:var(--surface-alt);}
+
+.formula{
+  background:var(--ink); color:var(--bg); border-radius:var(--radius); padding:20px 22px; margin:18px 0;
+  font-family:var(--mono); font-size:14px;
+}
+:root[data-theme="dark"] .formula, :root:not([data-theme="light"]) .formula{background:#0D0F0C;}
+.formula .label{color:var(--accent); font-size:11px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px;}
+.formula .eq{font-size:15.5px; margin-bottom:10px; font-variant-numeric:tabular-nums;}
+.formula .calc{opacity:.85; border-top:1px solid rgba(255,255,255,.15); padding-top:10px; margin-top:10px; font-variant-numeric:tabular-nums;}
+.formula .result{color:#fff; font-weight:700;}
+
+.checklist{list-style:none; margin:16px 0; padding:0; display:grid; gap:8px;}
+.checklist li{display:flex; gap:10px; align-items:flex-start; font-size:14.5px;}
+.checklist li::before{content:"✓"; color:var(--good); font-weight:700; font-family:var(--mono);}
+
+.deliverable{
+  display:flex; gap:14px; align-items:center; background:var(--surface); border:1px solid var(--accent);
+  border-radius:var(--radius); padding:14px 18px; margin-top:20px;
+}
+.deliverable .tag{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; background:var(--accent); color:#fff; padding:4px 10px; border-radius:6px; white-space:nowrap;}
+
+.flow{display:flex; flex-wrap:wrap; gap:0; align-items:stretch; margin:20px 0;}
+.flow-step{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:14px 16px; flex:1; min-width:150px; position:relative;
+}
+.flow-step .n{font-family:var(--serif); font-size:22px; color:var(--accent-ink); font-weight:600;}
+.flow-step h5{margin:4px 0 4px; font-size:14px; font-family:var(--sans); font-weight:700;}
+.flow-step p{font-size:13px; color:var(--ink-soft); margin:0;}
+.flow-arrow{display:flex; align-items:center; justify-content:center; padding:0 8px; color:var(--ink-soft); font-family:var(--mono);}
+
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:720px){.two-col{grid-template-columns:1fr;} .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg); padding:2px 0;}}
+
+.section-title{margin:64px 0 8px;}
+.section-title .eyebrow{display:block; margin-bottom:6px;}
+.footer{padding:48px 0 0; color:var(--ink-soft); font-size:13px; text-align:center;}
+kbd{font-family:var(--mono); background:var(--surface-alt); border:1px solid var(--border); border-radius:4px; padding:1px 6px; font-size:12px;}
+strong{color:var(--ink);}
+.small{font-size:13px; color:var(--ink-soft);}
+
+/* SITE NAV */
+.sitenav{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border);}
+.sitenav-inner{max-width:1040px; margin:0 auto; padding:0 24px; height:48px; display:flex; align-items:center; gap:20px; overflow-x:auto; white-space:nowrap;}
+.sitenav-brand{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); text-decoration:none; flex-shrink:0;}
+.sitenav-links{display:flex; gap:2px;}
+.sitenav-links a{font-family:var(--sans); font-size:13px; color:var(--ink-soft); text-decoration:none; padding:6px 10px; border-radius:6px; flex-shrink:0;}
+.sitenav-links a:hover{background:var(--surface-alt); color:var(--ink);}
+.sitenav-links a.is-active{color:var(--accent-ink); background:var(--accent-soft); font-weight:700;}
+</style>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="sitenav-brand" href="index.html">Projeto Integrador · E-commerce</a>
+    <div class="sitenav-links">
+      <a href="index.html">Início</a>
+      <a href="pets.html">Pets</a>
+      <a href="quadros.html">Quadros</a>
+      <a href="natura-norte.html">Raízes do Norte</a>
+      <a href="estetica.html">Estética</a>
+      <a href="casa-decoracao.html" class="is-active">Casa &amp; Decor</a>
+      <a href="doces-gourmet.html">Doces</a>
+      <a href="pos-venda-pos-consumo.html">Pós-venda &amp; Pós-consumo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="navstrip">
+  <div class="wrap">
+    <a href="#e0">0·Equipe</a><a href="#e1">1·Proposta</a><a href="#e2">2·Público</a><a href="#e3">3·Catálogo</a>
+    <a href="#e4">4·Canais</a><a href="#e5">5·Cadastro</a><a href="#e6">6·Auditoria</a><a href="#e7">7·Preço</a>
+    <a href="#e8">8·Marketing</a><a href="#e9">9·Estoque</a><a href="#e10">10·Entrega</a><a href="#e11">11·ABC</a>
+    <a href="#e12">12·Indicadores</a><a href="#pos">Pós-venda</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Projeto Integrador de E-commerce · Fase 1 — Planejamento e Estruturação</span>
+    <h1>Lar Aberto — casa e decoração sob medida do seu jeito</h1>
+    <p class="subtitle">Loja virtual de itens de decoração de pronta entrega (almofadas, tapetes, vasos, iluminação) combinada com uma linha sob encomenda (cortinas sob medida, prateleiras em MDF e capas personalizadas), com praça-piloto em São Paulo (capital) e Guarulhos.</p>
+    <div class="meta-row">
+      <span class="chip accent">Segmento: Casa &amp; Decoração</span>
+      <span class="chip">Praça-piloto: São Paulo (capital) + Guarulhos</span>
+      <span class="chip">Modelo: estoque enxuto + sob encomenda (cortina/prateleira/capa personalizada)</span>
+      <span class="chip">Ticket médio-alvo: R$ 134,90</span>
+    </div>
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <span class="progress-label">13 de 13 etapas com entregável essencial preenchido</span>
+    </div>
+  </header>
+
+  <!-- ETAPA 0 -->
+  <section class="module" id="e0">
+    <div class="module-head">
+      <div class="module-num">00</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Organização da equipe</div>
+        <h2>Time, papéis e ritmo de trabalho</h2>
+      </div>
+    </div>
+    <p>Uma loja que mistura estoque de pronta entrega com produção sob medida (marcenaria e costura terceirizadas) só funciona se cada frente — produto, financeiro, operação e atendimento — tiver dono claro. A divisão abaixo evita que "decoração" vire só escolha de paleta de cores e esqueça prazo de marcenaria, importação e precificação por metro.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Papel</th><th>Responsável (exemplo)</th><th>Principais entregas</th><th>Dedicação semanal</th></tr></thead>
+        <tbody>
+          <tr><td>Coordenação geral</td><td>Renata Alves</td><td>Cronograma, integração das etapas, apresentação final</td><td class="num">4h</td></tr>
+          <tr><td>Pesquisa de mercado</td><td>Thiago Nunes</td><td>Concorrência, persona, benchmarks de preço em lojas de decoração de SP/Guarulhos</td><td class="num">5h</td></tr>
+          <tr><td>Produto &amp; Curadoria</td><td>Juliana Prado</td><td>Ficha técnica dos itens, catálogo padrão x sob medida, fornecedores</td><td class="num">6h</td></tr>
+          <tr><td>Financeiro &amp; Precificação</td><td>Marcos Vieira</td><td>Planilha de custos, precificação por peça e por metro, indicadores de margem</td><td class="num">5h</td></tr>
+          <tr><td>Operações, Logística &amp; Marcenaria</td><td>Aline Souza</td><td>Estoque, capacidade da marcenaria parceira, frete, prazos de produção</td><td class="num">6h</td></tr>
+          <tr><td>Atendimento &amp; Marketing</td><td>Gabriel Costa</td><td>Canais de venda, campanhas, SAC, política de trocas</td><td class="num">5h</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Exemplo-guia da turma</h4>
+      <p>O grupo batizou o projeto de <strong>Lar Aberto</strong> — nome que evoca acolhimento e transformação do espaço, evitando termos genéricos como "Loja de Decoração Online". O naming foi validado checando disponibilidade de domínio (.com.br) e @ no Instagram antes de seguir para a Etapa 1.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ata de papéis assinada pela equipe + nome do projeto validado (domínio e redes sociais).</span></div>
+  </section>
+
+  <!-- ETAPA 1 -->
+  <section class="module" id="e1">
+    <div class="module-head">
+      <div class="module-num">01</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Ideia, problema e proposta de valor</div>
+        <h2>Por que a Lar Aberto precisa existir</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Objetivo</h4>
+        <p>Traduzir uma dor real de quem mora em apartamento compacto na Região Metropolitana de São Paulo em uma proposta de valor específica — não "vender objetos de decoração", e sim resolver um problema de medida, prazo e confiança na hora de redecorar.</p>
+      </div>
+      <div class="card">
+        <h4>O problema do cliente</h4>
+        <ul>
+          <li>Apartamentos compactos (35-60m²) têm janelas, vãos e paredes fora do padrão de fábrica, tornando cortinas e prateleiras prontas inadequadas em boa parte dos casos.</li>
+          <li>Grandes redes de decoração só vendem tamanho único ou exigem visita técnica cara (R$150-300) para qualquer item sob medida.</li>
+          <li>Itens decorativos importados (vasos, objetos de cerâmica) chegam sem controle de qualidade nem previsibilidade de prazo em marketplaces genéricos.</li>
+          <li>Quem quer redecorar rápido (mudança, reforma pequena) não sabe distinguir o que compra pronto do que precisa esperar produção sob encomenda.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Diferencial competitivo</h4>
+        <ul>
+          <li>Catálogo dividido de forma explícita entre "pronta entrega" e "sob medida", com prazo declarado em cada anúncio.</li>
+          <li>Cortina sob medida calculada por metro linear e prateleira em MDF sob medida, sem exigir visita técnica obrigatória (medição guiada por vídeo, com visita opcional paga).</li>
+          <li>Vasos de cerâmica importados com curadoria de qualidade e nacionalização própria, não revenda sem controle.</li>
+          <li>Capa de almofada personalizada com preview de estampa antes da produção.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout tip">
+      <h4>Gerador de proposta de valor (aplicado)</h4>
+      <p><strong>Para</strong> moradores de apartamentos compactos em São Paulo e Guarulhos <strong>que</strong> querem redecorar rápido sem contratar arquiteto nem pagar visita técnica cara, <strong>a Lar Aberto é</strong> uma loja virtual de casa e decoração <strong>que</strong> combina itens de pronta entrega com produção sob medida (cortina por metro linear, prateleira em MDF, capa personalizada) com prazo e acompanhamento claros, <strong>diferente de</strong> grandes redes que só vendem tamanho padrão ou de marketplaces genéricos sem controle de qualidade sobre os itens importados.</p>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Confundir "proposta de valor" com paleta de cores bonita no anúncio. A frase acima precisa ser testável: dá para verificar se a divisão clara "pronto x sob medida" reduz reclamação de prazo, e isso vira métrica na Etapa 12.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Frase de proposta de valor validada + lista de 3 problemas priorizados por frequência de reclamação em pesquisas com moradores.</span></div>
+  </section>
+
+  <!-- ETAPA 2 -->
+  <section class="module" id="e2">
+    <div class="module-head">
+      <div class="module-num">02</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Público-alvo, persona e jornada</div>
+        <h2>Quem compra e como decide</h2>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h4>Perfil demográfico</h4>
+        <ul>
+          <li>Moradores de 26-45 anos, classes B e C, cerca de 60% mulheres nas decisões de compra de decoração (setor moveleiro/decoração, estimativa de mercado).</li>
+          <li>Concentração em bairros com maior índice recente de reforma/redecoração: Vila Mariana, Pinheiros, Moema, Santana (SP) e Vila Galvão, Jardim Presidente Dutra, Centro (Guarulhos).</li>
+          <li>Renda familiar R$ 4.500–R$ 10.000; morador que troca de apartamento ou reforma parcialmente a cada 3-5 anos.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Persona — Fernanda Lopes, 29</h4>
+        <p>Social media, mora em um apartamento reformado de 42m² no Tatuapé (SP). Acabou de assinar contrato de aluguel novo e quer redecorar a sala em 3 semanas antes de fotografar o "reveal" para o Instagram. Precisa de tapete, almofadas, uma luminária e uma cortina blackout porque o quarto tem uma janela 15cm menor que o padrão de fábrica.</p>
+        <p class="small">Objeção principal: "cortina sob medida deve ser cara e demorada". Gatilho de compra: simulador de preço por metro no próprio site + prazo declarado antes da compra.</p>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Etapa da jornada</th><th>O que a Fernanda faz</th><th>O que a Lar Aberto precisa entregar</th></tr></thead>
+        <tbody>
+          <tr><td>1. Descoberta</td><td>Vê reels de "antes e depois" de salas pequenas no Instagram/Pinterest</td><td>Conteúdo com ambientes reais, não só still de catálogo</td></tr>
+          <tr><td>2. Consideração</td><td>Mede a janela com fita métrica, compara pronta entrega x sob medida</td><td>Guia "como medir sua janela" + calculadora de preço por metro</td></tr>
+          <tr><td>3. Compra</td><td>Escolhe tecido, cor e informa a medida no checkout</td><td>Checkout com campos de medição obrigatórios e prazo claro por item</td></tr>
+          <tr><td>4. Produção/Entrega</td><td>Acompanha status da produção sob medida separado do envio dos itens prontos</td><td>Atualizações de status por WhatsApp, separadas por tipo de item</td></tr>
+          <tr><td>5. Uso</td><td>Decora o ambiente, fotografa, posta com a marca marcada</td><td>Incentivo de UGC (desconto na próxima compra por foto do ambiente)</td></tr>
+          <tr><td>6. Pós-venda</td><td>Guarda a nota fiscal, pode pedir prateleira nova depois</td><td>Cadastro de medidas salvas para recompra facilitada</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Persona documentada + mapa de jornada de 6 etapas com ações da loja associadas a cada uma.</span></div>
+  </section>
+
+  <!-- ETAPA 3 -->
+  <section class="module" id="e3">
+    <div class="module-head">
+      <div class="module-num">03</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Catálogo e abastecimento</div>
+        <h2>O que vender, com quem produzir e quanto vender por mês</h2>
+      </div>
+    </div>
+    <p>O catálogo mistura <strong>estoque enxuto</strong> (itens de giro rápido em medidas fechadas de fábrica) com <strong>produção sob encomenda</strong> (cortina por metro linear, prateleira em MDF e capa de almofada personalizada). O fornecimento é misto: parte nacional — facções têxteis e uma marcenaria parceira no Belenzinho (SP) — e parte importada, com vasos de cerâmica trazidos da China via importador/trading em São Paulo.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>SKU</th><th>Linha</th><th>Fornecimento</th><th>Custo unit.</th><th>Prazo</th><th>Demanda estimada/mês (SP+Guarulhos)</th></tr></thead>
+        <tbody>
+          <tr><td>Almofada decorativa 45x45cm</td><td>Padrão</td><td>Facção Belenzinho (nacional)</td><td class="num">R$ 18,00</td><td class="num">3-5 dias</td><td class="num">75 un.</td></tr>
+          <tr><td>Tapete de área pequeno 1,20x0,80m</td><td>Padrão</td><td>Tecelagem parceira (distribuidor SP)</td><td class="num">R$ 62,00</td><td class="num">5-7 dias</td><td class="num">22 un.</td></tr>
+          <tr><td>Tapete de área médio 2,00x1,50m</td><td>Padrão</td><td>Tecelagem parceira (distribuidor SP)</td><td class="num">R$ 118,00</td><td class="num">5-7 dias</td><td class="num">13 un.</td></tr>
+          <tr><td>Vaso de cerâmica decorativo</td><td>Padrão (importado)</td><td>Importador/trading (China, nacionalizado)</td><td class="num">R$ 47,80</td><td class="num">4-7 dias</td><td class="num">28 un.</td></tr>
+          <tr><td>Luminária de mesa</td><td>Padrão</td><td>Fornecedor nacional (polo elétrico SP)</td><td class="num">R$ 54,00</td><td class="num">3-6 dias</td><td class="num">18 un.</td></tr>
+          <tr><td>Cortina blackout tamanho padrão 2,00x1,40m</td><td>Padrão</td><td>Facção Belenzinho (nacional)</td><td class="num">R$ 89,00</td><td class="num">5-7 dias</td><td class="num">15 un.</td></tr>
+          <tr><td>Espelho decorativo com moldura</td><td>Padrão</td><td>Vidraçaria + marcenaria parceira</td><td class="num">R$ 71,00</td><td class="num">5-7 dias</td><td class="num">10 un.</td></tr>
+          <tr><td>Cortina sob medida (por m linear)</td><td>Sob encomenda</td><td>Facção Belenzinho (costura sob medida)</td><td class="num">R$ 79,00/m</td><td class="num">12-18 dias úteis</td><td class="num">7 un.</td></tr>
+          <tr><td>Prateleira/nicho sob medida em MDF</td><td>Sob encomenda</td><td>Marcenaria parceira Belenzinho</td><td class="num">R$ 185,00/m²</td><td class="num">12-18 dias úteis</td><td class="num">4 un.</td></tr>
+          <tr><td>Capa de almofada personalizada</td><td>Sob encomenda</td><td>Ateliê de costura parceiro</td><td class="num">R$ 34,00</td><td class="num">8-10 dias úteis</td><td class="num">11 un.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">
+      <div class="label">Simulador didático — dimensionamento de demanda mensal (SOM)</div>
+      <div class="eq">SOM mensal = Domicílios (praça) × % fizeram reforma/redecoração em 12 meses × % compra decoração online × Frequência mensal equivalente × Market share-alvo</div>
+      <div class="calc">
+        População SP (capital) + Guarulhos ≈ 11,45 mi + 1,39 mi = <strong>12,84 milhões de habitantes</strong><br>
+        ÷ 2,8 hab./domicílio ≈ <strong>4.600.000 domicílios</strong> (praça-piloto)<br>
+        × 22% fizeram reforma ou redecoração nos últimos 12 meses = 1.012.000 domicílios potencialmente ativos<br>
+        × 40% desse grupo compra itens de decoração online (não em loja física) = 404.800 domicílios online-ativos/ano<br>
+        × frequência mensal equivalente (produto de compra esporádica, ≈1/8 ao ano por domicílio ativo convertido em base mensal) = 50.600 domicílios com propensão de compra no mês<br>
+        × market share-alvo de uma loja nova e nichada (0,25%)<br>
+        = <span class="result">≈ 127 pedidos/mês</span> → ≈203 peças/mês (1,6 item/pedido em média)
+      </div>
+    </div>
+    <div class="callout tip"><h4>Sobre a demanda sob encomenda</h4><p>Cortina sob medida, prateleira em MDF e capa personalizada não entram no estoque: cada pedido dispara uma ordem de produção com medida, tecido/acabamento e cor informados pelo cliente. Por isso vendem menos unidades (7, 4 e 11 no mês simulado) mas com ticket bem mais alto por unidade — a cortina sob medida, por exemplo, gera em média R$ 500+ por pedido contra R$ 49,90 de uma almofada, mesmo vendendo menos peças (ver Etapa 7).</p></div>
+    <div class="callout warn"><h4>Simulador de importação — vaso de cerâmica decorativo (didático)</h4>
+      <p>Lote de 200 un. · Valor FOB: US$ 3,50/un × 200 un = US$ 700 (câmbio R$ 5,40 → R$ 3.780,00). Frete + seguro internacional (lote consolidado): R$ 1.200,00. Base de cálculo do II: R$ 4.980,00.<br>
+      II (20%, cerâmica ornamental): R$ 996,00 · IPI (5% sobre base+II = R$ 5.976,00): R$ 298,80 · PIS+COFINS (11,75% sobre R$ 6.274,80): R$ 737,29 · Subtotal: R$ 7.012,09 · ICMS-SP (18% "por dentro"): R$ 1.539,25.<br>
+      Custo desembaraçado do lote ≈ R$ 8.551,34 + armazenagem/frete nacional até o CD (R$ 5,00/un × 200 = R$ 1.000,00) = R$ 9.551,34.<br>
+      <strong>Custo nacionalizado ÷ 200 un = R$ 47,76 ≈ R$ 47,80/un</strong> (valor já usado na tabela acima). Simulação didática — alíquotas variam por NCM real.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Tabela de catálogo com 10 SKUs (padrão e sob encomenda), fornecedores, custos, prazos e demanda mensal estimada por SKU.</span></div>
+  </section>
+
+  <!-- ETAPA 4 -->
+  <section class="module" id="e4">
+    <div class="module-head">
+      <div class="module-num">04</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Canais de venda</div>
+        <h2>Onde a Lar Aberto vai vender</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Comissão</th><th>Taxa de devolução</th><th>Receita líquida simulada (100 pedidos, tíquete R$134,90)</th></tr></thead>
+        <tbody>
+          <tr><td>Loja virtual própria</td><td class="num">~4,5% (gateway)</td><td class="num">5%</td><td class="num">R$ 12.238,80</td></tr>
+          <tr><td>Mercado Livre (Clássico)</td><td class="num">13%</td><td class="num">8%</td><td class="num">R$ 10.797,40</td></tr>
+          <tr><td>Shopee</td><td class="num">16% (com frete grátis subsidiado)</td><td class="num">9%</td><td class="num">R$ 10.311,76</td></tr>
+          <tr><td>Amazon (categoria Casa)</td><td class="num">15%</td><td class="num">6%</td><td class="num">R$ 10.778,51</td></tr>
+          <tr><td>Elo7 (sob encomenda/personalizados)</td><td class="num">12%</td><td class="num">2%</td><td class="num">R$ 11.633,78</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Cálculo: Receita bruta = 100 × R$134,90 = R$13.490,00. Receita líquida = R$13.490,00 × (1 − comissão) × (1 − taxa de devolução).</p>
+    <div class="callout tip"><h4>Dica do orientador</h4><p>Para os itens sob medida (cortina, prateleira, capa personalizada), evite Mercado Livre, Shopee e Amazon no lançamento: o SLA de produção de 12-18 dias úteis entra em conflito com as políticas de envio rápido desses marketplaces, gerando penalização de reputação. Priorize loja própria, Instagram/WhatsApp e Elo7 — canal já habituado a produtos artesanais e sob encomenda — para essa linha.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Matriz de canais com comissão, devolução e receita líquida simulada, e decisão de mix de canal por linha de produto (padrão × sob encomenda).</span></div>
+  </section>
+
+  <!-- ETAPA 5 -->
+  <section class="module" id="e5">
+    <div class="module-head">
+      <div class="module-num">05</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Cadastro do produto</div>
+        <h2>Ficha de anúncio da almofada decorativa Boho</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Título (59/60 car.)</h4><p>Almofada Decorativa Boho 45x45cm Capa Removível + Enchimento</p></div>
+      <div class="card"><h4>Palavras-chave</h4><ul><li>almofada decorativa sala</li><li>capa de almofada 45x45</li><li>almofada boho para sofá</li><li>kit almofada decoração sala SP</li></ul></div>
+      <div class="card"><h4>Ficha técnica</h4><ul><li>Tecido: linho misto/veludo (conforme variação)</li><li>Enchimento: fibra siliconizada 300g</li><li>Fechamento: zíper invisível lateral</li><li>Dimensões: 45x45cm (±1cm) · capa removível e lavável</li></ul></div>
+      <div class="card"><h4>FAQ do anúncio</h4><ul><li>"A capa é removível?" — sim, zíper invisível, lavagem à mão</li><li>"Serve numa almofada de 40x40?" — fica levemente folgada; recomendado usar o enchimento correspondente</li><li>"Posso pedir tecido/estampa personalizada?" — sim, via linha sob encomenda "Capa Personalizada"</li></ul></div>
+    </div>
+    <div class="callout example"><h4>Roteiro de imagens (7 fotos obrigatórias)</h4><p>1) Capa em fundo neutro · 2) Ambiente decorado (sofá/cama) mostrando composição · 3) Detalhe da textura do tecido · 4) Detalhe do zíper invisível · 5) Foto com fita métrica sobre a peça (escala) · 6) Composição com outras almofadas da coleção · 7) Etiqueta de composição e cuidados.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ficha de anúncio completa (título, descrição, ficha técnica, FAQ, 7 fotos) para o SKU-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 6 -->
+  <section class="module" id="e6">
+    <div class="module-head">
+      <div class="module-num">06</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Auditoria pré-publicação</div>
+        <h2>Checklist antes de publicar o anúncio</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Item</th><th>Risco se falhar</th><th>Responsável</th><th>Prazo</th></tr></thead>
+        <tbody>
+          <tr><td>Preço final confere com planilha (Etapa 7)</td><td>Alto</td><td>Financeiro</td><td class="num">D-2</td></tr>
+          <tr><td>Peso e dimensões da embalagem cadastrados (crítico p/ tapetes e cortinas)</td><td>Alto (frete errado)</td><td>Operações</td><td class="num">D-2</td></tr>
+          <tr><td>Dimensões exatas em cm na ficha técnica</td><td>Alto (devolução)</td><td>Produto</td><td class="num">D-1</td></tr>
+          <tr><td>Fotos com escala e ambiente decorado</td><td>Médio</td><td>Produto</td><td class="num">D-1</td></tr>
+          <tr><td>Variações de cor/tecido/tamanho corretas</td><td>Médio</td><td>Operações</td><td class="num">D-1</td></tr>
+          <tr><td>Estoque inicial correto por variação (linha padrão)</td><td>Alto (ruptura)</td><td>Operações</td><td class="num">D-1</td></tr>
+          <tr><td>Campo de medição obrigatório habilitado no checkout (sob medida)</td><td>Alto (pedido incompleto)</td><td>Tecnologia/Atendimento</td><td class="num">D-1</td></tr>
+          <tr><td>Política de sob medida (sem arrependimento por medida informada) visível no anúncio</td><td>Alto (reclamação/Procon)</td><td>Atendimento</td><td class="num">D0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Checklist de 8 itens assinado pelos responsáveis antes da publicação do anúncio-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 7 -->
+  <section class="module" id="e7">
+    <div class="module-head">
+      <div class="module-num">07</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Precificação</div>
+        <h2>Quanto cobrar: por peça (almofada) e por metro (cortina sob medida)</h2>
+      </div>
+    </div>
+    <p>A mesma fórmula de preço mínimo muda de base conforme o tipo de item: itens de estoque são precificados <strong>por peça</strong>; itens sob medida são precificados <strong>por metro linear (ou m²)</strong>, com um rateio de custo fixo de orçamento/medição embutido antes de aplicar a margem.</p>
+    <div class="formula">
+      <div class="label">Item de estoque — Almofada decorativa (preço por peça)</div>
+      <div class="eq">Preço Mínimo = Custos Fixos por unidade ÷ (1 − Comissão do canal − Margem de contribuição desejada)</div>
+      <div class="calc">
+        Custo do produto: R$ 18,00 · Embalagem: R$ 1,80 · Frete médio absorvido: R$ 4,20 → <strong>Custos por unidade = R$ 24,00</strong><br>
+        Comissão do canal (loja própria, gateway): 4,5% · Margem de contribuição desejada: 35%<br>
+        Preço Mínimo = 24,00 ÷ (1 − 0,045 − 0,35) = 24,00 ÷ 0,605 = <span class="result">R$ 39,67 (mínimo)</span><br>
+        Preço praticado (arredondado e ajustado a concorrência): <span class="result">R$ 49,90</span> → margem real de contribuição ≈ 47,4%
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Item sob encomenda — Cortina sob medida (preço por metro linear)</div>
+      <div class="eq">Preço Mínimo/m = [Custo variável/m + (Custo fixo de orçamento ÷ Metragem média do pedido)] ÷ (1 − Comissão do canal − Margem de contribuição desejada)</div>
+      <div class="calc">
+        Custo variável por metro: tecido blackout R$ 34,00/m + forro térmico R$ 15,00/m + ilhós/acabamento R$ 10,00/m + mão de obra de costura R$ 20,00/m = <strong>R$ 79,00/m</strong><br>
+        Custo fixo de medição/orçamento por pedido: R$ 25,00 ÷ metragem média do pedido (2,8m) = R$ 8,93/m → <strong>custo total ≈ R$ 87,93/m</strong><br>
+        Comissão do canal (loja própria): 4,5% · Margem de contribuição desejada: 38% (maior por ser item sob medida, com menor risco de devolução por arrependimento)<br>
+        Preço Mínimo = 87,93 ÷ (1 − 0,045 − 0,38) = 87,93 ÷ 0,575 = <span class="result">R$ 152,92/m (mínimo)</span><br>
+        Preço praticado: <span class="result">R$ 179,00/m</span> → pedido médio de 2,8m linear = R$ 501,20/cortina · margem real ≈ 46,4%
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Concorrente</th><th>Preço peça/metro equivalente</th><th>Posicionamento</th></tr></thead>
+        <tbody>
+          <tr><td>Loja de decoração de bairro</td><td class="num">R$ 59,90 (almofada)</td><td>Sem opção sob medida</td></tr>
+          <tr><td>Rede grande com sob medida (visita técnica)</td><td class="num">R$ 210,00/m (cortina)</td><td>Cobra visita técnica obrigatória (R$150-300)</td></tr>
+          <tr><td><strong>Lar Aberto</strong></td><td class="num"><strong>R$ 49,90 / R$ 179,00/m</strong></td><td>Meio-termo: sem visita obrigatória + medição guiada</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de precificação com preço mínimo, preço praticado e margem de contribuição real por SKU, diferenciando base por peça e por metro/m².</span></div>
+  </section>
+
+  <!-- ETAPA 8 -->
+  <section class="module" id="e8">
+    <div class="module-head">
+      <div class="module-num">08</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Marketing e funil</div>
+        <h2>Campanha "Reforma de Primavera" (agosto–novembro)</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Objetivo</h4><p>Gerar 127 pedidos/mês na praça SP+Guarulhos no período de maior incidência de reforma e redecoração (pré-verão).</p></div>
+      <div class="card"><h4>Público</h4><p>Homens e mulheres 26-45, interesse em "decoração de interiores"/"casa própria", raio de 15km de zonas com reforma recente, lookalike de clientes atuais.</p></div>
+      <div class="card"><h4>Orçamento</h4><p>R$ 3.200/mês (Meta Ads + Google Shopping) + R$ 800/mês (micro-influenciadores de decoração/interiores)</p></div>
+    </div>
+    <div class="formula">
+      <div class="label">Indicadores do funil</div>
+      <div class="eq">CTR = Cliques ÷ Impressões × 100 · CPC = Investimento ÷ Cliques · Conversão = Pedidos ÷ Cliques × 100 · CAC = Investimento ÷ Pedidos · ROAS = Receita ÷ Investimento</div>
+      <div class="calc">
+        Impressões: 260.000 · Cliques: 5.200 → <strong>CTR = 2,0%</strong><br>
+        Investimento R$ 3.200 ÷ 5.200 cliques → <strong>CPC = R$ 0,62</strong><br>
+        Pedidos gerados pela campanha: 104 ÷ 5.200 → <strong>Conversão = 2,0%</strong><br>
+        CAC = 3.200 ÷ 104 = <strong>R$ 30,80</strong> por pedido<br>
+        Receita gerada = 104 × R$134,90 = R$14.029,60 → ROAS = 14.029,60 ÷ 3.200 = <span class="result">4,4x</span>
+      </div>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Anunciar cortina e prateleira sob medida com o mesmo criativo e call-to-action dos itens de pronta entrega. Isso gera cliques de curiosos que não sabem que vão precisar informar medida e esperar 12-18 dias úteis, inflando o CAC efetivo desse segmento. Separar campanha e público por linha (padrão × sob medida) reduz esse ruído.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Plano de campanha com objetivo, público, orçamento, período e simulação de CTR/CPC/conversão/CAC/ROAS.</span></div>
+  </section>
+
+  <!-- ETAPA 9 -->
+  <section class="module" id="e9">
+    <div class="module-head">
+      <div class="module-num">09</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Estoque e reposição</div>
+        <h2>Linha padrão: ponto de pedido · Linha sob medida: capacidade da marcenaria</h2>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Cobertura e ponto de pedido — Almofada decorativa (linha padrão)</div>
+      <div class="eq">Cobertura (dias) = Estoque atual ÷ Demanda diária média · Ponto de Pedido = (Demanda diária × Prazo de reposição) + Estoque de segurança</div>
+      <div class="calc">
+        Demanda mensal: 75 un. → demanda diária média = 75 ÷ 30 = <strong>2,5 un./dia</strong><br>
+        Estoque atual: 90 un. → Cobertura = 90 ÷ 2,5 = <span class="result">≈ 36 dias</span><br>
+        Prazo de reposição da facção: 5 dias · Estoque de segurança (pico nov-dez, +50%): 6 un.<br>
+        Ponto de Pedido = (2,5 × 5) + 6 = 12,5 + 6 = <span class="result">≈ 19 un.</span> (repor quando o estoque chegar a 19 peças)
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Cenário</th><th>Demanda diária</th><th>Ponto de pedido</th><th>Estoque de segurança</th></tr></thead>
+        <tbody>
+          <tr><td>Atual (regime de cruzeiro)</td><td class="num">2,5 un./dia</td><td class="num">19 un.</td><td class="num">6 un.</td></tr>
+          <tr><td>Crescimento (pico nov-dez, +70%)</td><td class="num">4,25 un./dia</td><td class="num">31 un.</td><td class="num">10 un.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">
+      <div class="label">Capacidade de produção — Prateleira/nicho sob medida (linha sob encomenda)</div>
+      <div class="eq">Capacidade semanal (unidades) = Capacidade contratada de MDF (m²/semana) ÷ Consumo médio de MDF por unidade (m²)</div>
+      <div class="calc">
+        Capacidade total da marcenaria parceira (Belenzinho/SP): 40 m²/semana, atendendo vários clientes<br>
+        Contrato prioritário Lar Aberto: até 12 m²/semana reservados<br>
+        Consumo médio de MDF por prateleira/nicho sob medida: 1,8 m²/unidade<br>
+        Capacidade semanal = 12 ÷ 1,8 ≈ 6,7 → <strong>6 prateleiras/semana ≈ 24-26/mês</strong> (4,3 semanas/mês)<br>
+        Demanda projetada (Etapa 3): 4 prateleiras/mês → <span class="result">uso de ~15-17% da capacidade contratada</span> (folga ampla no cenário atual)
+      </div>
+    </div>
+    <div class="callout warn"><h4>Risco de gargalo</h4><p>Se a demanda de sob-medida crescer cerca de 5x (ex.: campanha forte de fim de ano), a marcenaria parceira se torna o fator limitante do negócio, não a demanda de mercado. A ação preventiva é renegociar o contrato prioritário de m²/semana ou qualificar uma segunda marcenaria parceira antes do pico. A cortina sob medida usa um ateliê de costura com capacidade maior (~30 cortinas/semana) e não é o gargalo atual.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de cobertura e ponto de pedido para os 2 SKUs de maior giro da linha padrão + cálculo de capacidade semanal da marcenaria parceira para a linha sob medida.</span></div>
+  </section>
+
+  <!-- ETAPA 10 -->
+  <section class="module" id="e10">
+    <div class="module-head">
+      <div class="module-num">10</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Entrega, atendimento e logística reversa</div>
+        <h2>Dois caminhos: item pronto x item sob medida</h2>
+      </div>
+    </div>
+    <p>O fluxo do pedido muda completamente conforme o tipo de item. Itens de estoque seguem separação e envio rápido; itens sob medida passam por aprovação de orçamento, produção na marcenaria/ateliê parceiro e, no caso de prateleiras, instalação.</p>
+    <h3 style="font-size:17px; margin:24px 0 4px;">Fluxo A — Item de estoque (almofada, tapete, vaso, luminária, cortina padrão)</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Confirmação</h5><p>Pagamento aprovado → separação no CD em até 24h</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Embalagem reforçada</h5><p>Proteção extra para itens frágeis (cerâmica, espelho, vidro)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Envio</h5><p>Transportadora regional; SP capital/Guarulhos em 2-3 dias úteis</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Entrega</h5><p>Confirmação de recebimento por WhatsApp</p></div>
+    </div>
+    <h3 style="font-size:17px; margin:32px 0 4px;">Fluxo B — Item sob medida (cortina, prateleira, capa personalizada)</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Medição</h5><p>Cliente informa medidas no checkout (guiado por vídeo) ou solicita visita técnica opcional (R$80, abatida na compra)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Orçamento</h5><p>Orçamento final com medida, tecido/acabamento e prazo enviado para aprovação</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Ordem de produção</h5><p>Cliente aprova → ordem enviada à marcenaria/ateliê parceiro</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Produção</h5><p>12-18 dias úteis (cortina/prateleira) ou 8-10 dias úteis (capa personalizada)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Qualidade</h5><p>Conferência de medida, acabamento e cor contra o pedido aprovado</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">6</div><h5>Entrega/Instalação</h5><p>Cortina/capa: entrega simples · Prateleira: instalação por equipe própria/parceira agendada</p></div>
+    </div>
+    <div class="formula">
+      <div class="label">OTIF e taxa de devolução</div>
+      <div class="eq">OTIF = (Pedidos completos E no prazo) ÷ Total de pedidos × 100 · Taxa de devolução = Devoluções ÷ Pedidos entregues × 100</div>
+      <div class="calc">
+        Pedidos do mês: 127 · Entregues completos e no prazo: 118 → <strong>OTIF = 93%</strong><br>
+        Devoluções: 6 (3 avaria de transporte em itens frágeis, 2 atraso na produção sob medida além do combinado, 1 defeito de material) → <span class="result">Taxa de devolução = 5%</span>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Motivo de devolução</th><th>Ocorrências/mês</th><th>% do total</th></tr></thead>
+        <tbody>
+          <tr><td>Avaria de transporte (vaso, espelho)</td><td class="num">3</td><td class="num">50%</td></tr>
+          <tr><td>Atraso na produção sob medida</td><td class="num">2</td><td class="num">33%</td></tr>
+          <tr><td>Defeito de material</td><td class="num">1</td><td class="num">17%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Fluxogramas A e B (acima) diferenciando item de estoque e item sob medida + cálculo de OTIF e devolução do mês simulado.</span></div>
+  </section>
+
+  <!-- ETAPA 11 -->
+  <section class="module" id="e11">
+    <div class="module-head">
+      <div class="module-num">11</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Priorização com curva ABC/Pareto</div>
+        <h2>Onde atacar primeiro</h2>
+      </div>
+    </div>
+    <p class="small">Base: incidentes operacionais do mês (mais amplo que a tabela de devoluções da Etapa 10, pois inclui casos resolvidos sem devolução formal, como reenvio de item avariado).</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Problema</th><th>Ocorrências/mês</th><th>% acumulado</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td>Avaria de transporte (itens frágeis)</td><td class="num">8</td><td class="num">42%</td><td>A</td></tr>
+          <tr><td>Atraso na produção sob medida</td><td class="num">5</td><td class="num">68%</td><td>A</td></tr>
+          <tr><td>Dúvida de medição antes da compra (contato SAC)</td><td class="num">4</td><td class="num">89%</td><td>B</td></tr>
+          <tr><td>Defeito de material</td><td class="num">2</td><td class="num">100%</td><td>C</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Ação 5W2H — Classe A (avaria de transporte)</h4>
+      <p><strong>What:</strong> padronizar embalagem reforçada (caixa dupla + espuma) por categoria de fragilidade · <strong>Why:</strong> é a maior causa de incidente operacional (42%) · <strong>Who:</strong> Operações, Logística &amp; Marcenaria · <strong>When:</strong> em 20 dias · <strong>Where:</strong> CD próprio e transportadora parceira · <strong>How:</strong> kit de embalagem específico para cerâmica/espelho/vidro + teste de queda antes da adoção · <strong>How much:</strong> R$ 1.200 (insumos de embalagem para 2 meses).</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Curva ABC dos 4 principais problemas operacionais + plano 5W2H para a Classe A.</span></div>
+  </section>
+
+  <!-- ETAPA 12 -->
+  <section class="module" id="e12">
+    <div class="module-head">
+      <div class="module-num">12</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Indicadores e recomendação executiva</div>
+        <h2>Painel de indicadores e relatório final</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Indicador</th><th>Valor do mês simulado</th><th>Meta</th></tr></thead>
+        <tbody>
+          <tr><td>Pedidos/mês</td><td class="num">127</td><td class="num">180 (T+2)</td></tr>
+          <tr><td>Ticket médio</td><td class="num">R$ 134,90</td><td class="num">R$ 140,00</td></tr>
+          <tr><td>Margem de contribuição média</td><td class="num">44%</td><td class="num">47%</td></tr>
+          <tr><td>CAC</td><td class="num">R$ 30,80</td><td class="num">R$ 27,00</td></tr>
+          <tr><td>ROAS</td><td class="num">4,4x</td><td class="num">5,0x</td></tr>
+          <tr><td>OTIF</td><td class="num">93%</td><td class="num">96%</td></tr>
+          <tr><td>Taxa de devolução</td><td class="num">5%</td><td class="num">≤3%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Recomendação executiva (resumo)</h4>
+      <p><strong>Diagnóstico:</strong> avaria de transporte em itens frágeis (Classe A) é o maior risco operacional, à frente inclusive do atraso na produção sob medida. <strong>Evidência:</strong> 8 das 19 incidências do mês, e 3 das 6 devoluções formais. <strong>Prioridade:</strong> embalagem reforçada por categoria de fragilidade. <strong>Ação de marketing:</strong> separar criativos e público de linha padrão e linha sob medida para não inflar CAC com cliques de quem não sabe que vai esperar 12-18 dias. <strong>Ação financeira:</strong> manter margem-alvo de 47% mesmo com custo de embalagem reforçada adicional. <strong>Ação logística:</strong> negociar ampliação do contrato prioritário com a marcenaria antes do pico de fim de ano. <strong>Meta:</strong> reduzir devolução para ≤3% em 60 dias. <strong>Risco se nada mudar:</strong> erosão de margem líquida em ~1,8 p.p. por trimestre, mais gargalo de produção sob medida no pico sazonal.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Painel com 7 indicadores + relatório executivo de 8 seções pronto para apresentação.</span></div>
+  </section>
+
+  <!-- PÓS-VENDA -->
+  <section class="module" id="pos" style="border-bottom:none;">
+    <div class="section-title">
+      <span class="eyebrow">Complemento ao projeto</span>
+      <h2 style="font-size:30px;">Pós-venda: relacionamento, trocas e atendimento</h2>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Fluxo de relacionamento pós-entrega</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>D+1</h5><p>Confirmação de recebimento e orientações de cuidado com o material (madeira, cerâmica, tecido)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>D+3</h5><p>Mensagem pedindo foto do ambiente decorado + avaliação do produto</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>D+7</h5><p>Para itens sob medida com instalação: checagem de satisfação com o resultado final</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>D+30</h5><p>Cadastro de medidas salvas ativado para recompra facilitada de itens sob medida</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Sazonal</h5><p>Lembrete de nova estação/reforma com sugestão de complementos de decoração</p></div>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Política de trocas e devoluções</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Itens de estoque — arrependimento</h4>
+        <p>Conforme Art. 49 do CDC, o cliente tem <strong>7 dias corridos</strong> a partir do recebimento para desistir da compra de almofadas, tapetes, vasos, luminárias e cortinas de tamanho padrão, sem justificativa, com reembolso integral incluindo frete.</p>
+      </div>
+      <div class="card">
+        <h4>Itens de estoque — defeito</h4>
+        <p>Garantia legal de <strong>90 dias</strong> (produto não durável) para vícios de fabricação ou material em itens de estoque, com troca ou reembolso integral, frete de retorno por conta da loja.</p>
+      </div>
+      <div class="card">
+        <h4>Itens sob medida — sem arrependimento por medida</h4>
+        <p>Cortina sob medida e prateleira em MDF cortadas nas dimensões informadas pelo próprio cliente <strong>não têm direito de arrependimento</strong> por medida errada declarada no pedido (produto personalizado, Art. 49 não se aplica a esse caso específico).</p>
+      </div>
+      <div class="card">
+        <h4>Itens sob medida — garantia total de execução</h4>
+        <p>Mesmo sem arrependimento por medida do cliente, há <strong>garantia total</strong> contra erro de execução da loja (corte diferente do orçamento aprovado) e contra defeito de material (MDF empenado, tecido com falha), com refação sem custo.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Canais de atendimento e relacionamento</h3>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Uso principal</th><th>Horário</th><th>SLA de resposta</th></tr></thead>
+        <tbody>
+          <tr><td>WhatsApp Business</td><td>Dúvidas de medida, status de produção, trocas</td><td>Seg-sáb, 9h-19h</td><td class="num">até 30 min</td></tr>
+          <tr><td>Instagram Direct</td><td>Pré-venda, prova social, dúvidas rápidas</td><td>Seg-sáb, 9h-19h</td><td class="num">até 2h</td></tr>
+          <tr><td>E-mail (SAC)</td><td>Formalização de trocas, aprovação de orçamento sob medida, notas fiscais</td><td>Todos os dias</td><td class="num">até 24h</td></tr>
+          <tr><td>Chat do site</td><td>Suporte durante o checkout, inclusive campo de medição</td><td>Seg-sáb, 9h-19h</td><td class="num">até 5 min</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Fluxo de escalonamento</h4><p>Nível 1 (atendente) resolve dúvidas e trocas simples em até 2h → Nível 2 (coordenação) entra em casos de atraso de produção sob medida ou insatisfação pública (redes sociais) em até 4h → Nível 3 (fundadores) atua em reclamações formais (Reclame Aqui/Procon) em até 24h, sempre com resposta pública + resolução privada registrada.</p></div>
+  </section>
+
+  <footer class="footer">
+    Projeto Integrador de E-commerce — Fase 1 · Lar Aberto · Material didático com simulações para fins de aprendizagem.
+  </footer>
+</div>

@@ -1,0 +1,483 @@
+<title>Pós-venda &amp; Pós-consumo — Projeto Integrador · Módulo Transversal</title>
+<style>
+:root{
+  --bg:#EEF0EC; --surface:#FFFFFF; --surface-alt:#E3E6DE; --border:#D2D6C9;
+  --ink:#1F2421; --ink-soft:#545C52;
+  --accent:#6B6B35; --accent-ink:#3A3A1C; --accent-soft:#EBEBD9;
+  --good:#2E7D4F; --warn:#B8790A; --critical:#B23A3A;
+  --radius:10px;
+  --serif: Georgia,'Iowan Old Style','Sitka Text','Source Serif Pro',serif;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono: ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+    --ink:#ECEEE7; --ink-soft:#ABB2A3;
+    --accent:#B8B85E; --accent-ink:#F5F5E0; --accent-soft:#33331A;
+    --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+  --ink:#ECEEE7; --ink-soft:#ABB2A3;
+  --accent:#B8B85E; --accent-ink:#F5F5E0; --accent-soft:#33331A;
+  --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+}
+*{box-sizing:border-box;}
+body{background:var(--bg); color:var(--ink); font-family:var(--sans); margin:0; line-height:1.55; font-size:16px;}
+.wrap{max-width:1080px; margin:0 auto; padding:0 24px 96px;}
+h1,h2,h3,h4{font-family:var(--serif); text-wrap:balance; margin:0; color:var(--ink);}
+p{margin:0 0 12px; max-width:74ch;}
+a{color:var(--accent-ink);}
+.eyebrow{font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em; font-size:12px; color:var(--accent-ink); font-weight:600;}
+
+/* SITE NAV */
+.sitenav{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border);}
+.sitenav-inner{max-width:1080px; margin:0 auto; padding:0 24px; height:48px; display:flex; align-items:center; gap:20px; overflow-x:auto; white-space:nowrap;}
+.sitenav-brand{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); text-decoration:none; flex-shrink:0;}
+.sitenav-links{display:flex; gap:2px;}
+.sitenav-links a{font-family:var(--sans); font-size:13px; color:var(--ink-soft); text-decoration:none; padding:6px 10px; border-radius:6px; flex-shrink:0;}
+.sitenav-links a:hover{background:var(--surface-alt); color:var(--ink);}
+.sitenav-links a.is-active{color:var(--accent-ink); background:var(--accent-soft); font-weight:700;}
+
+/* HERO */
+.hero{padding:56px 0 40px; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:18px;}
+.hero h1{font-size:clamp(30px,4.2vw,46px); font-weight:600;}
+.hero .subtitle{font-size:18px; color:var(--ink-soft); max-width:70ch;}
+.meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+.chip{font-family:var(--mono); font-size:12.5px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); background:var(--surface); color:var(--ink-soft);}
+.chip.accent{background:var(--accent); color:#1B1B0E; border-color:var(--accent); font-weight:600;}
+
+/* SECTION NAV STRIP */
+.navstrip{position:sticky; top:48px; z-index:5; background:var(--bg); border-bottom:1px solid var(--border); padding:10px 0; margin-bottom:8px; overflow-x:auto; white-space:nowrap;}
+.navstrip .wrap{padding-bottom:0; display:flex; gap:6px;}
+.navstrip a{font-family:var(--mono); font-size:12px; color:var(--ink-soft); text-decoration:none; padding:5px 10px; border-radius:6px; border:1px solid transparent;}
+.navstrip a:hover{border-color:var(--border); color:var(--ink);}
+
+/* MODULE */
+.module{padding:52px 0; border-bottom:1px solid var(--border); scroll-margin-top:104px;}
+.module-head{display:flex; gap:20px; align-items:flex-start; margin-bottom:22px;}
+.module-mark{font-family:var(--serif); font-size:34px; font-weight:600; color:var(--accent-ink); min-width:52px;}
+.module-title-wrap{flex:1;}
+.module-kicker{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:4px;}
+.module h2{font-size:26px; font-weight:600;}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:18px 0;}
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px;}
+.card h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; font-family:var(--sans); font-weight:700; color:var(--accent-ink); margin-bottom:8px;}
+.card p:last-child{margin-bottom:0;}
+.card ul{margin:0; padding-left:18px;}
+.card li{margin-bottom:5px;}
+
+.callout{border-radius:var(--radius); padding:16px 20px; margin:16px 0; border:1px solid var(--border);}
+.callout.tip{background:var(--accent-soft); border-color:var(--accent);}
+.callout.warn{background:var(--surface); border-left:4px solid var(--warn);}
+.callout.example{background:var(--surface-alt); border-style:dashed;}
+.callout h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; font-family:var(--mono);}
+
+.table-panel{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); margin:18px 0; background:var(--surface);}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:14.5px;}
+th,td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top;}
+thead th{background:var(--surface-alt); font-family:var(--sans); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-weight:700;}
+tbody tr:last-child td{border-bottom:none;}
+td.num, th.num{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right;}
+tbody tr:hover{background:var(--surface-alt);}
+
+.formula{background:var(--ink); color:var(--bg); border-radius:var(--radius); padding:20px 22px; margin:18px 0; font-family:var(--mono); font-size:14px;}
+:root[data-theme="dark"] .formula, :root:not([data-theme="light"]) .formula{background:#0D0F0C;}
+.formula .label{color:var(--accent); font-size:11px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px;}
+.formula .eq{font-size:15.5px; margin-bottom:10px; font-variant-numeric:tabular-nums;}
+.formula .calc{opacity:.85; border-top:1px solid rgba(255,255,255,.15); padding-top:10px; margin-top:10px; font-variant-numeric:tabular-nums;}
+.formula .result{color:#fff; font-weight:700;}
+
+.checklist{list-style:none; margin:16px 0; padding:0; display:grid; gap:8px;}
+.checklist li{display:flex; gap:10px; align-items:flex-start; font-size:14.5px;}
+.checklist li::before{content:"✓"; color:var(--good); font-weight:700; font-family:var(--mono);}
+
+.deliverable{display:flex; gap:14px; align-items:center; background:var(--surface); border:1px solid var(--accent); border-radius:var(--radius); padding:14px 18px; margin-top:20px;}
+.deliverable .tag{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; background:var(--accent); color:#1B1B0E; padding:4px 10px; border-radius:6px; white-space:nowrap;}
+
+.flow{display:flex; flex-wrap:wrap; gap:0; align-items:stretch; margin:20px 0;}
+.flow-step{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; flex:1; min-width:150px; position:relative;}
+.flow-step .n{font-family:var(--serif); font-size:22px; color:var(--accent-ink); font-weight:600;}
+.flow-step h5{margin:4px 0 4px; font-size:14px; font-family:var(--sans); font-weight:700;}
+.flow-step p{font-size:13px; color:var(--ink-soft); margin:0;}
+.flow-arrow{display:flex; align-items:center; justify-content:center; padding:0 8px; color:var(--ink-soft); font-family:var(--mono);}
+
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+.three-col{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+@media (max-width:820px){.two-col,.three-col{grid-template-columns:1fr;} .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg); padding:2px 0;}}
+
+.brand-tag{display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11.5px; padding:3px 9px; border-radius:6px; background:var(--surface-alt); color:var(--ink-soft); font-weight:600;}
+.dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+
+.footer{padding:48px 0 0; color:var(--ink-soft); font-size:13px; text-align:center;}
+strong{color:var(--ink);}
+.small{font-size:13px; color:var(--ink-soft);}
+</style>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="sitenav-brand" href="index.html">Projeto Integrador · E-commerce</a>
+    <div class="sitenav-links">
+      <a href="index.html">Início</a>
+      <a href="pets.html">Pets</a>
+      <a href="quadros.html">Quadros</a>
+      <a href="natura-norte.html">Raízes do Norte</a>
+      <a href="estetica.html">Estética</a>
+      <a href="casa-decoracao.html">Casa &amp; Decor</a>
+      <a href="doces-gourmet.html">Doces</a>
+      <a href="pos-venda-pos-consumo.html" class="is-active">Pós-venda &amp; Pós-consumo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="navstrip">
+  <div class="wrap">
+    <a href="#panorama">Panorama</a><a href="#materiais">Materiais &amp; Destinação</a><a href="#suporte">Canais de Suporte</a>
+    <a href="#fluxo-atendimento">Fluxo de Atendimento</a><a href="#fluxo-reversa">Logística Reversa</a>
+    <a href="#custos">Custos &amp; Recursos</a><a href="#kpis">Indicadores</a><a href="#regulacao">Regulação</a><a href="#marketing">Marketing</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Projeto Integrador de E-commerce · Módulo Transversal</span>
+    <h1>Pós-venda, pós-consumo de materiais e atendimento ao cliente</h1>
+    <p class="subtitle">Um único sistema operacional de relacionamento — construído para atender, ao mesmo tempo, as seis lojas do projeto (Matilha Urbana, Parede Viva Ateliê, Raízes do Norte, Cultivar Estética, Lar Aberto e Confeito de Autor) — cobrindo o que acontece depois do "comprei": suporte ao cliente, garantia, e o destino físico das embalagens e materiais depois do consumo, com os custos, recursos e fluxos de processo por trás de cada canal.</p>
+    <div class="meta-row">
+      <span class="chip accent">Escopo: as 6 lojas do projeto</span>
+      <span class="chip">Praça: São Paulo (capital) + Guarulhos</span>
+      <span class="chip">≈2.078 interações comerciais/mês combinadas</span>
+      <span class="chip">Operação de atendimento compartilhada (hub único)</span>
+    </div>
+  </header>
+
+  <!-- PANORAMA -->
+  <section class="module" id="panorama">
+    <div class="module-head">
+      <div class="module-mark">§1</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Panorama</div>
+        <h2>Os três pilares do pós-venda</h2>
+      </div>
+    </div>
+    <p>"Pós-venda" costuma ser tratado como sinônimo de SAC. Neste projeto ele é tratado como três sistemas com lógicas, custos e times diferentes — e que precisam ser desenhados juntos porque compartilham o mesmo cliente e, em boa parte, a mesma equipe.</p>
+    <div class="three-col">
+      <div class="card">
+        <h4>1 · Pós-venda imediato</h4>
+        <p>Tudo que resolve o pedido em si: rastreio, troca, garantia, cancelamento, dúvida de uso. Prazo curto (dias), gatilho é o próprio pedido.</p>
+      </div>
+      <div class="card">
+        <h4>2 · Pós-consumo de materiais</h4>
+        <p>O que acontece com embalagem, tecido, vidro, madeira e restos de produção depois que o produto foi usado. Prazo longo (semanas a anos), gatilho é o descarte.</p>
+      </div>
+      <div class="card">
+        <h4>3 · Atendimento &amp; relacionamento contínuo</h4>
+        <p>Canais sempre abertos (WhatsApp, e-mail, chat, redes sociais) que atendem tanto pré-venda quanto os dois pilares acima. É a infraestrutura que sustenta 1 e 2.</p>
+      </div>
+    </div>
+    <div class="callout tip">
+      <h4>Por que tratar os 3 juntos</h4>
+      <p>O mesmo atendente que troca uma peça da Matilha Urbana é quem recebe o pote vazio devolvido da Raízes do Norte e quem responde uma dúvida de agendamento da Cultivar Estética. Nas seis lojas, o volume individual é pequeno demais para justificar uma equipe de atendimento dedicada por marca — a resposta de negócio é um <strong>hub de atendimento compartilhado</strong>, com scripts e políticas específicas por loja, mas ferramenta, gente e processo em comum. Isso é o que dimensionamos abaixo.</p>
+    </div>
+  </section>
+
+  <!-- MATERIAIS E DESTINAÇÃO -->
+  <section class="module" id="materiais">
+    <div class="module-head">
+      <div class="module-mark">§2</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Pós-consumo de materiais</div>
+        <h2>O que cada loja usa e para onde isso vai depois do consumo</h2>
+      </div>
+    </div>
+    <p>Cada loja tem uma composição de materiais diferente — e por isso um canal de destinação diferente. A tabela abaixo consolida os seis programas; o detalhamento de processo e custo vem em seguida.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Loja</th><th>Materiais principais</th><th>Canal de pós-consumo</th><th>Parceiro de destinação</th><th>Incentivo ao cliente</th></tr></thead>
+        <tbody>
+          <tr><td><span class="brand-tag"><span class="dot" style="background:#1D7A72"></span>Matilha Urbana</span></td><td>Tecido (algodão/poliéster), velcro, saquinho biodegradável</td><td>Doação + reciclagem têxtil</td><td>ONGs de proteção animal + cooperativa têxtil do Brás</td><td>Cupom 15% ao devolver peça usada</td></tr>
+          <tr><td><span class="brand-tag"><span class="dot" style="background:#5B4B8A"></span>Parede Viva</span></td><td>Papelão reforçado, manta kraft, bastidor de madeira</td><td>Reciclagem de papelão + reaproveitamento de madeira</td><td>Cooperativa de catadores de Guarulhos</td><td>10% de desconto ao devolver a caixa</td></tr>
+          <tr><td><span class="brand-tag"><span class="dot" style="background:#2E6B4F"></span>Raízes do Norte</span></td><td>Potes de vidro/PET, sacos kraft, rótulos</td><td>Reuso (higienização) + reciclagem</td><td>Central de logística reversa própria + cooperativa de Guarulhos</td><td>R$3,00 de crédito por pote devolvido</td></tr>
+          <tr><td><span class="brand-tag"><span class="dot" style="background:#A6456B"></span>Cultivar Estética</span></td><td>Descartáveis de sessão, frascos de home care (vidro/PET)</td><td>PGRSS (resíduo comum triado) + recarga de frasco</td><td>Empresa de coleta de resíduos contratada + fornecedor de recarga</td><td>Desconto na recarga ao trazer o frasco</td></tr>
+          <tr><td><span class="brand-tag"><span class="dot" style="background:#3E6E8E"></span>Lar Aberto</span></td><td>Retalho de MDF, retalho de tecido, isopor, papelão</td><td>Reaproveitamento + reciclagem especializada de EPS</td><td>Marcenaria social do Belenzinho + recicladora de isopor</td><td>Sem incentivo direto (fluxo B2B com fornecedores)</td></tr>
+          <tr><td><span class="brand-tag"><span class="dot" style="background:#7A3B2E"></span>Confeito de Autor</span></td><td>Potes PET (bolo no pote), caixas de papel, resíduo orgânico</td><td>Reuso + compostagem</td><td>Hortas comunitárias/composteiras urbanas + coleta seletiva</td><td>R$2,00 de crédito por pote devolvido</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size:19px; margin:36px 0 12px;">Como funciona cada programa</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Matilha Urbana — Devolva &amp; Doe</h4>
+        <p>Peça de roupa pet fora de uso (pet cresceu, peça gastou) é devolvida limpa via etiqueta de postagem reversa. Peças em bom estado seguem para 3 ONGs parceiras de proteção animal em SP/Guarulhos; peças desgastadas viram trapo industrial via cooperativa têxtil do Brás. O saquinho de envio é compostável — instrução de compostagem doméstica vai no cartão de cuidados, sem necessidade de devolução.</p>
+      </div>
+      <div class="card">
+        <h4>Parede Viva — Devolva a Embalagem</h4>
+        <p>Quadro é produto de vida longa (baixo descarte); o programa foca na embalagem de transporte. Cliente que mora em regiões de maior densidade de pedidos (definidas por CEP) pode agendar retirada da caixa reforçada pelo mesmo motoboy de uma entrega futura, ou levar a um dos 4 pontos de coleta parceiros. Plástico bolha foi substituído por manta de papel kraft canelado em 100% dos envios desde o lançamento.</p>
+      </div>
+      <div class="card">
+        <h4>Raízes do Norte — Pote de Volta</h4>
+        <p>O único programa com <strong>economia circular real</strong> (não apenas reciclagem): potes de vidro devolvidos limpos são higienizados internamente e reentram no reenchimento de óleos, evitando compra de embalagem nova. Potes trincados ou danificados vão para reciclagem via cooperativa. Devolução por correio com etiqueta pré-paga ou em feiras de produtos saudáveis onde a marca já está presente fisicamente.</p>
+      </div>
+      <div class="card">
+        <h4>Cultivar Estética — Recarregue</h4>
+        <p>Descartáveis de sessão (máscaras, luvas, papel toalha) seguem o Plano de Gerenciamento de Resíduos de Serviços de Saúde (PGRSS) como resíduo comum triado, mesmo em procedimentos não invasivos — exigência de conformidade do estúdio. Já os frascos de vidro/PET da linha home care entram no programa Recarregue: cliente traz o frasco vazio a qualquer unidade e paga só o conteúdo, com desconto de 20% sobre o preço cheio.</p>
+      </div>
+      <div class="card">
+        <h4>Lar Aberto — Reaproveitamento de oficina</h4>
+        <p>Fluxo B2B, não B2C: retalhos de MDF e tecido gerados na produção sob medida (não pelo cliente final) são separados na marcenaria parceira do Belenzinho e repassados a um projeto de marcenaria social que os transforma em mobiliário para escolas. O isopor de proteção de vasos de cerâmica — material sem rota de reciclagem na coleta seletiva comum — está sendo eliminado dos novos pedidos (substituído por papel kraft) e o estoque remanescente segue para recicladora especializada em EPS.</p>
+      </div>
+      <div class="card">
+        <h4>Confeito de Autor — Pote Doce de Volta</h4>
+        <p>Mesmo mecanismo do Raízes do Norte aplicado ao pote de bolo no pote: devolução em ponto de retirada ou na próxima entrega, higienização e reuso quando o material permite (grau alimentício verificado), ou reciclagem. Resíduo orgânico de produção (aparas, cascas, sobras de massa) vai para composteiras urbanas parceiras — reduz custo de descarte e gera insumo para hortas comunitárias da região.</p>
+      </div>
+    </div>
+
+    <div class="formula">
+      <div class="label">Dimensionamento do programa de pós-consumo (consolidado, 6 lojas)</div>
+      <div class="eq">Devoluções de material/mês = Pedidos físicos elegíveis × Taxa de adesão ao programa</div>
+      <div class="calc">
+        Pedidos físicos/mês (exclui Cultivar Estética, que é serviço): 100 (Pets) + 10 (Quadros) + 485 (Natureza) + 127 (Casa) + 540 (Doces) = <strong>1.262 pedidos/mês</strong><br>
+        Taxa de adesão estimada ao programa (benchmark de programas de devolução voluntária com incentivo, 6-10%): 8%<br>
+        Devoluções de material = 1.262 × 8% = <span class="result">≈ 101 devoluções/mês</span>
+      </div>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Matriz de materiais × destinação × parceiro para as 6 lojas + ficha de processo de cada programa de devolução.</span></div>
+  </section>
+
+  <!-- CANAIS DE SUPORTE -->
+  <section class="module" id="suporte">
+    <div class="module-head">
+      <div class="module-mark">§3</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Atendimento &amp; relacionamento</div>
+        <h2>Canais de suporte consolidados (hub único, 6 marcas)</h2>
+      </div>
+    </div>
+    <p>Um único time e uma única ferramenta de helpdesk atendem as seis marcas, com caixas de entrada separadas por número/perfil para preservar a identidade de cada loja. A tabela abaixo é a central de referência — cada loja individualmente já resume sua fatia; aqui está a operação por trás.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Uso principal</th><th>Horário</th><th>SLA de resposta</th><th>Ferramenta</th></tr></thead>
+        <tbody>
+          <tr><td>WhatsApp Business API (6 números, 1 inbox)</td><td>Dúvida, status do pedido/agendamento, troca, devolução de material</td><td>Seg-sáb, 9h-19h</td><td class="num">até 30 min</td><td>BSP (ex.: 360dialog) + helpdesk</td></tr>
+          <tr><td>Instagram Direct (6 perfis)</td><td>Pré-venda, prova social, orçamentos</td><td>Seg-sáb, 9h-19h</td><td class="num">até 2h</td><td>Inbox unificado (Meta Business Suite)</td></tr>
+          <tr><td>E-mail — sac@ por marca</td><td>Formalização de trocas, notas fiscais, reclamações</td><td>Todos os dias</td><td class="num">até 24h</td><td>Helpdesk (mesma central)</td></tr>
+          <tr><td>Chat do site (6 lojas)</td><td>Suporte durante o checkout/agendamento</td><td>Seg-sáb, 9h-19h</td><td class="num">até 5 min</td><td>Widget integrado ao helpdesk</td></tr>
+          <tr><td>Central de Ajuda (FAQ self-service)</td><td>Tabela de medidas, prazos, política de trocas, PGRSS</td><td>24/7 (estático)</td><td class="num">imediato</td><td>Base de artigos do helpdesk</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Abrir um número de WhatsApp e um Instagram por marca é necessário para a identidade visual, mas gerenciar cada canal manualmente sem inbox unificado é o que mais gera atraso de SLA quando as 6 lojas crescem juntas. A ferramenta de helpdesk unificada é o investimento que evita contratar 6 atendentes em vez de 1.</p></div>
+  </section>
+
+  <!-- FLUXO DE ATENDIMENTO -->
+  <section class="module" id="fluxo-atendimento">
+    <div class="module-head">
+      <div class="module-mark">§4</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Processo</div>
+        <h2>Fluxo de atendimento pós-venda (ciclo de vida do chamado)</h2>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Recepção multicanal</h5><p>Chamado chega por WhatsApp, e-mail, Direct ou chat e cai automaticamente no helpdesk único</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Triagem</h5><p>Categorização por marca, tipo (dúvida/troca/defeito/devolução de material) e prioridade</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Resolução N1</h5><p>Atendente resolve casos padrão com script por marca (até 80% dos chamados)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Escalonamento N2/N3</h5><p>Casos de defeito recorrente ou insatisfação pública sobem para coordenação/fundadores</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Registro em CRM</h5><p>Toda interação vira histórico do cliente, ligado ao pedido/agendamento original</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">6</div><h5>Pesquisa &amp; aprendizado</h5><p>CSAT pós-atendimento; chamados recorrentes alimentam a curva ABC de cada loja (Etapa 11)</p></div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Nível</th><th>Quem resolve</th><th>Tipo de caso</th><th>SLA de escalonamento</th></tr></thead>
+        <tbody>
+          <tr><td>N1</td><td>Atendente do hub</td><td>Dúvida, status, troca simples, devolução de material dentro da política</td><td class="num">até 2h</td></tr>
+          <tr><td>N2</td><td>Coordenação de operações</td><td>Defeito recorrente, atraso de produção sob encomenda, insatisfação em rede social</td><td class="num">até 4h</td></tr>
+          <tr><td>N3</td><td>Fundadores/responsáveis pela marca</td><td>Reclamação formal (Reclame Aqui/Procon), risco de imagem, pedido jurídico</td><td class="num">até 24h</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Fluxograma de 6 passos + matriz de escalonamento N1/N2/N3 aplicável às 6 marcas.</span></div>
+  </section>
+
+  <!-- FLUXO DE LOGÍSTICA REVERSA -->
+  <section class="module" id="fluxo-reversa">
+    <div class="module-head">
+      <div class="module-mark">§5</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Processo</div>
+        <h2>Fluxo de logística reversa e pós-consumo</h2>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Solicitação</h5><p>Cliente informa intenção de devolver embalagem/material pelo canal de atendimento ou pela Central de Ajuda</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Triagem do motivo</h5><p>Diferencia devolução voluntária (programa de incentivo) de devolução por defeito (garantia, tratada no fluxo da própria loja)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Coleta</h5><p>Etiqueta de postagem reversa, retirada por motoboy em rota já programada, ou ponto de coleta físico</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Destinação</h5><p>Higienização/reuso, reciclagem, doação ou compostagem, conforme o material e o parceiro de cada loja</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Crédito ao cliente</h5><p>Cupom/desconto aplicado automaticamente à conta do cliente, registrado no CRM</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">6</div><h5>Relatório de impacto</h5><p>Consolidação mensal de kg/unidades recuperadas por loja, usada no material de marketing</p></div>
+    </div>
+    <div class="callout example"><h4>Recursos envolvidos em cada etapa</h4>
+      <p><strong>Pessoas:</strong> atendente do hub (triagem e registro) + motoboy/transportadora (coleta) + operador da cooperativa/parceiro (destinação). <strong>Ferramentas:</strong> helpdesk (registro do chamado), planilha/CRM de crédito ao cliente, etiqueta de postagem reversa dos Correios ou transportadora contratada. <strong>Parceiros externos:</strong> cooperativas de reciclagem (Brás e Guarulhos), ONGs de proteção animal, marcenaria social do Belenzinho, hortas comunitárias, recicladora de EPS.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Fluxograma de 6 passos de logística reversa + lista de recursos humanos, ferramentas e parceiros por etapa.</span></div>
+  </section>
+
+  <!-- CUSTOS E RECURSOS -->
+  <section class="module" id="custos">
+    <div class="module-head">
+      <div class="module-mark">§6</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Orçamento</div>
+        <h2>Custos e recursos do hub de pós-venda e pós-consumo</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Recurso</th><th>Tipo</th><th>Custo mensal</th><th>Observação</th></tr></thead>
+        <tbody>
+          <tr><td>1 atendente do hub (CLT, meio-período/júnior)</td><td>Pessoas</td><td class="num">R$ 4.000,00</td><td>Salário R$2.400 × encargos ~1,68 (13º, férias, FGTS, INSS patronal)</td></tr>
+          <tr><td>Ferramenta de helpdesk/CRM (plano PME, até 3 atendentes)</td><td>Ferramenta</td><td class="num">R$ 389,00</td><td>Inbox unificado WhatsApp + e-mail + chat</td></tr>
+          <tr><td>WhatsApp Business API (BSP + conversas iniciadas pela empresa)</td><td>Ferramenta</td><td class="num">R$ 81,00</td><td>≈233 conversas proativas/mês × R$0,35</td></tr>
+          <tr><td>Coleta/logística reversa (pontos de coleta + motoboy agendado)</td><td>Operação</td><td class="num">R$ 656,50</td><td>101 devoluções/mês × R$6,50 de coleta agrupada</td></tr>
+          <tr><td>Incentivo ao cliente (cupom/crédito por devolução)</td><td>Marketing</td><td class="num">R$ 505,00</td><td>101 devoluções/mês × R$5,00 médio de cupom</td></tr>
+          <tr><td>Patrocínio/parceria fixa com cooperativas e ONGs</td><td>Marketing/Parceria</td><td class="num">R$ 300,00</td><td>Doação mensal fixa, mantém relação institucional</td></tr>
+          <tr><td><strong>Total do hub</strong></td><td></td><td class="num"><strong>R$ 5.931,50</strong></td><td>Rateado entre as 6 marcas conforme volume de chamados</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">
+      <div class="label">Rateio do custo entre as 6 marcas (por volume de interação)</div>
+      <div class="eq">Custo da marca = Custo total do hub × (Interações da marca ÷ Interações totais)</div>
+      <div class="calc">
+        Interações/mês por marca (pedidos+atendimentos, usadas como proxy de volume de chamados):<br>
+        Pets 100 · Quadros 10 · Natureza 485 · Estética 816 · Casa 127 · Doces 540 → total = <strong>2.078</strong><br>
+        Exemplo — Raízes do Norte: 485 ÷ 2.078 = 23,3% → R$5.931,50 × 23,3% = <span class="result">R$ 1.383,80/mês</span><br>
+        Exemplo — Parede Viva (menor volume): 10 ÷ 2.078 = 0,5% → <span class="result">R$ 28,50/mês</span> (ainda assim mantém SLA completo, por estar no mesmo hub)
+      </div>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Orçamento mensal do hub (R$5.931,50) + fórmula de rateio proporcional por marca.</span></div>
+  </section>
+
+  <!-- KPIs -->
+  <section class="module" id="kpis">
+    <div class="module-head">
+      <div class="module-mark">§7</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Indicadores</div>
+        <h2>Painel de indicadores de pós-venda e pós-consumo</h2>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Fórmulas do painel</div>
+      <div class="eq">CSAT = respostas positivas ÷ respostas totais × 100 · TMA = soma do tempo de atendimento ÷ nº de chamados · Taxa de reincidência = chamados repetidos do mesmo pedido ÷ total de chamados × 100 · Taxa de recuperação de material = devoluções válidas ÷ pedidos elegíveis × 100 · Custo por atendimento = custo total do hub ÷ nº de chamados</div>
+      <div class="calc">
+        Chamados/mês estimados (taxa de contato de 28% sobre 2.078 interações) = <strong>582 chamados/mês</strong><br>
+        Custo por atendimento = R$5.931,50 ÷ 582 = <span class="result">R$ 10,19/chamado</span> (já incluindo o programa de pós-consumo)<br>
+        Taxa de recuperação de material = 101 ÷ 1.262 = <span class="result">8,0%</span>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Indicador</th><th>Valor do mês simulado</th><th>Meta (6 meses)</th></tr></thead>
+        <tbody>
+          <tr><td>CSAT (satisfação pós-atendimento)</td><td class="num">88%</td><td class="num">≥ 92%</td></tr>
+          <tr><td>NPS consolidado (6 marcas)</td><td class="num">+42</td><td class="num">+55</td></tr>
+          <tr><td>TMA (tempo médio de atendimento)</td><td class="num">12 min</td><td class="num">≤ 9 min</td></tr>
+          <tr><td>Taxa de reincidência de chamado</td><td class="num">9%</td><td class="num">≤ 6%</td></tr>
+          <tr><td>Taxa de recuperação de material</td><td class="num">8,0%</td><td class="num">≥ 15%</td></tr>
+          <tr><td>Custo por atendimento</td><td class="num">R$ 10,19</td><td class="num">≤ R$ 9,00</td></tr>
+          <tr><td>SLA cumprido (WhatsApp, 30 min)</td><td class="num">91%</td><td class="num">≥ 95%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Painel de 7 indicadores com valor simulado e meta de 6 meses, calculado a partir dos volumes consolidados das 6 lojas.</span></div>
+  </section>
+
+  <!-- REGULAÇÃO -->
+  <section class="module" id="regulacao">
+    <div class="module-head">
+      <div class="module-mark">§8</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Compliance</div>
+        <h2>Enquadramento regulatório de referência</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>PNRS — Lei 12.305/2010</h4>
+        <p>Política Nacional de Resíduos Sólidos. Estabelece a lógica de responsabilidade compartilhada pelo ciclo de vida do produto — base legal e conceitual de todos os programas de devolução deste módulo, mesmo quando voluntários.</p>
+      </div>
+      <div class="card">
+        <h4>Decreto 10.936/2022</h4>
+        <p>Acordo setorial de logística reversa de embalagens em geral. Empresas de maior porte têm metas obrigatórias de recuperação; para as 6 lojas (porte pequeno/MEI-ME), o programa é voluntário, mas antecipa uma exigência que tende a se estender à cadeia.</p>
+      </div>
+      <div class="card">
+        <h4>CDC — Art. 49, 18 e 26</h4>
+        <p>Direito de arrependimento (7 dias), garantia por vício (30/90 dias) e exceções para produto personalizado — já tratados em cada loja; aqui operacionalizados pelo mesmo fluxo de atendimento e helpdesk único.</p>
+      </div>
+      <div class="card">
+        <h4>RDC ANVISA 222/2018</h4>
+        <p>Regras de gerenciamento de resíduos de serviços de saúde, aplicável ao estúdio da Cultivar Estética mesmo em procedimentos não invasivos — exige Plano de Gerenciamento de Resíduos (PGRSS) e destinação segregada de descartáveis.</p>
+      </div>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Tratar "programa de sustentabilidade" como iniciativa de marketing isolada. Sem lastro em um fluxo operacional real (coleta, parceiro de destinação, custo previsto), o programa vira promessa vazia — e o primeiro cliente que tenta devolver algo e não consegue destrói mais confiança do que a ausência do programa.</p></div>
+  </section>
+
+  <!-- MARKETING -->
+  <section class="module" id="marketing" style="border-bottom:none;">
+    <div class="module-head">
+      <div class="module-mark">§9</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Comunicação</div>
+        <h2>Playbook de marketing do pós-consumo</h2>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h4>Como comunicar (sem greenwashing)</h4>
+        <ul>
+          <li>Nunca prometer "100% sustentável" — comunicar o número real (ex.: "8% dos potes já voltam para reuso, nossa meta é 15%").</li>
+          <li>Selo próprio "Circula" aplicado nos SKUs elegíveis a devolução, visível na ficha de produto (Etapa 5 de cada loja).</li>
+          <li>Relatório de impacto trimestral público (kg de tecido recuperado, potes reutilizados, m² de MDF reaproveitado) — mesmo formato do painel de indicadores acima, em linguagem simples.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Calendário de campanhas</h4>
+        <ul>
+          <li>Semana do Meio Ambiente (junho) — campanha cruzada nas 6 marcas com bônus temporário no valor do cupom de devolução.</li>
+          <li>Dia da Reciclagem (ago) — conteúdo mostrando o destino real do material (bastidor de tecido virando trapo, pote virando reenchimento).</li>
+          <li>Aniversário de cada marca — relatório de impacto do ano enviado por e-mail/WhatsApp aos clientes que participaram do programa.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="formula">
+      <div class="label">Hipótese de retenção associada ao programa (a validar com dados reais)</div>
+      <div class="eq">Retenção = Clientes com 2ª compra em 90 dias ÷ Total de clientes do período × 100</div>
+      <div class="calc">
+        Benchmark de mercado para clientes que participam de programas de devolução com incentivo: recompra 90 dias entre 12 p.p. e 20 p.p. acima da base geral.<br>
+        Base geral estimada (sem programa): 22% · Clientes do programa (com incentivo de cupom): <span class="result">≈ 38%</span><br>
+        Tratar como hipótese testável no painel de indicadores (Etapa 12 de cada loja), não como dado definitivo.
+      </div>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Playbook de comunicação do programa de pós-consumo + calendário anual de campanhas cruzadas entre as 6 marcas.</span></div>
+  </section>
+
+  <footer class="footer">
+    Projeto Integrador de E-commerce — Módulo Transversal · Pós-venda, Pós-consumo e Atendimento · Material didático com simulações para fins de aprendizagem.
+  </footer>
+</div>

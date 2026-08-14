@@ -1,0 +1,706 @@
+<title>Parede Viva Ateliê — Projeto Integrador · Quadros sob Encomenda</title>
+<style>
+:root{
+  --bg:#EEF0EC; --surface:#FFFFFF; --surface-alt:#E3E6DE; --border:#D2D6C9;
+  --ink:#1F2421; --ink-soft:#545C52;
+  --accent:#5B4B8A; --accent-ink:#332756; --accent-soft:#E7E2F2;
+  --good:#2E7D4F; --warn:#B8790A; --critical:#B23A3A;
+  --radius:10px;
+  --serif: Georgia,'Iowan Old Style','Sitka Text','Source Serif Pro',serif;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono: ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+    --ink:#ECEEE7; --ink-soft:#ABB2A3;
+    --accent:#9B85D6; --accent-ink:#F0EBFA; --accent-soft:#322953;
+    --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141713; --surface:#1C1F1A; --surface-alt:#232720; --border:#333830;
+  --ink:#ECEEE7; --ink-soft:#ABB2A3;
+  --accent:#9B85D6; --accent-ink:#F0EBFA; --accent-soft:#322953;
+  --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--sans);
+  margin:0; line-height:1.55; font-size:16px;
+}
+.wrap{max-width:1040px; margin:0 auto; padding:0 24px 96px;}
+h1,h2,h3,h4{font-family:var(--serif); text-wrap:balance; margin:0; color:var(--ink);}
+p{margin:0 0 12px; max-width:74ch;}
+a{color:var(--accent-ink);}
+.eyebrow{
+  font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em;
+  font-size:12px; color:var(--accent-ink); font-weight:600;
+}
+/* HERO */
+.hero{
+  padding:56px 0 40px; border-bottom:1px solid var(--border);
+  display:flex; flex-direction:column; gap:18px;
+}
+.hero h1{font-size:clamp(32px,4.4vw,50px); font-weight:600;}
+.hero .subtitle{font-size:18px; color:var(--ink-soft); max-width:68ch;}
+.meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+.chip{
+  font-family:var(--mono); font-size:12.5px; padding:6px 12px; border-radius:999px;
+  border:1px solid var(--border); background:var(--surface); color:var(--ink-soft);
+}
+.chip.accent{background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600;}
+.progress{
+  display:flex; align-items:center; gap:12px; margin-top:8px;
+}
+.progress-track{flex:1; max-width:320px; height:8px; background:var(--surface-alt); border-radius:999px; overflow:hidden; border:1px solid var(--border);}
+.progress-fill{height:100%; width:100%; background:var(--accent);}
+.progress-label{font-family:var(--mono); font-size:13px; color:var(--ink-soft); white-space:nowrap;}
+
+/* NAV STRIP */
+.navstrip{
+  position:sticky; top:48px; z-index:5; background:var(--bg);
+  border-bottom:1px solid var(--border); padding:10px 0; margin-bottom:8px;
+  overflow-x:auto; white-space:nowrap;
+}
+.navstrip .wrap{padding-bottom:0; display:flex; gap:6px;}
+.navstrip a{
+  font-family:var(--mono); font-size:12px; color:var(--ink-soft); text-decoration:none;
+  padding:5px 10px; border-radius:6px; border:1px solid transparent;
+}
+.navstrip a:hover{border-color:var(--border); color:var(--ink);}
+
+/* MODULE */
+.module{padding:52px 0; border-bottom:1px solid var(--border); scroll-margin-top:56px;}
+.module-head{display:flex; gap:20px; align-items:flex-start; margin-bottom:22px;}
+.module-num{
+  font-family:var(--serif); font-size:40px; font-weight:600; color:var(--accent-ink);
+  min-width:64px;
+}
+.module-title-wrap{flex:1;}
+.module-kicker{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:4px;}
+.module h2{font-size:26px; font-weight:600;}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:18px 0;}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px 20px;
+}
+.card h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; font-family:var(--sans); font-weight:700; color:var(--accent-ink); margin-bottom:8px;}
+.card p:last-child{margin-bottom:0;}
+.card ul{margin:0; padding-left:18px;}
+.card li{margin-bottom:5px;}
+
+.callout{border-radius:var(--radius); padding:16px 20px; margin:16px 0; border:1px solid var(--border);}
+.callout.tip{background:var(--accent-soft); border-color:var(--accent);}
+.callout.warn{background:var(--surface); border-left:4px solid var(--warn);}
+.callout.example{background:var(--surface-alt); border-style:dashed;}
+.callout h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; font-family:var(--mono);}
+
+.table-panel{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); margin:18px 0; background:var(--surface);}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:14.5px;}
+th,td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top;}
+thead th{background:var(--surface-alt); font-family:var(--sans); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-weight:700;}
+tbody tr:last-child td{border-bottom:none;}
+td.num, th.num{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right;}
+tbody tr:hover{background:var(--surface-alt);}
+
+.formula{
+  background:var(--ink); color:var(--bg); border-radius:var(--radius); padding:20px 22px; margin:18px 0;
+  font-family:var(--mono); font-size:14px;
+}
+:root[data-theme="dark"] .formula, :root:not([data-theme="light"]) .formula{background:#0D0F0C;}
+.formula .label{color:var(--accent); font-size:11px; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px;}
+.formula .eq{font-size:15.5px; margin-bottom:10px; font-variant-numeric:tabular-nums;}
+.formula .calc{opacity:.85; border-top:1px solid rgba(255,255,255,.15); padding-top:10px; margin-top:10px; font-variant-numeric:tabular-nums;}
+.formula .result{color:#fff; font-weight:700;}
+
+.checklist{list-style:none; margin:16px 0; padding:0; display:grid; gap:8px;}
+.checklist li{display:flex; gap:10px; align-items:flex-start; font-size:14.5px;}
+.checklist li::before{content:"✓"; color:var(--good); font-weight:700; font-family:var(--mono);}
+
+.deliverable{
+  display:flex; gap:14px; align-items:center; background:var(--surface); border:1px solid var(--accent);
+  border-radius:var(--radius); padding:14px 18px; margin-top:20px;
+}
+.deliverable .tag{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; background:var(--accent); color:#fff; padding:4px 10px; border-radius:6px; white-space:nowrap;}
+
+.flow{display:flex; flex-wrap:wrap; gap:0; align-items:stretch; margin:20px 0;}
+.flow-step{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:14px 16px; flex:1; min-width:150px; position:relative;
+}
+.flow-step .n{font-family:var(--serif); font-size:22px; color:var(--accent-ink); font-weight:600;}
+.flow-step h5{margin:4px 0 4px; font-size:14px; font-family:var(--sans); font-weight:700;}
+.flow-step p{font-size:13px; color:var(--ink-soft); margin:0;}
+.flow-arrow{display:flex; align-items:center; justify-content:center; padding:0 8px; color:var(--ink-soft); font-family:var(--mono);}
+
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:720px){.two-col{grid-template-columns:1fr;} .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg); padding:2px 0;}}
+
+.section-title{margin:64px 0 8px;}
+.section-title .eyebrow{display:block; margin-bottom:6px;}
+.footer{padding:48px 0 0; color:var(--ink-soft); font-size:13px; text-align:center;}
+kbd{font-family:var(--mono); background:var(--surface-alt); border:1px solid var(--border); border-radius:4px; padding:1px 6px; font-size:12px;}
+strong{color:var(--ink);}
+.small{font-size:13px; color:var(--ink-soft);}
+
+/* SITE NAV */
+.sitenav{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border);}
+.sitenav-inner{max-width:1040px; margin:0 auto; padding:0 24px; height:48px; display:flex; align-items:center; gap:20px; overflow-x:auto; white-space:nowrap;}
+.sitenav-brand{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); text-decoration:none; flex-shrink:0;}
+.sitenav-links{display:flex; gap:2px;}
+.sitenav-links a{font-family:var(--sans); font-size:13px; color:var(--ink-soft); text-decoration:none; padding:6px 10px; border-radius:6px; flex-shrink:0;}
+.sitenav-links a:hover{background:var(--surface-alt); color:var(--ink);}
+.sitenav-links a.is-active{color:var(--accent-ink); background:var(--accent-soft); font-weight:700;}
+</style>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="sitenav-brand" href="index.html">Projeto Integrador · E-commerce</a>
+    <div class="sitenav-links">
+      <a href="index.html">Início</a>
+      <a href="pets.html">Pets</a>
+      <a href="quadros.html" class="is-active">Quadros</a>
+      <a href="natura-norte.html">Raízes do Norte</a>
+      <a href="estetica.html">Estética</a>
+      <a href="casa-decoracao.html">Casa &amp; Decor</a>
+      <a href="doces-gourmet.html">Doces</a>
+      <a href="pos-venda-pos-consumo.html">Pós-venda &amp; Pós-consumo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="navstrip">
+  <div class="wrap">
+    <a href="#e0">0·Equipe</a><a href="#e1">1·Proposta</a><a href="#e2">2·Público</a><a href="#e3">3·Catálogo</a>
+    <a href="#e4">4·Canais</a><a href="#e5">5·Cadastro</a><a href="#e6">6·Auditoria</a><a href="#e7">7·Preço</a>
+    <a href="#e8">8·Marketing</a><a href="#e9">9·Estoque</a><a href="#e10">10·Entrega</a><a href="#e11">11·ABC</a>
+    <a href="#e12">12·Indicadores</a><a href="#pos">Pós-venda</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Projeto Integrador de E-commerce · Fase 1 — Planejamento e Estruturação</span>
+    <h1>Parede Viva Ateliê — quadros decorativos sob encomenda</h1>
+    <p class="subtitle">Ateliê virtual de quadros personalizados em diferentes dimensões — impressão fine art e canvas, molduras sob medida e curadoria de arte —, 100% produzido por encomenda somente após aprovação de prévia digital pelo cliente, com praça-piloto em São Paulo (capital) e Guarulhos.</p>
+    <div class="meta-row">
+      <span class="chip accent">Segmento: Decoração personalizada (quadros sob encomenda)</span>
+      <span class="chip">Praça-piloto: São Paulo (capital) + Guarulhos</span>
+      <span class="chip">Modelo: 100% sob encomenda — produção só após aprovação de prévia</span>
+      <span class="chip">Ticket médio-alvo: R$ 320,00</span>
+    </div>
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <span class="progress-label">13 de 13 etapas com entregável essencial preenchido</span>
+    </div>
+  </header>
+
+  <!-- ETAPA 0 -->
+  <section class="module" id="e0">
+    <div class="module-head">
+      <div class="module-num">00</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Organização da equipe</div>
+        <h2>Time, papéis e ritmo de trabalho</h2>
+      </div>
+    </div>
+    <p>Um ateliê de quadros sob encomenda vive de duas engrenagens que precisam girar juntas: a criativa (curadoria de arte, aprovação de prévia) e a operacional (produção, insumos, prazos). A divisão de papéis abaixo evita que o projeto vire só um "Instagram bonito" e esqueça precificação, estoque de insumos e política de trocas — os pontos que decidem se a margem sobrevive ao primeiro trimestre.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Papel</th><th>Responsável (exemplo)</th><th>Principais entregas</th><th>Dedicação semanal</th></tr></thead>
+        <tbody>
+          <tr><td>Coordenação geral</td><td>Beatriz N.</td><td>Cronograma, integração das etapas, apresentação final</td><td class="num">4h</td></tr>
+          <tr><td>Pesquisa de mercado</td><td>Rafael O.</td><td>Concorrência, persona, benchmarks de preço em ateliês e marketplaces de SP/Guarulhos</td><td class="num">5h</td></tr>
+          <tr><td>Curadoria & Arte</td><td>Isadora C.</td><td>Catálogo de estilos do ilustrador parceiro, ficha técnica por acabamento, fornecedores de insumo</td><td class="num">6h</td></tr>
+          <tr><td>Financeiro & Precificação</td><td>Thiago M.</td><td>Planilha de custos por m², precificação por tamanho/acabamento, indicadores de margem</td><td class="num">5h</td></tr>
+          <tr><td>Produção & Operações</td><td>Vinícius P.</td><td>Estoque de insumos, fornecedores, prazos de produção sob encomenda</td><td class="num">5h</td></tr>
+          <tr><td>Atendimento & Marketing</td><td>Larissa F.</td><td>Canais de venda, campanhas sazonais, aprovação de prévia, política de trocas</td><td class="num">5h</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Exemplo-guia da turma</h4>
+      <p>O grupo batizou o projeto de <strong>Parede Viva Ateliê</strong> — nome que remete a memória afetiva e decoração viva de casa, evitando termos genéricos como "Quadros Personalizados Online". O naming foi validado checando disponibilidade de domínio (.com.br) e @ no Instagram antes de seguir para a Etapa 1.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ata de papéis assinada pela equipe + nome do projeto validado (domínio e redes sociais).</span></div>
+  </section>
+
+  <!-- ETAPA 1 -->
+  <section class="module" id="e1">
+    <div class="module-head">
+      <div class="module-num">01</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Ideia, problema e proposta de valor</div>
+        <h2>Por que a Parede Viva Ateliê precisa existir</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Objetivo</h4>
+        <p>Traduzir uma dor real de quem decora casa nova ou quer presentear com algo único em uma proposta de valor específica — não "vender quadro", e sim resolver um problema de personalização, qualidade de impressão e confiança no resultado antes de produzir.</p>
+      </div>
+      <div class="card">
+        <h4>O problema do cliente</h4>
+        <ul>
+          <li>Apartamentos novos em SP e Guarulhos têm paredes vazias e moradores sem tempo/repertório para escolher arte e moldura.</li>
+          <li>Posters genéricos de marketplace vêm em tamanho único, impressão de baixa qualidade e sem opção de moldura sob medida.</li>
+          <li>Presentes emotivos (casamento, nascimento, pet) exigem personalização real (foto do cliente), mas sem garantia de como o resultado final vai ficar.</li>
+          <li>Cliente já foi decepcionado com cor/corte divergente da imagem enviada e não tem como aprovar nada antes da produção em lojas comuns.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Diferencial competitivo</h4>
+        <ul>
+          <li>Prévia digital do mockup enviada em até 48h — produção só começa após aprovação por escrito do cliente.</li>
+          <li>Qualquer dimensão sob medida (não só P/M/G/GG padrão), cobrada por m² com transparência de custo.</li>
+          <li>Impressão giclée fine art (padrão de galeria) e canvas com verniz de proteção UV.</li>
+          <li>Catálogo de 20 estilos de ilustrador parceiro para quem não tem foto própria, além de arte 100% exclusiva do cliente.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout tip">
+      <h4>Gerador de proposta de valor (aplicado)</h4>
+      <p><strong>Para</strong> moradores e casais de São Paulo e Guarulhos que querem transformar fotos e momentos especiais em decoração de parede com qualidade de galeria, <strong>a Parede Viva Ateliê é</strong> um ateliê de quadros sob encomenda <strong>que</strong> produz peças personalizadas em qualquer dimensão somente após o cliente aprovar uma prévia digital, <strong>diferente de</strong> posters genéricos ou impressões rápidas de tamanho único vendidas em marketplaces sem etapa de aprovação.</p>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Confundir "proposta de valor" com "quadro bonito no feed". A frase acima precisa ser testável: dá para verificar se a etapa de aprovação de prévia reduz reclamação por divergência de cor/corte, e isso vira métrica na Etapa 12.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Frase de proposta de valor validada + lista de 3 problemas priorizados por frequência de reclamação em pesquisas com clientes de decoração personalizada.</span></div>
+  </section>
+
+  <!-- ETAPA 2 -->
+  <section class="module" id="e2">
+    <div class="module-head">
+      <div class="module-num">02</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Público-alvo, persona e jornada</div>
+        <h2>Quem compra e como decide</h2>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h4>Perfil demográfico</h4>
+        <ul>
+          <li>Adultos de 25-45 anos, classes A e B, mudança recente de apartamento, casamento recente ou pais/tutores de pet.</li>
+          <li>Concentração em bairros com forte consumo de decoração: Vila Madalena, Pinheiros, Perdizes, Vila Mariana (SP) e Jardim Presidente Dutra, Vila Rosália (Guarulhos).</li>
+          <li>Renda familiar R$ 6.000–R$ 15.000; compra é planejada, não impulsiva — decisão amadurece em dias, não minutos.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Persona — Fernanda Lima, 34</h4>
+        <p>Analista de projetos, casada, mudou-se há 4 meses para um apartamento na Vila Mariana (SP). Quer decorar a sala com uma foto do casamento em tamanho grande e, no aniversário da mãe, um quadro menor com foto de família. Pesquisa referências no Pinterest e Instagram antes de decidir, mede a parede com fita métrica e valoriza muito ver como o quadro vai ficar antes de pagar pela produção.</p>
+        <p class="small">Objeção principal: "já comprei quadro pela internet e a cor/corte ficou diferente da foto que mandei". Gatilho de compra: prévia digital com simulação de cor e proporção na parede.</p>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Etapa da jornada</th><th>O que a Fernanda faz</th><th>O que a Parede Viva Ateliê precisa entregar</th></tr></thead>
+        <tbody>
+          <tr><td>1. Descoberta</td><td>Vê referências de decoração no Pinterest/Instagram</td><td>Conteúdo com casas reais de clientes, não só still de catálogo</td></tr>
+          <tr><td>2. Consideração</td><td>Mede a parede, compara tamanhos e acabamentos disponíveis</td><td>Guia de tamanhos com simulação de proporção na parede</td></tr>
+          <tr><td>3. Compra</td><td>Faz upload da foto, escolhe tamanho e acabamento, finaliza checkout</td><td>Checkout simples com upload de imagem em alta resolução</td></tr>
+          <tr><td>4. Aprovação da prévia</td><td>Recebe o mockup digital e aprova, ou pede ajuste de cor/enquadramento</td><td>Prévia em até 48h + até 2 rodadas de ajuste sem custo</td></tr>
+          <tr><td>5. Produção & Entrega</td><td>Acompanha status do pedido, quer receber antes de uma data comemorativa</td><td>Prazo de produção claro por tamanho + rastreio comunicado por WhatsApp</td></tr>
+          <tr><td>6. Pós-venda</td><td>Pendura o quadro, fotografa e posta marcando o ateliê</td><td>Incentivo de UGC (desconto na próxima peça por foto) + lembrete de próxima data especial</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Persona documentada + mapa de jornada de 6 etapas com ações do ateliê associadas a cada uma.</span></div>
+  </section>
+
+  <!-- ETAPA 3 -->
+  <section class="module" id="e3">
+    <div class="module-head">
+      <div class="module-num">03</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Catálogo e abastecimento</div>
+        <h2>O que vender, com quais insumos e quanto vender por mês</h2>
+      </div>
+    </div>
+    <p>Aqui não existe "estoque de produto acabado" — cada quadro só nasce depois do pedido e da aprovação da prévia. O que existe é <strong>estoque de insumos</strong>: telas em branco, bastidores de madeira, molduras, vidro, papel fine art, tintas de impressão e verniz. O catálogo é organizado por <strong>dimensão</strong> (não por "tipo de quadro"), porque é a dimensão que determina consumo de insumo, prazo e preço.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Insumo</th><th>Fornecedor</th><th>Custo unitário</th><th>Prazo de reposição</th></tr></thead>
+        <tbody>
+          <tr><td>Impressão giclée fine art (papel algodão)</td><td>Gráfica parceira (SP)</td><td class="num">R$ 45,00/m²</td><td class="num">10 dias úteis</td></tr>
+          <tr><td>Impressão canvas (tela)</td><td>Gráfica parceira (SP)</td><td class="num">R$ 32,00/m²</td><td class="num">10 dias úteis</td></tr>
+          <tr><td>Vidro antirreflexo (corte sob medida)</td><td>Vidraçaria parceira (Guarulhos)</td><td class="num">R$ 60,00/m²</td><td class="num">5 dias úteis</td></tr>
+          <tr><td>Moldura de madeira (perfil nacional)</td><td>Marcenaria parceira (Brás)</td><td class="num">R$ 22,00/m linear</td><td class="num">12 dias úteis</td></tr>
+          <tr><td>Moldura de alumínio importada</td><td>Trading (China)</td><td class="num">R$ 39,70/m linear*</td><td class="num">12 + 20 dias</td></tr>
+          <tr><td>Bastidor de madeira (chassi)</td><td>Marcenaria parceira</td><td class="num">R$ 18–78 por tamanho</td><td class="num">6 dias úteis</td></tr>
+          <tr><td>Verniz de proteção UV</td><td>Fornecedor local</td><td class="num">R$ 8,00/m²</td><td class="num">5 dias úteis</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">*Custo já nacionalizado (ver simulador de importação abaixo). A moldura de alumínio é opcional e soma 20 dias ao prazo de produção por depender de importação.</p>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Tamanho</th><th>Dimensão</th><th>Área</th><th>Perímetro</th><th>Prazo de produção</th><th>Demanda estimada (peças/mês)</th></tr></thead>
+        <tbody>
+          <tr><td>P</td><td>30×40cm</td><td class="num">0,12 m²</td><td class="num">1,4 m</td><td class="num">5 dias úteis</td><td class="num">4</td></tr>
+          <tr><td>M</td><td>40×60cm</td><td class="num">0,24 m²</td><td class="num">2,0 m</td><td class="num">7 dias úteis</td><td class="num">3</td></tr>
+          <tr><td>G</td><td>60×90cm</td><td class="num">0,54 m²</td><td class="num">3,0 m</td><td class="num">9 dias úteis</td><td class="num">1</td></tr>
+          <tr><td>GG</td><td>80×120cm</td><td class="num">0,96 m²</td><td class="num">4,0 m</td><td class="num">12 dias úteis</td><td class="num">1</td></tr>
+          <tr><td>Sob medida</td><td>Qualquer (mín. 0,15 m²)</td><td class="num">variável</td><td class="num">variável</td><td class="num">10-15 dias úteis</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">
+      <div class="label">Simulador didático — dimensionamento de demanda mensal (SOM)</div>
+      <div class="eq">SOM mensal = Domicílios (praça) × % que reformou/decorou em 12 meses × % que compra arte personalizada nesse grupo × Sazonalidade mensal × Market share-alvo</div>
+      <div class="calc">
+        População SP (capital) + Guarulhos ≈ 11,45 mi + 1,39 mi = <strong>12,84 milhões de habitantes</strong><br>
+        ÷ 2,8 hab./domicílio ≈ <strong>4,6 milhões de domicílios</strong><br>
+        × 15% reformaram/decoraram nos últimos 12 meses = 690.000 domicílios "decoradores ativos"<br>
+        × 6% desse grupo compra arte personalizada/quadro sob encomenda = <strong>41.400 domicílios/ano</strong> (mercado obtível anual)<br>
+        Sazonalidade: dia das mães, namorados e natal concentram ~40% da demanda em 3 meses-pico → 16.560 domicílios nesses 3 meses (5.520/mês) · os 60% restantes se distribuem nos outros 9 meses → 24.840 domicílios (2.760/mês regular)<br>
+        × market share-alvo de um ateliê novo (0,3%): mês regular = 2.760 × 0,3% = 8,3 · mês de pico = 5.520 × 0,3% = 16,6<br>
+        Média ponderada do ano: (9×8 + 3×17) ÷ 12 = <span class="result">≈ 10 pedidos/mês</span> (8 em meses regulares, 17 em meses de pico sazonal)
+      </div>
+    </div>
+    <div class="callout tip"><h4>Distribuição por tamanho</h4><p>Dos ~10 pedidos/mês, P e M respondem por 70% do volume (peças de entrada, presentes menores), enquanto G, GG e sob medida somam 30% — mas com ticket 2 a 6 vezes maior, sustentando boa parte do faturamento mesmo vendendo menos unidades (ver Etapa 7).</p></div>
+    <div class="callout warn"><h4>Simulador de importação — moldura de alumínio (didático)</h4>
+      <p>Valor FOB: US$ 4,20/m × 500 m = US$ 2.100 (câmbio R$ 5,40 → R$ 11.340,00). Frete + seguro internacional: R$ 980,00. Base de cálculo do II: R$ 12.320,00.<br>
+      II (12,6%): R$ 1.552,32 · IPI (5% sobre base+II): R$ 693,62 · PIS (2,1%) + COFINS (9,65%) sobre base ampliada ≈ R$ 1.711,50 · ICMS-SP (18% "por dentro" sobre o total nacionalizado) ≈ R$ 3.573,10.<br>
+      <strong>Custo desembaraçado total ≈ R$ 19.850,54 ÷ 500 m = R$ 39,70/m linear nacionalizado</strong> (valor já usado na tabela de insumos acima). Simulação didática — alíquotas variam por NCM real.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Tabela de insumos + tabela de tamanhos (SKUs por dimensão) com área, perímetro, prazo e demanda mensal estimada.</span></div>
+  </section>
+
+  <!-- ETAPA 4 -->
+  <section class="module" id="e4">
+    <div class="module-head">
+      <div class="module-num">04</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Canais de venda</div>
+        <h2>Onde a Parede Viva Ateliê vai vender</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Comissão</th><th>Devolução/reparo</th><th>Receita líquida simulada (10 pedidos, tíquete R$320)</th></tr></thead>
+        <tbody>
+          <tr><td>Loja virtual própria</td><td class="num">~4,5% (gateway)</td><td class="num">2%</td><td class="num">R$ 2.994,90</td></tr>
+          <tr><td>Instagram Shopping / WhatsApp</td><td class="num">0% (só gateway 4,5%)</td><td class="num">1%</td><td class="num">R$ 3.025,40</td></tr>
+          <tr><td>Elo7 (marketplace de personalizados)</td><td class="num">12%</td><td class="num">3%</td><td class="num">R$ 2.731,50</td></tr>
+          <tr><td>Etsy (exportação)</td><td class="num">~12% (taxa + processamento + câmbio)</td><td class="num">1%</td><td class="num">R$ 2.788,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Cálculo: Receita bruta = 10 × R$320 = R$3.200. Receita líquida = R$3.200 × (1 − comissão) × (1 − devolução/reparo). Como o produto é sob encomenda, "devolução" aqui é majoritariamente reparo por defeito, não arrependimento por preferência.</p>
+    <div class="callout tip"><h4>Dica do orientador</h4><p>Evite Mercado Livre e Shopee para essa linha: são marketplaces de giro rápido, otimizados para entrega em 1-2 dias e preço baixo — incompatíveis com um produto de alto valor que leva de 5 a 15 dias úteis para ser produzido após aprovação de prévia. Priorize loja própria e Instagram/WhatsApp (canal mais forte, pois o produto é visual e emocional) e use o Elo7 como vitrine complementar de descoberta.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Matriz de canais com comissão, devolução/reparo e receita líquida simulada, e decisão de mix de canal.</span></div>
+  </section>
+
+  <!-- ETAPA 5 -->
+  <section class="module" id="e5">
+    <div class="module-head">
+      <div class="module-num">05</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Cadastro do produto</div>
+        <h2>Ficha de anúncio do Quadro Fine Art M (40×60cm) com vidro antirreflexo</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Título (58/60 car.)</h4><p>Quadro Personalizado Fine Art 40x60cm Vidro Antirreflexo</p></div>
+      <div class="card"><h4>Palavras-chave</h4><ul><li>quadro personalizado com foto</li><li>quadro fine art emoldurado</li><li>presente casamento decoração</li><li>quadro sob encomenda São Paulo</li></ul></div>
+      <div class="card"><h4>Ficha técnica</h4><ul><li>Impressão: giclée fine art, papel algodão 300g/m²</li><li>Moldura: madeira nacional (preta, branca ou carvalho)</li><li>Vidro antirreflexo 2mm + sistema de pendurar incluso</li><li>Prazo de produção: 7 dias úteis após aprovação da prévia</li></ul></div>
+      <div class="card"><h4>FAQ do anúncio</h4><ul><li>"Posso usar foto do celular?" — sim, recomendamos resolução mínima de 300dpi no tamanho final</li><li>"Recebo prévia antes de produzir?" — sim, em até 48h, com até 2 rodadas de ajuste sem custo</li><li>"Posso trocar se não gostar do resultado?" — não por preferência (item personalizado), mas sim se divergir da prévia aprovada</li></ul></div>
+    </div>
+    <div class="callout example"><h4>Roteiro de imagens (7 fotos obrigatórias)</h4><p>1) Capa ambientada em sala real · 2) Detalhe do canto da moldura e do vidro · 3) Verso com sistema de pendurar · 4) Still em fundo neutro com régua de escala · 5) Comparativo foto original × quadro pronto · 6) Cliente com o quadro pendurado (UGC) · 7) Tabela de tamanhos e acabamentos disponíveis.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Ficha de anúncio completa (título, descrição, ficha técnica, FAQ, 7 fotos) para o SKU-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 6 -->
+  <section class="module" id="e6">
+    <div class="module-head">
+      <div class="module-num">06</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Auditoria pré-publicação</div>
+        <h2>Checklist antes de publicar o anúncio</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Item</th><th>Risco se falhar</th><th>Responsável</th><th>Prazo</th></tr></thead>
+        <tbody>
+          <tr><td>Fluxo de prévia aprovada por escrito antes da produção está ativo</td><td>Alto (retrabalho)</td><td>Atendimento</td><td class="num">D-0</td></tr>
+          <tr><td>Preço por tamanho/acabamento confere com planilha (Etapa 7)</td><td>Alto</td><td>Financeiro</td><td class="num">D-2</td></tr>
+          <tr><td>Requisitos de resolução da imagem enviada estão claros</td><td>Alto (qualidade)</td><td>Produção</td><td class="num">D-1</td></tr>
+          <tr><td>Peso e dimensões da embalagem cadastrados por tamanho</td><td>Alto (frete errado)</td><td>Operações</td><td class="num">D-2</td></tr>
+          <tr><td>Prazo de produção por tamanho destacado no anúncio</td><td>Alto (reclamação)</td><td>Atendimento</td><td class="num">D-1</td></tr>
+          <tr><td>Fotos com escala e detalhe da moldura/vidro</td><td>Médio</td><td>Produto</td><td class="num">D-1</td></tr>
+          <tr><td>Variações de tamanho e acabamento corretas no cadastro</td><td>Médio</td><td>Operações</td><td class="num">D-1</td></tr>
+          <tr><td>Política de trocas (personalizado × catálogo autoral) visível</td><td>Médio</td><td>Atendimento</td><td class="num">D0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Checklist de 8 itens assinado pelos responsáveis antes da publicação do anúncio-piloto.</span></div>
+  </section>
+
+  <!-- ETAPA 7 -->
+  <section class="module" id="e7">
+    <div class="module-head">
+      <div class="module-num">07</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Precificação</div>
+        <h2>Quanto cobrar — por m² e por acabamento, em dois tamanhos</h2>
+      </div>
+    </div>
+    <p>Como não existe "peça padrão", o preço muda por tamanho <em>e</em> por acabamento. A fórmula de preço mínimo é a mesma para todos, mas os custos variam com a área (m²) e o perímetro (moldura, cobrada por metro linear). Abaixo, o cálculo completo para o acabamento-carro-chefe (fine art emoldurado com vidro antirreflexo) nos dois extremos do catálogo: P e GG.</p>
+    <div class="two-col">
+      <div class="formula">
+        <div class="label">Preço mínimo — Tamanho P (30×40cm, 0,12 m², perímetro 1,4 m)</div>
+        <div class="eq">Preço Mínimo = Custos ÷ (1 − Comissão − Margem)</div>
+        <div class="calc">
+          Impressão giclée: 0,12×45 = R$5,40 · Vidro: 0,12×60 = R$7,20 · Moldura: 1,4×22 = R$30,80 · Montagem: 0,12×15 = R$1,80 · Embalagem: R$12,00 · Frete absorvido: R$8,00<br>
+          <strong>Custos = R$65,20</strong><br>
+          Comissão (loja própria): 4,5% · Margem desejada: 40%<br>
+          Preço Mínimo = 65,20 ÷ (1 − 0,045 − 0,40) = 65,20 ÷ 0,555 = <span class="result">R$ 117,48</span><br>
+          Preço praticado: <span class="result">R$ 149,00</span> → margem real ≈ 51,7% (contribuição R$77,10)
+        </div>
+      </div>
+      <div class="formula">
+        <div class="label">Preço mínimo — Tamanho GG (80×120cm, 0,96 m², perímetro 4,0 m)</div>
+        <div class="eq">Preço Mínimo = Custos ÷ (1 − Comissão − Margem)</div>
+        <div class="calc">
+          Impressão giclée: 0,96×45 = R$43,20 · Vidro: 0,96×60 = R$57,60 · Moldura: 4,0×22 = R$88,00 · Montagem: 0,96×15 = R$14,40 · Embalagem: R$45,00 · Frete absorvido: R$35,00<br>
+          <strong>Custos = R$283,20</strong><br>
+          Comissão (loja própria): 4,5% · Margem desejada: 40%<br>
+          Preço Mínimo = 283,20 ÷ 0,555 = <span class="result">R$ 510,27</span><br>
+          Preço praticado: <span class="result">R$ 649,00</span> → margem real ≈ 51,9% (contribuição R$336,60)
+        </div>
+      </div>
+    </div>
+    <div class="callout tip"><h4>O que muda de fato entre P e GG</h4><p>A margem <strong>percentual</strong> fica parecida (~52%) nos dois tamanhos — o que muda é a margem em <strong>R$</strong>: R$77,10 no P contra R$336,60 no GG. É por isso que tamanhos grandes, mesmo vendendo poucas unidades por mês (Etapa 3), sustentam boa parte do resultado do ateliê.</p></div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Tamanho</th><th>Área / Perímetro</th><th>Canvas c/ bastidor</th><th>Fine art s/ vidro</th><th>Fine art c/ vidro</th><th>+ Moldura alumínio</th></tr></thead>
+        <tbody>
+          <tr><td>P</td><td class="num">0,12 m² / 1,4 m</td><td class="num">R$ 99</td><td class="num">R$ 129</td><td class="num">R$ 149</td><td class="num">+R$ 59</td></tr>
+          <tr><td>M</td><td class="num">0,24 m² / 2,0 m</td><td class="num">R$ 149</td><td class="num">R$ 199</td><td class="num">R$ 229</td><td class="num">+R$ 79</td></tr>
+          <tr><td>G</td><td class="num">0,54 m² / 3,0 m</td><td class="num">R$ 259</td><td class="num">R$ 329</td><td class="num">R$ 399</td><td class="num">+R$ 119</td></tr>
+          <tr><td>GG</td><td class="num">0,96 m² / 4,0 m</td><td class="num">R$ 429</td><td class="num">R$ 499</td><td class="num">R$ 649</td><td class="num">+R$ 159</td></tr>
+          <tr><td>Sob medida</td><td class="num">por m² (mín. 0,15 m²)</td><td class="num">a partir de R$300/m²</td><td class="num">a partir de R$430/m²</td><td class="num">a partir de R$570/m²</td><td class="num">sob consulta</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example"><h4>Exemplo-guia — peça sob medida</h4><p>Encomenda de 1,00m × 1,50m (1,50 m², perímetro 5,00m), fine art com vidro: Custos = 1,50×45 + 1,50×60 + 5,00×22 + 1,50×15 + R$50 (emb.) + R$38 (frete) = R$378,00. Preço Mínimo = 378,00 ÷ 0,555 = R$681,08 → preço praticado R$850,00 (arredondado para cima por ser peça única, com maior risco de produção) → margem real ≈ 51,0%, equivalente a R$566,67/m².</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de precificação por m² e por acabamento, com preço mínimo e preço praticado calculados para os tamanhos P e GG.</span></div>
+  </section>
+
+  <!-- ETAPA 8 -->
+  <section class="module" id="e8">
+    <div class="module-head">
+      <div class="module-num">08</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Marketing e funil</div>
+        <h2>Campanha "Datas Especiais" (dia das mães, namorados e natal)</h2>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h4>Objetivo</h4><p>Concentrar investimento nos 3 meses de pico sazonal para gerar ~17 pedidos/mês na praça SP+Guarulhos nesses períodos.</p></div>
+      <div class="card"><h4>Público</h4><p>Adultos 25-45, interesse em "decoração" e "presentes personalizados", lookalike de clientes atuais, raio de 20km dos bairros-alvo.</p></div>
+      <div class="card"><h4>Orçamento</h4><p>R$ 900/mês (Meta Ads) + R$ 500/mês (microinfluenciadores de decoração/lifestyle) = R$ 1.400/mês</p></div>
+    </div>
+    <div class="formula">
+      <div class="label">Indicadores do funil</div>
+      <div class="eq">CTR = Cliques ÷ Impressões × 100 · CPC = Investimento ÷ Cliques · Conversão = Pedidos ÷ Cliques × 100 · CAC = Investimento ÷ Pedidos · ROAS = Receita ÷ Investimento</div>
+      <div class="calc">
+        Impressões: 70.000 · Cliques: 1.400 → <strong>CTR = 2,0%</strong><br>
+        Investimento R$1.400 ÷ 1.400 cliques → <strong>CPC = R$ 1,00</strong><br>
+        Pedidos gerados pela campanha: 7 ÷ 1.400 cliques → <strong>Conversão = 0,5%</strong><br>
+        CAC = 1.400 ÷ 7 = <strong>R$ 200,00</strong> por pedido<br>
+        Receita gerada = 7 × R$320 = R$2.240 → ROAS = 2.240 ÷ 1.400 = <span class="result">1,6x</span>
+      </div>
+    </div>
+    <div class="callout warn"><h4>Erro comum</h4><p>Comparar a conversão de 0,5% com a de e-commerces de baixo ticket (2-3%) e concluir que a campanha "está ruim". Produtos de alto valor e personalizados têm funil mais longo — o cliente pesquisa, mede a parede, hesita — então CAC mais alto é aceitável se o ticket e a margem compensarem. O alerta real aqui é o ROAS de 1,6x abaixo da meta de breakeven (~2,0x, dado a margem de contribuição de ~52%).</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Plano de campanha com objetivo, público, orçamento, período e simulação de CTR/CPC/conversão/CAC/ROAS.</span></div>
+  </section>
+
+  <!-- ETAPA 9 -->
+  <section class="module" id="e9">
+    <div class="module-head">
+      <div class="module-num">09</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Estoque de insumos e reposição</div>
+        <h2>Quando repor papel/lona e moldura</h2>
+      </div>
+    </div>
+    <p>Não há "estoque de quadro pronto" para repor — o que se controla é o consumo de <strong>insumo por m² (ou metro linear) vendido</strong>. Abaixo, o cálculo completo para o papel/lona de impressão, seguido da comparação com o insumo de moldura, em dois cenários: mês regular e mês de pico sazonal.</p>
+    <div class="formula">
+      <div class="label">Cobertura e ponto de pedido — papel/lona (m² impressos)</div>
+      <div class="eq">Cobertura (dias) = Estoque atual ÷ Demanda diária média · Ponto de Pedido = (Demanda diária × Prazo de reposição) + Estoque de segurança</div>
+      <div class="calc">
+        Consumo mensal de área (mês regular): 4×0,12 + 3×0,24 + 1×0,54 + 1×0,96 + 1×1,50 = <strong>4,20 m²/mês</strong> → demanda diária = 4,20 ÷ 30 = <strong>0,14 m²/dia</strong><br>
+        Estoque atual do rolo: 10 m² → Cobertura = 10 ÷ 0,14 = <span class="result">≈ 71 dias</span><br>
+        Prazo de reposição do fornecedor: 10 dias · Estoque de segurança (absorve virada para o pico, +70%): (0,14×1,7 − 0,14) × 10 = 1,0 m²<br>
+        Ponto de Pedido = (0,14 × 10) + 1,0 = 1,4 + 1,0 = <span class="result">≈ 2,4 m²</span> (repor quando restar 2,4 m² de papel/lona)
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Insumo</th><th>Cenário</th><th>Demanda diária</th><th>Prazo de reposição</th><th>Estoque de segurança</th><th>Ponto de pedido</th></tr></thead>
+        <tbody>
+          <tr><td>Papel/lona</td><td>Regular</td><td class="num">0,14 m²/dia</td><td class="num">10 dias</td><td class="num">1,0 m²</td><td class="num">2,4 m²</td></tr>
+          <tr><td>Papel/lona</td><td>Pico sazonal</td><td class="num">0,24 m²/dia</td><td class="num">10 dias</td><td class="num">1,0 m²</td><td class="num">3,4 m²</td></tr>
+          <tr><td>Moldura (madeira)</td><td>Regular</td><td class="num">0,79 m/dia</td><td class="num">12 dias</td><td class="num">6,6 m</td><td class="num">16,0 m</td></tr>
+          <tr><td>Moldura (madeira)</td><td>Pico sazonal</td><td class="num">1,34 m/dia</td><td class="num">12 dias</td><td class="num">6,6 m</td><td class="num">22,7 m</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Dica do orientador</h4><p>O ponto de pedido da moldura deve subir <em>antes</em> de maio (dia das mães) — o prazo de reposição de 12 dias mais o próprio prazo de produção não deixam margem para repor durante o pico. Antecipar a compra em abril é o que evita ruptura de insumo justamente no mês de maior demanda.</p></div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de cobertura e ponto de pedido para os 2 insumos críticos (papel/lona e moldura), em cenário regular e de pico sazonal.</span></div>
+  </section>
+
+  <!-- ETAPA 10 -->
+  <section class="module" id="e10">
+    <div class="module-head">
+      <div class="module-num">10</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Entrega, atendimento e logística reversa</div>
+        <h2>Do pedido ao quadro pendurado na parede</h2>
+      </div>
+    </div>
+    <p>Como a produção sob encomenda é mais longa e tem uma etapa crítica de aprovação de prévia (ver fluxo completo na seção de pós-venda), medimos o mês em uma amostra trimestral (30 pedidos) para ter uma base estatística mais robusta que um único mês de baixo volume.</p>
+    <div class="formula">
+      <div class="label">OTIF e taxa de reparo/garantia (amostra trimestral)</div>
+      <div class="eq">OTIF = (Pedidos completos E no prazo) ÷ Total de pedidos × 100 · Taxa de reparo = Casos de reparo ÷ Pedidos entregues × 100</div>
+      <div class="calc">
+        Pedidos do trimestre: 30 · Entregues completos e no prazo: 27 → <strong>OTIF = 90%</strong> (3 atrasos: 2 por demora do cliente em aprovar a prévia, 1 por atraso do fornecedor de moldura importada)<br>
+        Casos de reparo/garantia: 2 (1 erro de corte/dimensão, 1 divergência da prévia aprovada) ÷ 30 entregues → <span class="result">Taxa de reparo = 6,7% (≈7%)</span>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Motivo de reparo/garantia</th><th>Ocorrências/trimestre</th><th>% do total</th></tr></thead>
+        <tbody>
+          <tr><td>Erro de corte/dimensão</td><td class="num">1</td><td class="num">50%</td></tr>
+          <tr><td>Divergência da prévia aprovada</td><td class="num">1</td><td class="num">50%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Fluxograma completo do pedido (seção de pós-venda) + cálculo de OTIF e taxa de reparo/garantia do trimestre simulado.</span></div>
+  </section>
+
+  <!-- ETAPA 11 -->
+  <section class="module" id="e11">
+    <div class="module-head">
+      <div class="module-num">11</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Priorização com curva ABC/Pareto</div>
+        <h2>Onde atacar primeiro</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Problema</th><th>Ocorrências/trimestre</th><th>% acumulado</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td>Atraso na aprovação da prévia pelo cliente</td><td class="num">5</td><td class="num">36%</td><td>A</td></tr>
+          <tr><td>Dúvida de medida/parede antes da compra (contato SAC)</td><td class="num">4</td><td class="num">64%</td><td>A</td></tr>
+          <tr><td>Atraso de fornecedor (moldura de alumínio importada)</td><td class="num">3</td><td class="num">86%</td><td>A</td></tr>
+          <tr><td>Erro de corte/dimensão</td><td class="num">1</td><td class="num">93%</td><td>B</td></tr>
+          <tr><td>Divergência da prévia aprovada</td><td class="num">1</td><td class="num">100%</td><td>C</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Ação 5W2H — Classe A (atraso na aprovação da prévia)</h4>
+      <p><strong>What:</strong> implementar prazo-limite de 48h para aprovação, com lembretes automáticos · <strong>Why:</strong> é a maior causa de atraso e compromete todo o cronograma de produção · <strong>Who:</strong> Atendimento · <strong>When:</strong> em 15 dias · <strong>Where:</strong> WhatsApp e e-mail · <strong>How:</strong> mensagem automática em D+1 e D+2, com política de "fila pausada" após 5 dias sem resposta · <strong>How much:</strong> R$150 (ferramenta de automação de mensagens).</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Curva ABC dos 5 principais problemas + plano 5W2H para a Classe A.</span></div>
+  </section>
+
+  <!-- ETAPA 12 -->
+  <section class="module" id="e12">
+    <div class="module-head">
+      <div class="module-num">12</div>
+      <div class="module-title-wrap">
+        <div class="module-kicker">Indicadores e recomendação executiva</div>
+        <h2>Painel de indicadores e relatório final</h2>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Indicador</th><th>Valor do mês simulado</th><th>Meta</th></tr></thead>
+        <tbody>
+          <tr><td>Pedidos/mês</td><td class="num">10</td><td class="num">16 (T+2)</td></tr>
+          <tr><td>Ticket médio</td><td class="num">R$ 320,00</td><td class="num">R$ 340,00</td></tr>
+          <tr><td>Margem de contribuição média</td><td class="num">≈52%</td><td class="num">55%</td></tr>
+          <tr><td>CAC</td><td class="num">R$ 200,00</td><td class="num">R$ 150,00</td></tr>
+          <tr><td>ROAS</td><td class="num">1,6x</td><td class="num">2,2x</td></tr>
+          <tr><td>OTIF</td><td class="num">90%</td><td class="num">95%</td></tr>
+          <tr><td>Taxa de reparo/garantia</td><td class="num">7%</td><td class="num">≤4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout example">
+      <h4>Recomendação executiva (resumo)</h4>
+      <p><strong>Diagnóstico:</strong> a demora do cliente em aprovar a prévia (Classe A) é o maior risco ao prazo e à reputação do ateliê. <strong>Evidência:</strong> 5 das 14 ocorrências do trimestre (36%), com efeito direto na queda do OTIF para 90%. <strong>Prioridade:</strong> prazo-limite de aprovação com lembretes automáticos. <strong>Ação de marketing:</strong> concentrar investimento nos 3 meses de pico sazonal, já que o ROAS atual (1,6x) está abaixo da meta (2,2x) e a demanda é fortemente sazonal. <strong>Ação financeira:</strong> manter a margem-alvo de ~52% mesmo em peças sob medida, usando a fórmula de preço mínimo por m². <strong>Ação logística:</strong> antecipar o ponto de pedido de moldura antes de abril, cobrindo o pico de maio-junho. <strong>Meta:</strong> elevar o OTIF para 95% e reduzir a taxa de reparo/garantia para ≤4% em 60 dias. <strong>Risco se nada mudar:</strong> perda de pedidos de alto ticket (GG e sob medida) por atraso, com impacto desproporcional na margem devido ao maior valor unitário dessas peças.</p>
+    </div>
+    <div class="deliverable"><span class="tag">Entregável</span><span>Painel com 7 indicadores + relatório executivo de 8 seções pronto para apresentação.</span></div>
+  </section>
+
+  <!-- PÓS-VENDA -->
+  <section class="module" id="pos" style="border-bottom:none;">
+    <div class="section-title">
+      <span class="eyebrow">Complemento ao projeto</span>
+      <h2 style="font-size:30px;">Pós-venda: pedido, trocas e relacionamento</h2>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Fluxo de atendimento do pedido</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="n">1</div><h5>Confirmação</h5><p>Pagamento aprovado → coleta de briefing (foto, medidas, referências de estilo)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">2</div><h5>Prévia digital</h5><p>Mockup da arte-final enviado em até 48h para avaliação do cliente</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">3</div><h5>Aprovação da arte-final</h5><p>Cliente aprova por escrito (até 2 rodadas de ajuste gratuitas) — a produção só começa depois disso</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">4</div><h5>Produção</h5><p>Impressão, corte, montagem e moldura conforme prazo do tamanho (5 a 15 dias úteis)</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">5</div><h5>Controle de qualidade</h5><p>Conferência da peça contra a prévia aprovada: cor, corte, moldura e vidro</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">6</div><h5>Embalagem e envio</h5><p>Embalagem reforçada anti-impacto + código de rastreio enviado por WhatsApp</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="n">7</div><h5>Pós-entrega</h5><p>Mensagem em D+3 pedindo foto do quadro pendurado + avaliação; ativa lembrete de próxima data especial</p></div>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Política de trocas e devoluções</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Direito de arrependimento (arte de catálogo, não personalizada)</h4>
+        <p>Conforme Art. 49 do CDC, quando o cliente escolhe uma arte do catálogo do ilustrador parceiro sem personalização (sem foto/nome próprio), o produto não é exclusivo daquele consumidor — logo, há <strong>7 dias corridos</strong> a partir do recebimento para desistir da compra sem justificativa, com reembolso integral incluindo frete.</p>
+      </div>
+      <div class="card">
+        <h4>Itens 100% personalizados (foto/nome do cliente)</h4>
+        <p>Produtos feitos sob encomenda com arte exclusiva do cliente <strong>não têm direito de arrependimento por não gostar do resultado</strong> — é a exceção prevista para produtos personalizados no CDC, já que a peça é produzida especificamente para aquele consumidor e não pode ser revendida.</p>
+      </div>
+      <div class="card">
+        <h4>Garantia legal de defeito</h4>
+        <p>O quadro é um bem durável: garantia legal de <strong>90 dias</strong> (Art. 26, II do CDC) contra vícios de impressão, moldura ou vidro, com troca ou reembolso integral e frete de retorno por conta do ateliê.</p>
+      </div>
+      <div class="card">
+        <h4>Regra específica do sob encomenda</h4>
+        <p>Mesmo sendo personalizado, o cliente tem <strong>garantia total</strong> contra defeito de impressão, erro de corte/dimensão e qualquer divergência em relação à prévia que ele mesmo aprovou — nesses casos, o ateliê refaz a peça ou reembolsa integralmente, sem custo ao cliente.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:19px; margin:32px 0 6px;">Canais de atendimento e relacionamento</h3>
+    <div class="table-panel">
+      <table>
+        <thead><tr><th>Canal</th><th>Uso principal</th><th>Horário</th><th>SLA de resposta</th></tr></thead>
+        <tbody>
+          <tr><td>WhatsApp Business</td><td>Briefing, envio e aprovação de prévia, status do pedido</td><td>Seg-sáb, 9h-19h</td><td class="num">até 30 min</td></tr>
+          <tr><td>Instagram Direct</td><td>Pré-venda, prova social, dúvidas rápidas de estilo</td><td>Seg-sáb, 9h-19h</td><td class="num">até 2h</td></tr>
+          <tr><td>E-mail (SAC)</td><td>Formalização de trocas/reparos, reclamações, notas fiscais</td><td>Todos os dias</td><td class="num">até 24h</td></tr>
+          <tr><td>Chat do site</td><td>Suporte durante upload de imagem e checkout</td><td>Seg-sáb, 9h-19h</td><td class="num">até 5 min</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><h4>Fluxo de escalonamento</h4><p>Nível 1 (atendente) resolve dúvidas, envio de prévia e reparos simples em até 2h → Nível 2 (coordenação) entra em casos de atraso recorrente ou insatisfação pública (redes sociais) em até 4h → Nível 3 (fundadores) atua em reclamações formais (Reclame Aqui/Procon) em até 24h, sempre com resposta pública + resolução privada registrada.</p></div>
+  </section>
+
+  <footer class="footer">
+    Projeto Integrador de E-commerce — Fase 1 · Parede Viva Ateliê · Material didático com simulações para fins de aprendizagem.
+  </footer>
+</div>
