@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estante Épica — Projeto Integrador · Bonecos e Miniaturas</title>
+<style>
+:root{
+  --bg:#F2EFEA; --surface:#FFFFFF; --surface-alt:#EAE3D9; --border:#D9CFC1;
+  --ink:#25211D; --ink-soft:#675E54;
+  --accent:#A84F2A; --accent-ink:#703116; --accent-soft:#F3DDD2;
+  --good:#2E7D4F; --warn:#B8790A; --critical:#B23A3A; --radius:10px;
+  --serif:Georgia,'Iowan Old Style','Sitka Text','Source Serif Pro',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171411; --surface:#211C18; --surface-alt:#2B241E; --border:#42372E;
+  --ink:#F1ECE6; --ink-soft:#BDB1A5; --accent:#DE7B4F; --accent-ink:#FFD9C6; --accent-soft:#43291E;
+  --good:#4CAF6E; --warn:#D99A2B; --critical:#E06060;
+}}
+:root[data-theme="dark"]{--bg:#171411;--surface:#211C18;--surface-alt:#2B241E;--border:#42372E;--ink:#F1ECE6;--ink-soft:#BDB1A5;--accent:#DE7B4F;--accent-ink:#FFD9C6;--accent-soft:#43291E;--good:#4CAF6E;--warn:#D99A2B;--critical:#E06060;}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{background:var(--bg);color:var(--ink);font-family:var(--sans);margin:0;line-height:1.55;font-size:16px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px 96px} h1,h2,h3,h4{font-family:var(--serif);text-wrap:balance;margin:0;color:var(--ink)} p{margin:0 0 12px;max-width:74ch} a{color:var(--accent-ink)}
+.eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--accent-ink);font-weight:600}
+.hero{padding:56px 0 40px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:18px}.hero h1{font-size:clamp(32px,4.4vw,50px);font-weight:600}.hero .subtitle{font-size:18px;color:var(--ink-soft);max-width:68ch}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}.chip{font-family:var(--mono);font-size:12.5px;padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--ink-soft)}.chip.accent{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+.progress{display:flex;align-items:center;gap:12px;margin-top:8px}.progress-track{flex:1;max-width:320px;height:8px;background:var(--surface-alt);border-radius:999px;overflow:hidden;border:1px solid var(--border)}.progress-fill{height:100%;width:100%;background:var(--accent)}.progress-label{font-family:var(--mono);font-size:13px;color:var(--ink-soft);white-space:nowrap}
+.sitenav{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--border)}.sitenav-inner{max-width:1040px;margin:0 auto;padding:0 24px;height:48px;display:flex;align-items:center;gap:20px;overflow-x:auto;white-space:nowrap}.sitenav-brand{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);text-decoration:none;flex-shrink:0}.sitenav-links{display:flex;gap:2px}.sitenav-links a{font-size:13px;color:var(--ink-soft);text-decoration:none;padding:6px 10px;border-radius:6px;flex-shrink:0}.sitenav-links a:hover{background:var(--surface-alt);color:var(--ink)}.sitenav-links a.is-active{color:var(--accent-ink);background:var(--accent-soft);font-weight:700}
+.navstrip{position:sticky;top:48px;z-index:5;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:8px;overflow-x:auto;white-space:nowrap}.navstrip .wrap{padding-bottom:0;display:flex;gap:6px}.navstrip a{font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-decoration:none;padding:5px 10px;border-radius:6px;border:1px solid transparent}.navstrip a:hover{border-color:var(--border);color:var(--ink)}
+.module{padding:52px 0;border-bottom:1px solid var(--border);scroll-margin-top:96px}.module-head{display:flex;gap:20px;align-items:flex-start;margin-bottom:22px}.module-num{font-family:var(--serif);font-size:40px;font-weight:600;color:var(--accent-ink);min-width:64px}.module-title-wrap{flex:1}.module-kicker{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin-bottom:4px}.module h2{font-size:26px;font-weight:600}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:18px 0}.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}.card h4{font-size:13px;text-transform:uppercase;letter-spacing:.06em;font-family:var(--sans);font-weight:700;color:var(--accent-ink);margin-bottom:8px}.card p:last-child{margin-bottom:0}.card ul{margin:0;padding-left:18px}.card li{margin-bottom:5px}
+.callout{border-radius:var(--radius);padding:16px 20px;margin:16px 0;border:1px solid var(--border)}.callout.tip{background:var(--accent-soft);border-color:var(--accent)}.callout.warn{background:var(--surface);border-left:4px solid var(--warn)}.callout.example{background:var(--surface-alt);border-style:dashed}.callout h4{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:var(--mono)}
+.table-panel{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);margin:18px 0;background:var(--surface)}table{border-collapse:collapse;width:100%;min-width:640px;font-size:14.5px}th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}thead th{background:var(--surface-alt);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:700}tbody tr:last-child td{border-bottom:none}td.num,th.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}tbody tr:hover{background:var(--surface-alt)}
+.formula{background:var(--ink);color:var(--bg);border-radius:var(--radius);padding:20px 22px;margin:18px 0;font-family:var(--mono);font-size:14px}.formula .label{color:var(--accent);font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}.formula .eq{font-size:15.5px;margin-bottom:10px;font-variant-numeric:tabular-nums}.formula .calc{opacity:.9;border-top:1px solid rgba(255,255,255,.15);padding-top:10px;margin-top:10px;font-variant-numeric:tabular-nums}.formula .result{color:#fff;font-weight:700}
+.deliverable{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius);padding:14px 18px;margin-top:20px}.deliverable .tag{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em;background:var(--accent);color:#fff;padding:4px 10px;border-radius:6px;white-space:nowrap}
+.flow{display:flex;flex-wrap:wrap;gap:0;align-items:stretch;margin:20px 0}.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;flex:1;min-width:145px}.flow-step .n{font-family:var(--serif);font-size:22px;color:var(--accent-ink);font-weight:600}.flow-step h5{margin:4px 0;font-size:14px}.flow-step p{font-size:13px;color:var(--ink-soft);margin:0}.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 8px;color:var(--ink-soft);font-family:var(--mono)}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}.small{font-size:13px;color:var(--ink-soft)}.section-title{margin:64px 0 8px}.section-title .eyebrow{display:block;margin-bottom:6px}.footer{padding:48px 0 0;color:var(--ink-soft);font-size:13px;text-align:center}.sources a{overflow-wrap:anywhere}
+@media(max-width:720px){.two-col{grid-template-columns:1fr}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg);padding:2px 0}.deliverable{align-items:flex-start}.progress{align-items:flex-start;flex-direction:column}.progress-label{white-space:normal}}
+</style>
+</head>
+<body>
+<nav class="sitenav"><div class="sitenav-inner"><a class="sitenav-brand" href="index.html">Projeto Integrador · E-commerce</a><div class="sitenav-links">
+  <a href="index.html">Início</a><a href="pets.html">Pets</a><a href="quadros.html">Quadros</a><a href="natura-norte.html">Raízes do Norte</a><a href="estetica.html">Estética</a><a href="casa-decoracao.html">Casa &amp; Decor</a><a href="doces-gourmet.html">Doces</a><a href="miniaturas.html" class="is-active">Miniaturas</a><a href="pos-venda-pos-consumo.html">Pós-venda &amp; Pós-consumo</a>
+</div></div></nav>
+<div class="navstrip"><div class="wrap">
+  <a href="#e0">0·Equipe</a><a href="#e1">1·Proposta</a><a href="#e2">2·Público</a><a href="#e3">3·Catálogo</a><a href="#e4">4·Canais</a><a href="#e5">5·Cadastro</a><a href="#e6">6·Auditoria</a><a href="#e7">7·Preço</a><a href="#e8">8·Marketing</a><a href="#e9">9·Estoque</a><a href="#e10">10·Entrega</a><a href="#e11">11·ABC</a><a href="#e12">12·Indicadores</a><a href="#pos">Pós-venda</a><a href="#fontes">Fontes</a>
+</div></div>
+<main class="wrap">
+<header class="hero">
+  <span class="eyebrow">Projeto Integrador de E-commerce · Fase 1 — Planejamento e Estruturação</span>
+  <h1>Estante Épica — bonecos e miniaturas para colecionadores</h1>
+  <p class="subtitle">Loja virtual especializada em figuras articuladas, miniaturas em vinil, model kits, die-cast e estátuas licenciadas, com curadoria de autenticidade, pré-venda transparente e embalagem de proteção para a Região Metropolitana de São Paulo.</p>
+  <div class="meta-row"><span class="chip accent">Segmento: Colecionáveis &amp; Cultura Pop</span><span class="chip">Praça-piloto: São Paulo + Guarulhos</span><span class="chip">Modelo: pronta entrega + pré-venda</span><span class="chip">Ticket médio-alvo: R$ 252,90</span></div>
+  <div class="progress"><div class="progress-track"><div class="progress-fill"></div></div><span class="progress-label">13 de 13 etapas + fontes e premissas documentadas</span></div>
+</header>
+
+<section class="module" id="e0"><div class="module-head"><div class="module-num">00</div><div class="module-title-wrap"><div class="module-kicker">Organização da equipe</div><h2>Time, papéis e ritmo de trabalho</h2></div></div>
+  <p>A operação precisa equilibrar conhecimento de fandom com controles de varejo. O especialista reconhece uma edição rara; operações garante que ela chegue sem amassados e o compliance evita vender réplica não licenciada ou brinquedo sem certificação.</p>
+  <div class="table-panel"><table><thead><tr><th>Papel</th><th>Responsável (exemplo)</th><th>Principais entregas</th><th>Dedicação</th></tr></thead><tbody>
+    <tr><td>Coordenação geral</td><td>Rafael M.</td><td>Cronograma, integração das etapas e apresentação</td><td class="num">4h/sem.</td></tr>
+    <tr><td>Curadoria &amp; Produto</td><td>Bianca T.</td><td>Franquias, escalas, autenticidade e calendário de lançamentos</td><td class="num">6h/sem.</td></tr>
+    <tr><td>Compras &amp; Compliance</td><td>Henrique S.</td><td>Distribuidores, notas, licenças, Inmetro e importação</td><td class="num">6h/sem.</td></tr>
+    <tr><td>Financeiro</td><td>Marina L.</td><td>Custos, precificação, câmbio e fluxo de caixa de pré-venda</td><td class="num">5h/sem.</td></tr>
+    <tr><td>Operações</td><td>João V.</td><td>Estoque por edição, embalagem, seguro e expedição</td><td class="num">5h/sem.</td></tr>
+    <tr><td>Comunidade &amp; SAC</td><td>Luana C.</td><td>Conteúdo, lançamentos, lista de espera e pós-venda</td><td class="num">5h/sem.</td></tr>
+  </tbody></table></div>
+  <div class="callout example"><h4>Exemplo-guia da turma</h4><p>O nome <strong>Estante Épica</strong> comunica destino de exposição e paixão por narrativas. Antes do lançamento, a equipe deve consultar domínio, perfis sociais e disponibilidade de marca no INPI; o nome deste exercício não representa registro concluído.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Ata de papéis + calendário quinzenal de curadoria, compras, publicação e revisão de indicadores.</span></div>
+</section>
+
+<section class="module" id="e1"><div class="module-head"><div class="module-num">01</div><div class="module-title-wrap"><div class="module-kicker">Ideia, problema e proposta de valor</div><h2>Por que a Estante Épica precisa existir</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><h4>Problemas do cliente</h4><ul><li>Dificuldade para diferenciar original, réplica e falsificação.</li><li>Pré-vendas sem atualização clara e com datas tratadas como promessa.</li><li>Caixas amassadas e peças quebradas por embalagem inadequada.</li><li>Cadastro incompleto: escala, altura, material, articulações e itens inclusos ausentes.</li></ul></div>
+    <div class="card"><h4>Resposta da loja</h4><ul><li>Procedência documentada, nota fiscal e distribuidor identificado.</li><li>Fotos da caixa real e nota sobre o estado para o colecionador mint in box.</li><li>Calendário de pré-venda com status e janela estimada, não data falsa.</li><li>Embalagem em dupla caixa nos itens premium e seguro sobre valor declarado.</li></ul></div>
+    <div class="card"><h4>Diferencial mensurável</h4><ul><li>100% dos anúncios com escala, dimensão e material.</li><li>100% dos SKUs com classificação brinquedo × colecionável 14+ auditada.</li><li>Taxa de avaria menor que 2% em 90 dias.</li><li>Atualização quinzenal de toda pré-venda aberta.</li></ul></div>
+  </div>
+  <div class="callout tip"><h4>Proposta de valor aplicada</h4><p><strong>Para</strong> fãs adultos de cultura pop em São Paulo e Guarulhos <strong>que</strong> temem falsificações, avarias e pré-vendas sem informação, <strong>a Estante Épica é</strong> uma curadoria de colecionáveis licenciados <strong>que</strong> comprova procedência, descreve cada edição com precisão e protege caixa e peça até a entrega, <strong>diferente de</strong> vendedores generalistas que tratam todo boneco como produto equivalente.</p></div>
+  <div class="callout warn"><h4>Fronteira regulatória</h4><p>“Colecionável” não é um rótulo livre. Segundo o Inmetro, modelos destinados a maiores de 14 anos podem ficar fora do escopo de brinquedos quando devidamente identificados; se houver função lúdica, o item pode continuar enquadrado como brinquedo e exigir certificação.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Proposta de valor + protocolo de procedência e classificação regulatória por SKU.</span></div>
+</section>
+
+<section class="module" id="e2"><div class="module-head"><div class="module-num">02</div><div class="module-title-wrap"><div class="module-kicker">Público-alvo, persona e jornada</div><h2>Quem compra e como decide</h2></div></div>
+  <div class="two-col">
+    <div class="card"><h4>Perfil de trabalho (hipótese)</h4><ul><li>Adultos de 20–44 anos, fãs de filmes, anime, games, quadrinhos e automobilismo.</li><li>Compram para coleção própria e para presente; parte preserva a embalagem.</li><li>Comparam preço, autenticidade, condição da caixa, escala e reputação.</li><li>Participam de grupos, eventos e comunidades; lançamento e escassez aceleram a decisão.</li></ul></div>
+    <div class="card"><h4>Persona — André Lima, 31</h4><p>Analista de sistemas em Guarulhos, coleciona figuras de anime e heróis em uma estante fechada. Reserva R$ 350 mensais para o hobby, acompanha canais de unboxing e só compra quando vê fotos detalhadas, fabricante e previsão realista. Tolera esperar por pré-venda; não tolera silêncio.</p><p class="small">Objeção: “é original e a caixa chega inteira?” · Gatilho: lote oficial limitado + parcelamento sem juros + atualização de status.</p></div>
+  </div>
+  <div class="table-panel"><table><thead><tr><th>Etapa</th><th>O que André faz</th><th>O que a loja entrega</th></tr></thead><tbody>
+    <tr><td>1. Descoberta</td><td>Vê anúncio, unboxing ou lançamento no grupo</td><td>Vídeo curto com a peça, escala e licença visíveis</td></tr>
+    <tr><td>2. Validação</td><td>Pesquisa fabricante, edição e falsificações conhecidas</td><td>Procedência, EAN/SKU, fabricante e fotos próprias</td></tr>
+    <tr><td>3. Comparação</td><td>Compara preço, caixa, prazo e parcelamento</td><td>Custo total e condição do item antes do checkout</td></tr>
+    <tr><td>4. Compra</td><td>Escolhe pronta entrega ou aceita a pré-venda</td><td>Status claramente separado e regras específicas</td></tr>
+    <tr><td>5. Entrega</td><td>Filma o unboxing e confere caixa/acessórios</td><td>Dupla caixa, lacre e checklist de separação</td></tr>
+    <tr><td>6. Comunidade</td><td>Publica a coleção e busca a próxima peça</td><td>Clube de pontos, lista de desejos e alerta por franquia</td></tr>
+  </tbody></table></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Persona inicial + roteiro de 10 entrevistas para validar orçamento, franquias e tolerância de espera.</span></div>
+</section>
+
+<section class="module" id="e3"><div class="module-head"><div class="module-num">03</div><div class="module-title-wrap"><div class="module-kicker">Catálogo e abastecimento</div><h2>O que vender, de quem comprar e quanto projetar</h2></div></div>
+  <p>O catálogo combina giro acessível e peças premium. A compra deve ocorrer de fabricantes/distribuidores oficiais com nota fiscal. Importação direta só entra na fase seguinte, depois de validar NCM, licenciamento, enquadramento no Inmetro, tributos e propriedade intelectual.</p>
+  <div class="table-panel"><table><thead><tr><th>SKU / linha</th><th>Abastecimento</th><th>Custo unit.</th><th>Preço sugerido</th><th>Prazo</th><th>Demanda/mês</th></tr></thead><tbody>
+    <tr><td>Figura articulada licenciada 7&quot; / 18 cm</td><td>Distribuidor nacional</td><td class="num">R$ 155,00</td><td class="num">R$ 299,90</td><td class="num">12 dias</td><td class="num">20 un.</td></tr>
+    <tr><td>Figura estilizada em vinil 10–12 cm</td><td>Distribuidor nacional</td><td class="num">R$ 105,00</td><td class="num">R$ 199,90</td><td class="num">10 dias</td><td class="num">24 un.</td></tr>
+    <tr><td>Miniatura anime estática 14–18 cm</td><td>Importador oficial</td><td class="num">R$ 75,00</td><td class="num">R$ 149,90</td><td class="num">15 dias</td><td class="num">18 un.</td></tr>
+    <tr><td>Model kit escala 1/144</td><td>Importador oficial</td><td class="num">R$ 145,00</td><td class="num">R$ 269,90</td><td class="num">18 dias</td><td class="num">10 un.</td></tr>
+    <tr><td>Veículo die-cast 1:64</td><td>Atacadista licenciado</td><td class="num">R$ 38,00</td><td class="num">R$ 79,90</td><td class="num">8 dias</td><td class="num">16 un.</td></tr>
+    <tr><td>Estátua nacional em resina 1/10</td><td>Fabricante, pré-venda</td><td class="num">R$ 620,00</td><td class="num">R$ 1.099,90</td><td class="num">90–180 dias</td><td class="num">5 un.</td></tr>
+    <tr><td>Diorama artesanal original (sem personagem licenciado)</td><td>Artista parceiro, sob encomenda</td><td class="num">R$ 210,00</td><td class="num">R$ 399,90</td><td class="num">20 dias úteis</td><td class="num">3 un.</td></tr>
+  </tbody></table></div>
+  <div class="formula"><div class="label">Projeção de receita — mês de operação estável</div><div class="eq">Receita = Σ (demanda por SKU × preço de venda)</div><div class="calc">96 itens/mês · Receita projetada = <strong>R$ 24.270,40</strong><br>Preço médio ponderado por item = R$24.270,40 ÷ 96 = <span class="result">R$ 252,82</span><br>Premissa didática: 1 item por pedido; validar após 90 dias com conversão e sell-through reais.</div></div>
+  <div class="callout tip"><h4>Leitura do mercado</h4><p>O Anuário Abrinq 2026 registra US$ 352,9 milhões em importações de brinquedos em 2025, ante US$ 334,4 milhões em 2024. Para esta loja, o dado reforça a necessidade de planejar câmbio, lead time e reposição; não mede sozinho o nicho adulto de colecionáveis.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Catálogo inicial de 7 linhas com fornecedor, custo, preço, prazo, compliance e projeção mensal.</span></div>
+</section>
+
+<section class="module" id="e4"><div class="module-head"><div class="module-num">04</div><div class="module-title-wrap"><div class="module-kicker">Canais de venda</div><h2>Onde a Estante Épica vai vender</h2></div></div>
+  <div class="table-panel"><table><thead><tr><th>Canal</th><th>Custo considerado</th><th>Devolução simulada</th><th>Receita líquida (96 pedidos)</th><th>Papel</th></tr></thead><tbody>
+    <tr><td>Loja própria</td><td class="num">4,5% gateway</td><td class="num">4%</td><td class="num">R$ 22.251</td><td>Base da marca, CRM e pré-venda</td></tr>
+    <tr><td>Mercado Livre Clássico</td><td class="num">12%*</td><td class="num">6%</td><td class="num">R$ 20.076</td><td>Descoberta e pronta entrega</td></tr>
+    <tr><td>Shopee</td><td class="num">14%*</td><td class="num">7%</td><td class="num">R$ 19.411</td><td>Itens de entrada e die-cast</td></tr>
+    <tr><td>Instagram + WhatsApp</td><td class="num">4,5% gateway</td><td class="num">3%</td><td class="num">R$ 22.483</td><td>Comunidade, lista de espera e consultoria</td></tr>
+    <tr><td>Eventos geek / feiras</td><td class="num">8% rateio do evento*</td><td class="num">1%</td><td class="num">R$ 22.105</td><td>Experiência física e aquisição</td></tr>
+  </tbody></table></div>
+  <p class="small">Cálculo comparável: R$24.270,40 × (1 − custo do canal) × (1 − devolução). *Premissas para simulação: a tarifa oficial varia por categoria, anúncio e campanha; custos fixos/frete devem ser conferidos no simulador do canal antes de publicar.</p>
+  <div class="callout tip"><h4>Dica do orientador</h4><p>Use marketplace para pronta entrega e busca de produto; centralize pré-vendas longas na loja própria, onde é possível registrar aceite da janela estimada e manter uma linha do tempo. Nunca use o dinheiro de uma nova pré-venda para cobrir fornecedor de uma anterior: cada lote precisa de caixa segregado.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Matriz de canais + regra clara de pronta entrega, pré-venda e sob encomenda por canal.</span></div>
+</section>
+
+<section class="module" id="e5"><div class="module-head"><div class="module-num">05</div><div class="module-title-wrap"><div class="module-kicker">Cadastro do produto</div><h2>Ficha de anúncio da figura articulada 7&quot;</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><h4>Título-modelo</h4><p>Figura Articulada Licenciada 7&quot; 18 cm com Base e Acessórios</p></div>
+    <div class="card"><h4>Identificação</h4><ul><li>Fabricante, linha, franquia e personagem</li><li>EAN, SKU do fabricante e lote</li><li>Produto oficial; distribuidor e NF arquivados</li><li>Status: pronta entrega / pré-venda</li></ul></div>
+    <div class="card"><h4>Ficha técnica</h4><ul><li>Altura aproximada: 18 cm · escala comercial: 7&quot;</li><li>Material: PVC/ABS · até 22 articulações*</li><li>Inclui base, acessórios e mãos alternativas*</li><li>Caixa com janela; dimensões e peso embalado</li></ul></div>
+    <div class="card"><h4>Segurança e condição</h4><ul><li>Classificação etária e registro Inmetro quando aplicável</li><li>Advertência 14+ quando enquadrado como colecionável</li><li>Estado da caixa: padrão / pequeno dano fotografado</li><li>Peças pequenas; conservação longe de calor e sol</li></ul></div>
+  </div>
+  <p class="small">*Preencher com os dados do modelo real; nunca copiar número de articulações ou acessórios de outra edição.</p>
+  <div class="callout example"><h4>Roteiro de imagens (8 fotos)</h4><p>1) frente da caixa · 2) verso com selos e advertências · 3) laterais · 4) peça fora da caixa quando houver amostra · 5) acessórios · 6) escala ao lado de régua · 7) close de pintura/articulações · 8) dano específico da embalagem, se existir. Usar imagens autorizadas do fabricante e fotos próprias, sem remover marca d’água de terceiros.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Ficha completa do SKU-piloto, com procedência, escala, conteúdo, segurança, condição e 8 imagens.</span></div>
+</section>
+
+<section class="module" id="e6"><div class="module-head"><div class="module-num">06</div><div class="module-title-wrap"><div class="module-kicker">Auditoria pré-publicação</div><h2>Checklist antes de liberar o anúncio</h2></div></div>
+  <div class="table-panel"><table><thead><tr><th>Controle</th><th>Risco</th><th>Responsável</th><th>Prazo</th></tr></thead><tbody>
+    <tr><td>Nota fiscal e fornecedor autorizado arquivados</td><td>Crítico: falsificação</td><td>Compras</td><td class="num">D-3</td></tr>
+    <tr><td>Classificação brinquedo × colecionável e selo conferidos</td><td>Crítico: regulatório</td><td>Compliance</td><td class="num">D-3</td></tr>
+    <tr><td>EAN, escala, material, itens e idade conferidos na caixa</td><td>Alto: informação errada</td><td>Produto</td><td class="num">D-2</td></tr>
+    <tr><td>Preço, taxa e margem recalculados por canal</td><td>Alto: margem negativa</td><td>Financeiro</td><td class="num">D-2</td></tr>
+    <tr><td>Status e janela de pré-venda destacados</td><td>Alto: atraso percebido</td><td>Operações</td><td class="num">D-1</td></tr>
+    <tr><td>Peso, dimensões, dupla caixa e seguro cadastrados</td><td>Alto: avaria/frete</td><td>Operações</td><td class="num">D-1</td></tr>
+    <tr><td>Fotos próprias da condição da caixa</td><td>Médio: disputa</td><td>Produto</td><td class="num">D-1</td></tr>
+    <tr><td>Direitos de imagem e texto autorizados</td><td>Alto: propriedade intelectual</td><td>Coordenação</td><td class="num">D-1</td></tr>
+  </tbody></table></div>
+  <div class="callout warn"><h4>Erro comum</h4><p>Confundir “escala 7 polegadas” com proporção 1/7. Uma figura “7 inch” costuma indicar altura aproximada; uma escala 1/7 é uma proporção e resulta em outra dimensão. O cadastro deve reproduzir exatamente a nomenclatura do fabricante.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Checklist de 8 controles com evidência anexada e dupla aprovação para itens de pré-venda.</span></div>
+</section>
+
+<section class="module" id="e7"><div class="module-head"><div class="module-num">07</div><div class="module-title-wrap"><div class="module-kicker">Precificação</div><h2>Quanto cobrar pela figura articulada 7&quot;</h2></div></div>
+  <div class="formula"><div class="label">Fórmula de preço mínimo</div><div class="eq">Preço mínimo = Custo variável unitário ÷ (1 − taxa do canal − tributos − margem desejada)</div><div class="calc">Produto: R$155,00 · Embalagem dupla: R$8,50 · Seguro/frete absorvido: R$12,00 → <strong>custo variável = R$175,50</strong><br>Gateway: 4,5% · Tributos simulados: 6% · Margem de contribuição desejada: 30%<br>R$175,50 ÷ (1 − 0,045 − 0,06 − 0,30) = R$175,50 ÷ 0,595 = <span class="result">R$ 294,96</span><br>Preço praticado: <span class="result">R$ 299,90</span> · margem após gateway e tributos ≈ 31,0%.</div></div>
+  <div class="table-panel"><table><thead><tr><th>Benchmark pesquisado</th><th>Preço observado</th><th>Leitura</th></tr></thead><tbody>
+    <tr><td>Iron Studios — figura licenciada McFarlane 7&quot;</td><td class="num">R$ 299,99</td><td>Referência especializada de produto oficial</td></tr>
+    <tr><td>Ri Happy — figura colecionável em vinil 10–12 cm</td><td class="num">R$ 149,99</td><td>Faixa de entrada de marca licenciada</td></tr>
+    <tr><td><strong>Estante Épica — figura 7&quot;</strong></td><td class="num"><strong>R$ 299,90</strong></td><td>Preço coerente, condicionado ao custo real do lote</td></tr>
+  </tbody></table></div>
+  <div class="callout tip"><h4>Câmbio e lote</h4><p>O custo desta simulação é nacionalizado via distribuidor. Em importação direta, nunca aplicar apenas câmbio sobre o preço externo: incluir frete, seguro, tributos, despacho, armazenagem, variação cambial e eventual licenciamento antes de formar o preço.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Planilha de preço por canal e por lote, com margem mínima e campo de câmbio travado na data da compra.</span></div>
+</section>
+
+<section class="module" id="e8"><div class="module-head"><div class="module-num">08</div><div class="module-title-wrap"><div class="module-kicker">Marketing e funil</div><h2>Campanha “Sua Próxima Peça”</h2></div></div>
+  <div class="card-grid"><div class="card"><h4>Objetivo</h4><p>Vender 70 itens/mês pelo canal próprio e formar lista segmentada por franquia para novos lotes.</p></div><div class="card"><h4>Público</h4><p>Adultos 20–44 na RMSP, fãs de anime, games, filmes e quadrinhos, mais públicos semelhantes a compradores.</p></div><div class="card"><h4>Conteúdo</h4><p>Unboxing, comparativo de escala, close de pintura, guia de autenticidade, tour de coleção e calendário de pré-vendas.</p></div></div>
+  <div class="formula"><div class="label">Funil mensal simulado</div><div class="eq">CTR = cliques ÷ impressões · Conversão = pedidos ÷ cliques · CAC = mídia ÷ pedidos · ROAS = receita atribuída ÷ mídia</div><div class="calc">120.000 impressões · 2.640 cliques → <strong>CTR 2,2%</strong><br>Investimento R$2.400 ÷ 2.640 → <strong>CPC R$0,91</strong><br>42 pedidos atribuídos ÷ 2.640 → <strong>conversão 1,59%</strong><br>CAC = R$2.400 ÷ 42 = <strong>R$57,14</strong><br>42 × ticket de R$252,90 = R$10.621,80 → <span class="result">ROAS 4,43x</span></div></div>
+  <div class="callout warn"><h4>Escassez com honestidade</h4><p>Só comunicar “últimas unidades”, “edição limitada” ou contador regressivo quando houver evidência. Quantidade de estoque e prazo de campanha devem ser reais; fandom não é licença para urgência artificial.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Plano de mídia + calendário de conteúdo + captura de preferência por franquia com consentimento LGPD.</span></div>
+</section>
+
+<section class="module" id="e9"><div class="module-head"><div class="module-num">09</div><div class="module-title-wrap"><div class="module-kicker">Estoque e reposição</div><h2>Giro por edição, não apenas por categoria</h2></div></div>
+  <div class="formula"><div class="label">Ponto de pedido — figura articulada 7&quot;</div><div class="eq">Ponto de pedido = demanda diária × lead time + estoque de segurança</div><div class="calc">Demanda: 20 un./mês ÷ 30 = <strong>0,67 un./dia</strong><br>Reposição: 12 dias · segurança: 6 un. (lançamento/câmbio)<br>(0,67 × 12) + 6 = <span class="result">14 unidades</span><br>Estoque atual: 26 un. → cobertura ≈ <span class="result">39 dias</span>.</div></div>
+  <div class="table-panel"><table><thead><tr><th>Classe de estoque</th><th>Política</th><th>Indicador principal</th></tr></thead><tbody>
+    <tr><td>Evergreen / personagens principais</td><td>Reposição por ponto de pedido</td><td>Cobertura e ruptura</td></tr>
+    <tr><td>Lançamento / lote limitado</td><td>Compra fechada + lista de espera</td><td>Sell-through em 30 dias</td></tr>
+    <tr><td>Estátua premium</td><td>Pré-venda com unidades reservadas</td><td>Saldo fornecedor × reservas</td></tr>
+    <tr><td>Caixa avariada</td><td>SKU separado, foto e desconto transparente</td><td>Tempo para venda</td></tr>
+    <tr><td>Encalhe acima de 120 dias</td><td>Bundle, conteúdo e desconto com piso de margem</td><td>GMROI e idade do estoque</td></tr>
+  </tbody></table></div>
+  <div class="callout tip"><h4>Dica do orientador</h4><p>Não some personagens diferentes como se fossem o mesmo SKU. O comprador procura uma edição específica; dez figuras da mesma linha podem significar uma ruptura e nove encalhes. EAN + personagem + versão + lote devem formar a chave operacional.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Mapa de estoque por EAN/edição, cobertura, reservas, avarias e sell-through do lançamento.</span></div>
+</section>
+
+<section class="module" id="e10"><div class="module-head"><div class="module-num">10</div><div class="module-title-wrap"><div class="module-kicker">Entrega, atendimento e logística reversa</div><h2>Da prateleira da loja à estante do cliente</h2></div></div>
+  <div class="formula"><div class="label">Indicadores de operação</div><div class="eq">OTIF = completos e no prazo ÷ pedidos · Avaria = pedidos avariados ÷ entregues</div><div class="calc">96 pedidos · 91 completos e no prazo → <strong>OTIF 94,8%</strong><br>2 avarias (1 caixa amassada, 1 peça solta) ÷ 96 → <span class="result">taxa de avaria 2,1%</span><br>Meta após reforço da embalagem: <strong>≤ 1,5%</strong>.</div></div>
+  <div class="flow"><div class="flow-step"><div class="n">1</div><h5>Reserva</h5><p>Baixa por EAN e separa pronta entrega de pré-venda</p></div><div class="flow-arrow">→</div><div class="flow-step"><div class="n">2</div><h5>Inspeção</h5><p>Fotos da caixa, lacre, pintura visível e acessórios</p></div><div class="flow-arrow">→</div><div class="flow-step"><div class="n">3</div><h5>Proteção</h5><p>Cantos, preenchimento sem pressão e dupla caixa premium</p></div><div class="flow-arrow">→</div><div class="flow-step"><div class="n">4</div><h5>Expedição</h5><p>Peso aferido, valor declarado e rastreio</p></div><div class="flow-arrow">→</div><div class="flow-step"><div class="n">5</div><h5>Entrega</h5><p>Alerta e orientação de filmar desembalagem sem limitar direitos</p></div></div>
+  <div class="callout tip"><h4>Filmagem não pode virar barreira</h4><p>O vídeo de unboxing ajuda a apurar a avaria, mas não deve ser tratado como condição única para garantia. A equipe analisa embalagem, fotos, rastreio e relato; a obrigação legal não desaparece porque o cliente não filmou.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>POP de embalagem por faixa de valor + checklist fotográfico + painel de OTIF e avaria.</span></div>
+</section>
+
+<section class="module" id="e11"><div class="module-head"><div class="module-num">11</div><div class="module-title-wrap"><div class="module-kicker">Priorização com curva ABC/Pareto</div><h2>Onde atacar primeiro</h2></div></div>
+  <div class="table-panel"><table><thead><tr><th>Ocorrência simulada</th><th>Casos/mês</th><th>% acumulado</th><th>Classe</th></tr></thead><tbody>
+    <tr><td>Dúvida/atraso de pré-venda</td><td class="num">8</td><td class="num">38%</td><td>A</td></tr>
+    <tr><td>Caixa amassada ou avaria</td><td class="num">5</td><td class="num">62%</td><td>A</td></tr>
+    <tr><td>Dúvida sobre autenticidade</td><td class="num">4</td><td class="num">81%</td><td>A</td></tr>
+    <tr><td>Cadastro incompleto</td><td class="num">2</td><td class="num">90%</td><td>B</td></tr>
+    <tr><td>Item/acessório divergente</td><td class="num">1</td><td class="num">95%</td><td>C</td></tr>
+    <tr><td>Arrependimento</td><td class="num">1</td><td class="num">100%</td><td>C</td></tr>
+  </tbody></table></div>
+  <div class="callout tip"><h4>5W2H — comunicação de pré-venda</h4><p><strong>What:</strong> criar página de status por lote · <strong>Why:</strong> maior volume de contatos · <strong>Who:</strong> Operações + SAC · <strong>When:</strong> 15 dias · <strong>Where:</strong> conta do cliente e WhatsApp · <strong>How:</strong> atualização quinzenal com pedido ao fornecedor, produção, trânsito, desembaraço e recebimento · <strong>How much:</strong> R$ 480 de configuração.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Pareto de ocorrências + plano 5W2H para pré-venda, avaria e autenticidade.</span></div>
+</section>
+
+<section class="module" id="e12"><div class="module-head"><div class="module-num">12</div><div class="module-title-wrap"><div class="module-kicker">Indicadores e recomendação executiva</div><h2>Painel de indicadores e relatório final</h2></div></div>
+  <div class="table-panel"><table><thead><tr><th>Indicador</th><th>Mês simulado</th><th>Meta T+3</th></tr></thead><tbody>
+    <tr><td>Itens / pedidos</td><td class="num">96 / 96</td><td class="num">120 / 112</td></tr>
+    <tr><td>Ticket médio</td><td class="num">R$ 252,82</td><td class="num">≥ R$ 260</td></tr>
+    <tr><td>Margem de contribuição média</td><td class="num">31%</td><td class="num">≥ 32%</td></tr>
+    <tr><td>Conversão do site</td><td class="num">1,59%</td><td class="num">≥ 2,0%</td></tr>
+    <tr><td>CAC da mídia</td><td class="num">R$ 57,14</td><td class="num">≤ R$ 52</td></tr>
+    <tr><td>ROAS</td><td class="num">4,43x</td><td class="num">≥ 5,0x</td></tr>
+    <tr><td>Sell-through de lançamentos (30 dias)</td><td class="num">68%</td><td class="num">≥ 75%</td></tr>
+    <tr><td>OTIF</td><td class="num">94,8%</td><td class="num">≥ 97%</td></tr>
+    <tr><td>Taxa de avaria</td><td class="num">2,1%</td><td class="num">≤ 1,5%</td></tr>
+  </tbody></table></div>
+  <div class="callout example"><h4>Recomendação executiva</h4><p><strong>Diagnóstico:</strong> o projeto é viável como curadoria de nicho, mas o risco não está só na demanda: procedência, pré-venda e embalagem sustentam a confiança. <strong>Prioridade:</strong> lançar com 5 linhas de pronta entrega e no máximo 2 lotes de pré-venda simultâneos. <strong>Operação:</strong> dupla caixa para itens acima de R$300 e foto da condição. <strong>Financeiro:</strong> margem por lote e caixa segregado. <strong>Marketing:</strong> conteúdo de autenticidade e escala antes de mídia de urgência. <strong>Meta de 90 dias:</strong> OTIF ≥97%, avaria ≤1,5% e sell-through ≥75%.</p></div>
+  <div class="deliverable"><span class="tag">Entregável</span><span>Painel de 9 indicadores + recomendação executiva e regra de decisão para novos lotes.</span></div>
+</section>
+
+<section class="module" id="pos"><div class="section-title"><span class="eyebrow">Complemento ao projeto</span><h2 style="font-size:30px">Pós-venda: pré-venda, trocas e comunidade</h2></div>
+  <h3 style="font-size:19px;margin:32px 0 6px">Política de trocas e devoluções</h3>
+  <div class="card-grid">
+    <div class="card"><h4>Arrependimento online</h4><p>Solicitação em até <strong>7 dias corridos do recebimento</strong>, com devolução integral e logística reversa sem custo ao consumidor. O item deve ser protegido para o retorno, sem criar exigência que elimine o direito legal.</p></div>
+    <div class="card"><h4>Defeito ou avaria</h4><p>Abertura imediata de protocolo, coleta de evidências e solução conforme o CDC. Para produto durável, a garantia legal é de <strong>90 dias</strong>; transporte reverso é autorizado pela loja.</p></div>
+    <div class="card"><h4>Caixa para colecionador</h4><p>Se a condição “caixa perfeita” foi parte expressa da oferta, dano relevante é divergência. Itens vendidos como “caixa avariada” recebem fotos individuais e aceite claro antes da compra.</p></div>
+    <div class="card"><h4>Pré-venda</h4><p>A página informa janela estimada, marcos e política de cancelamento. Atraso relevante dispara aviso proativo com nova previsão e alternativas cabíveis; silêncio nunca é tratado como aceite.</p></div>
+  </div>
+  <h3 style="font-size:19px;margin:32px 0 6px">Canais de relacionamento</h3>
+  <div class="table-panel"><table><thead><tr><th>Canal</th><th>Uso</th><th>Horário</th><th>SLA</th></tr></thead><tbody>
+    <tr><td>WhatsApp Business</td><td>Pré-venda, autenticidade, avaria e trocas</td><td>Seg–sáb, 9h–19h</td><td class="num">até 30 min</td></tr>
+    <tr><td>Página “Meus lotes”</td><td>Status de cada pré-venda e histórico de atualizações</td><td>24/7</td><td class="num">quinzenal</td></tr>
+    <tr><td>E-mail SAC</td><td>Formalização, NF, cancelamento e anexos</td><td>Todos os dias</td><td class="num">até 24h</td></tr>
+    <tr><td>Instagram/Discord</td><td>Conteúdo, votação e comunidade; sem dados sensíveis</td><td>Seg–sáb</td><td class="num">até 2h</td></tr>
+  </tbody></table></div>
+  <div class="callout tip"><h4>Relacionamento que gera estoque melhor</h4><p>Lista de desejos e votação por franquia ajudam compras a escolher lotes, mas não são pedido nem reserva. A reserva só existe após checkout e confirmação; interesse de comunidade serve como sinal de demanda, não como receita garantida.</p></div>
+</section>
+
+<section class="module sources" id="fontes" style="border-bottom:none"><div class="module-head"><div class="module-num">↗</div><div class="module-title-wrap"><div class="module-kicker">Pesquisa e premissas</div><h2>Fontes consultadas</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><h4>Regulação</h4><p><a href="https://www.gov.br/inmetro/pt-br/acesso-a-informacao/perguntas-frequentes/avaliacao-da-conformidade/brinquedos/objetos-de-colecao-sao-considerados-brinquedos" target="_blank" rel="noopener">Inmetro — objetos de coleção e Portaria 302/2021</a></p><p><a href="https://www.gov.br/inmetro/pt-br/acesso-a-informacao/perguntas-frequentes/avaliacao-da-conformidade/brinquedos/o-que-a-portaria-inmetro-n-5632016-para-brinquedos-estabelece" target="_blank" rel="noopener">Inmetro — certificação e registro de brinquedos</a></p></div>
+    <div class="card"><h4>Mercado e preço</h4><p><a href="https://www.abrinq.com.br/wp-content/uploads/2026/03/Anu%C3%A1rio-Estat%C3%ADstico-2026.pdf" target="_blank" rel="noopener">Abrinq — Anuário Estatístico 2026</a></p><p><a href="https://ironstudios.com.br/products/figura-muichiro-tokito-demon-slayer-7-scale-mcfarlane" target="_blank" rel="noopener">Iron Studios — benchmark de figura licenciada 7&quot;</a></p><p><a href="https://www.rihappy.com.br/stranger-things/dustin" target="_blank" rel="noopener">Ri Happy — benchmark de vinil e action figure</a></p></div>
+    <div class="card"><h4>Canais e consumidor</h4><p><a href="https://vendedores.mercadolivre.com.br/nota/como-funcionam-as-taxas-do-mercado-livre" target="_blank" rel="noopener">Mercado Livre — faixas de tarifa por anúncio</a></p><p><a href="https://www.procon.sp.gov.br/wp-content/uploads/2022/07/GuiadeComercioEletroniconovologEPDC2021ELEICOES2022.pdf" target="_blank" rel="noopener">Procon-SP — guia de comércio eletrônico</a></p><p><a href="https://www.correios.com.br/enviar/encomendas/logistica-reversa" target="_blank" rel="noopener">Correios — logística reversa</a></p></div>
+  </div>
+  <div class="callout example"><h4>Como ler os números</h4><p>Preços públicos e regras foram pesquisados em <strong>19/08/2026</strong>. Custos de compra, demanda, devolução, mídia, estoque e metas são <strong>simulações didáticas</strong> para São Paulo e Guarulhos; devem ser substituídos por cotações de fornecedor, simuladores dos canais e dados reais antes de investimento.</p></div>
+</section>
+
+<footer class="footer">Projeto Integrador de E-commerce — Fase 1 · Estante Épica · Material didático com pesquisa e simulações para fins de aprendizagem.</footer>
+</main>
+</body>
+</html>
